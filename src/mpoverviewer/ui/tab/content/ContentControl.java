@@ -10,7 +10,13 @@ import javafx.scene.input.KeyCode;
 public interface ContentControl {
 
     void cleanUp();
-    
+
+    /**
+     * Function call after a new tab has been created with the content that
+     * implements ContentControl.
+     */
+    void constructedBehavior();
+
     Node getNode();
 
     String getTitle();

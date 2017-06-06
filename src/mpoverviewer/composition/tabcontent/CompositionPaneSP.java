@@ -86,7 +86,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
             }
         });
         
-        sharedZoom();
+//        sharedZoom();
         //OPTIMIZATION: do this when switching away to another tab??
 //        pane.getChildren().clear();
 //        composition.clear();
@@ -151,6 +151,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
             line.setStartY(i * 364 + 296);
             line.setEndX(2216f);
             line.setEndY(i * 364 + 296);
+            line.setStrokeWidth(2);
             lineBG.add(line);
 
             Line line2 = new Line();
@@ -158,6 +159,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
             line2.setStartY(i * 364 + 296 + 64 + 2);
             line2.setEndX(2216f);
             line2.setEndY(i * 364 + 296 + 64 + 2);
+            line2.setStrokeWidth(2);
             lineBG.add(line2);
         }
     }
@@ -423,5 +425,10 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
         while (scale > scaleShared) {
             zoomOut();
         }
+    }
+
+    @Override
+    public void constructedBehavior() {
+        sharedZoom();
     }
 }

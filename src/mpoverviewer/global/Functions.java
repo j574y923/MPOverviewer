@@ -8,6 +8,7 @@ import javafx.stage.FileChooser;
 import mpoverviewer.composition.serialize.SongToData;
 import mpoverviewer.composition.tabcontent.CompositionPaneSP;
 import mpoverviewer.ui.tab.TabDraggable;
+import mpoverviewer.ui.tab.content.ContentControl;
 
 /**
  * Class for easy reference to hotkey function definitions
@@ -38,6 +39,8 @@ public class Functions {
 
         ((TabDraggable) Variables.stageInFocus.getTabPane().getSelectionModel()
                 .getSelectedItem()).setContentControl(new CompositionPaneSP(null));
+        ((ContentControl) Variables.stageInFocus.getTabPane().getSelectionModel()
+                .getSelectedItem().getContent()).constructedBehavior();
     }
 
     /**
@@ -69,6 +72,8 @@ public class Functions {
                         ((TabDraggable) Variables.stageInFocus.getTabPane().getSelectionModel()
                                 .getSelectedItem()).setContentControl(
                                         new CompositionPaneSP(new SongToData().getSongToData(file.toString())));
+                        ((ContentControl) Variables.stageInFocus.getTabPane().getSelectionModel()
+                                .getSelectedItem().getContent()).constructedBehavior();
                     }
                 }
                 Variables.userDir = new File(files.get(0).getParent());
