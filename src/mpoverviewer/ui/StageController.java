@@ -5,28 +5,21 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import mpoverviewer.composition.tabcontent.CompositionPaneSP;
-//import mpoverviewer.MPOverviewer;
-import mpoverviewer.global.Functions;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image.ImageIndex;
 import mpoverviewer.ui.menubar.MenuBarController;
 import mpoverviewer.ui.ribbonmenu.RibbonMenuButton;
 import mpoverviewer.ui.ribbonmenu.RibbonMenuContainer;
 import mpoverviewer.ui.ribbonmenu.RibbonMenuController;
-import mpoverviewer.ui.tab.content.ContentControl;
 
 /**
  * Stage that represents a window and its components. Every window is
@@ -141,43 +134,7 @@ public class StageController extends Stage {
                 }
             }
         });
-//
-//        /**
-//         * Hot key event filter for the focused stage.
-//         *
-//         * Ctrl + W: Close tab
-//         *
-//         * Ctrl + N: New tab
-//         */
-//        addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//                if (event.getCode() == KeyCode.W) {
-//                    if (event.isControlDown()) {
-////                        System.out.println("Close Tab");
-//
-//                        if (getTabPane().getTabs().isEmpty()) {
-////                            MPOverviewer.stageInFocus.getTabPane().
-//                            return;
-//                        }
-//
-//                        TabDraggable tab = (TabDraggable) getTabPane().getSelectionModel().getSelectedItem();
-//                        tab.closeTab();
-//
-////                        postDeleteState = true;
-//                    }
-//                    event.consume();
-//                } else if (event.getCode() == KeyCode.N) {
-//                    if (event.isControlDown()) {
-////                        System.out.println("New Tab");
-//
-//                        newTab();
-//                    }
-//                    event.consume();
-//                }
-//            }
-//        });
-
+        
         /**
          * Listener detects when the stage is focused. Focus this stage and then
          * set the stageInFocus global variable to this StageControls object.
@@ -234,13 +191,5 @@ public class StageController extends Stage {
 
     private void focusThis() {
         Variables.stageInFocus = this;
-//        System.out.println("Y" + this.getHeight());
     }
-
-//    public static void newTab() {
-//        TabDraggable newTab = new TabDraggable("Untitled");
-//        int i = MPOverviewer.stageInFocus.getTabPane().getSelectionModel().getSelectedIndex();
-//        MPOverviewer.stageInFocus.getTabPane().getTabs().add(i + 1, newTab);
-//        MPOverviewer.stageInFocus.getTabPane().getSelectionModel().selectNext();
-//    }
 }

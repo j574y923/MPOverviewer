@@ -32,7 +32,7 @@ import mpoverviewer.image.ImageLoader;
  *
  * @author j574y923
  * @since 2017.05.15
- * @version v0.2.1
+ * @version v0.2.3
  */
 public class MPOverviewer extends Application {
 
@@ -76,12 +76,12 @@ public class MPOverviewer extends Application {
         ScrollPane panetest2 = new ScrollPane();
         panetest2.setContent(panetest);
 //        panetest2.setHbarPolicy(ScrollBarPolicy.ALWAYS);
-CompositionPane panetest3 = new CompositionPane(song);
+        CompositionPane panetest3 = new CompositionPane(song);
         tab2.setContent(panetest3);
 
         CompositionPaneSP panetest4 = new CompositionPaneSP(song);
         tab3.setContent(panetest4);
-        
+
         TabPane tabs = Variables.stageInFocus.getTabPane();
         tabs.getTabs().add(tab2);
         tabs.getTabs().add(tab3);
@@ -91,9 +91,9 @@ CompositionPane panetest3 = new CompositionPane(song);
     @Override
     public void start(Stage primaryStage) {
         Variables.init();
-        
+
         test();
-        
+
         Variables.stageInFocus.setTitle("Hello World!");
 //        Variables.stageInFocus.setScene(scene);
         Variables.stageInFocus.setMinWidth(550);
