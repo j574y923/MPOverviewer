@@ -33,7 +33,7 @@ import mpoverviewer.ui.tab.content.ContentControl;
 public class CompositionPaneSP extends ScrollPane implements ContentControl {
 
     private Song song;
-    
+
     private Pane pane;
     private Group content;
     private static final int HEIGHT_DEFAULT = 4366;
@@ -85,7 +85,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
                 }
             }
         });
-        
+
 //        sharedZoom();
         //OPTIMIZATION: do this when switching away to another tab??
 //        pane.getChildren().clear();
@@ -94,7 +94,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
     }
 
     @Override
-    public void cleanUp(){
+    public void cleanUp() {
 //        pane.getChildren().clear();
 //        composition.clear();
 //        compositionVol.clear();
@@ -102,7 +102,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
 //        lineBG.clear();
 //        measureNum.clear();
     }
-    
+
     private void initBG() {
         if (!compositionBG.isEmpty()) {
             return;
@@ -403,6 +403,28 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
             case DOWN:
                 getScrollBarV().increment();
                 break;
+            case PAGE_UP:
+                for (int i = 0; i < this.heightProperty().intValue(); i += 50) {
+                    getScrollBarV().decrement();
+                }
+                break;
+            case PAGE_DOWN:
+                for (int i = 0; i < this.heightProperty().intValue(); i += 50) {
+                    getScrollBarV().increment();
+                }
+                break;
+            case MINUS:
+                if (ctrlDown) {
+                    zoomOut();
+                }
+                break;
+            case PLUS:
+            case EQUALS:
+                if (ctrlDown) {
+                    zoomIn();
+                }
+                break;
+            default:
         }
     }
 

@@ -1,0 +1,22 @@
+v0.2.1
+-Add basic ribbon menu framework
+-Add hotkeys for scrolling and zooming
+
+v0.2.0 (009f6a84912cc018d6d78c20a005fec78b98667b)
+-Alter Tab's ContentControl interface to include post-constructor behavior
+-Fix bug that blurs pane wrapped in a group (don't really know why setting line stroke width fixed it)
+-Fix bug where zoom applied to new tab but that tab is not fully constructed yet
+
+v0.1.0 (a1b6b28c73691eb8ffc506ac632a97223b16e11e)
+-Add Draggable tabs
+-Add Graphical representation for MPC txt file in tab content
+-Add Scroll and zoom for tab content
+-Alter Zoom so it is applied to all tabs at once
+-Create UI layout
+
+
+-------------------------
+MAJOR.MINOR.PATCH - 0.0.0
+Major - major feature change
+Minor - backend/frontend API change that breaks API backward compatibility
+Patch - individual file changes that do not break backward compatibility

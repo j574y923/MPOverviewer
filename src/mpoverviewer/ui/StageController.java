@@ -21,7 +21,11 @@ import mpoverviewer.composition.tabcontent.CompositionPaneSP;
 //import mpoverviewer.MPOverviewer;
 import mpoverviewer.global.Functions;
 import mpoverviewer.global.Variables;
+import mpoverviewer.image.ImageIndex;
 import mpoverviewer.ui.menubar.MenuBarController;
+import mpoverviewer.ui.ribbonmenu.RibbonMenuButton;
+import mpoverviewer.ui.ribbonmenu.RibbonMenuContainer;
+import mpoverviewer.ui.ribbonmenu.RibbonMenuController;
 import mpoverviewer.ui.tab.content.ContentControl;
 
 /**
@@ -197,8 +201,25 @@ public class StageController extends Stage {
             }
         });
 
+        RibbonMenuController rmc = new RibbonMenuController();
+        RibbonMenuContainer rmca = new RibbonMenuContainer("test");
+        RibbonMenuButton rmb = new RibbonMenuButton();
+        rmb.setGraphic(Variables.imageLoader.getImageView(ImageIndex.BOAT_SMA));
+        RibbonMenuButton rmb1 = new RibbonMenuButton();
+        rmb1.setGraphic(Variables.imageLoader.getImageView(ImageIndex.MUSHROOM_SMA));
+//        rmb.setText("TEST");
+        rmca.addButton(rmb,0,0);
+        rmca.addButton(rmb1,0,1);
+        rmc.addContainer(rmca);
+        RibbonMenuContainer rmca2 = new RibbonMenuContainer("test2");
+        RibbonMenuButton rmb2 = new RibbonMenuButton();
+        rmb2.setGraphic(Variables.imageLoader.getImageView(ImageIndex.PIG));
+//        rmb.setText("TEST");
+        rmca2.addButton(rmb2,0,0);
+        rmc.addContainer(rmca2);
+        
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(menuBar, tabPane);
+        vBox.getChildren().addAll(menuBar, rmc, tabPane);
         Scene scene = new Scene(vBox, 550, 350);
         setScene(scene);
     }
