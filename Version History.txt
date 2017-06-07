@@ -1,4 +1,7 @@
-v0.2.1
+v0.2.2
+-Clean up code
+
+v0.2.1 (67e6ff252330faa3fb6efb0a288a45b9f9e9adb8)
 -Add basic ribbon menu framework
 -Add hotkeys for scrolling and zooming
 

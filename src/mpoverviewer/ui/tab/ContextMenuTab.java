@@ -10,7 +10,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-//import mpoverviewer.MPOverviewer;
 import mpoverviewer.global.Functions;
 import mpoverviewer.global.Variables;
 

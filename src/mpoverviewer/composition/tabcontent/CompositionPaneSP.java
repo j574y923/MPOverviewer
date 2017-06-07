@@ -58,16 +58,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
         compositionVol = new ArrayList<>();
         composition = new ArrayList<>();
         initDraw(song);
-//        this.setScaleX(0.5);
-//        this.setScaleY(0.5);
-//        this.setTranslateX(-300);     
-//        this.setTranslateY(this.getScene().getHeight()/4);
-//        this.setFitToHeight(true);
-//        this.setFitToWidth(true);
-//        this.setMinSize(2000, 768);
-//        this.setPrefSize(1000, 1000);
-//        this.setMaxSize(1000,1000);
-//this.setPrefViewportHeight(2183);
+        
         pane.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
@@ -169,23 +160,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
         pane.getChildren().addAll(compositionBG);
         pane.getChildren().addAll(lineBG);
         pane.getChildren().addAll(measureNum);
-//        ScrollBar sc = new ScrollBar();
-//        sc.setOrientation(Orientation.VERTICAL);
-//        sc.setPrefHeight(389);
-//sc.setMin(0);
-//sc.setMax(1);
-//sc.setValue(50);
-//pane.getChildren().add(sc);
-//System.out.println("X"+pane.getBoundsInLocal().getMaxX());
-//System.out.println("Y"+pane.getHeight());
-//        pane.setMaxSize(0, 0);
-
-//        pane.setScaleX(0.5);
-//        pane.setScaleY(0.5);
-//        pane.setTranslateX(-(int)pane.getBoundsInLocal().getMaxX()/8);
-//        pane.setTranslateY(-(int)pane.getBoundsInLocal().getMaxY()/8);
-//        pane.setPrefSize(1100, 2183);
-//        System.out.println("xx" + this.getContent().getBoundsInLocal().getMaxX());
+        
         if (song != null) {
             //put the song's imageview representation into pane
             this.song = song;
@@ -259,13 +234,6 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
 
                 paneSel.setScaleX(scaleVal);
                 paneSel.setScaleY(scaleVal);
-//        double transScale = 4 / scaleVal;
-//        System.out.println(transScale);
-//        pane.setTranslateX(-(int) pane.getBoundsInLocal().getMaxX() / transScale);
-//        pane.setTranslateY(-(int) pane.getBoundsInLocal().getMaxY() / transScale);
-//        pane.setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
-//        pane.setPrefSize(WIDTH_DEFAULT * scaleVal, HEIGHT_DEFAULT * scaleVal);
-//        pane.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 
                 paneSel.setTranslateX(0);
                 paneSel.setTranslateX(-(int) paneSel.getBoundsInParent().getMinX());
@@ -297,7 +265,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
 
                 paneSel.setScaleX(scaleVal);
                 paneSel.setScaleY(scaleVal);
-//        pane.setPrefSize(WIDTH_DEFAULT * scaleVal, HEIGHT_DEFAULT * scaleVal);
+                
                 paneSel.setTranslateX(0);
                 paneSel.setTranslateX(-(int) paneSel.getBoundsInParent().getMinX());
                 paneSel.setTranslateY(0);

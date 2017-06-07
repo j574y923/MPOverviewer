@@ -24,14 +24,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import mpoverviewer.global.Variables;
-//import mpoverviewer.MPOverviewer;
-//import mpoverviewer.ui.menubar.MenuBarController;
 import mpoverviewer.ui.StageController;
 import mpoverviewer.ui.tab.content.ContentControl;
 
-//FIXED:BUG!!!! HOLD THE MOUSEWHEEL ON A TAB AND DRAG IT... SOLUTION: CREATE A CASE TO HANDLE THIS
-//FIXED:BUG!!!! MOVE ALL TABS TO SECOND WINDOW, CLOSE MAIN WINDOW, MOVE A TAB BACK TO ORIGINAL WINDOW POSITION SOLUTION:MOVE STAGE.SETONHIDING TO STAGECONTROLS CLASS
-//TODO: (DONE)close all tabs but leave the window there, (DONE)context menu for right click
 /**
  * A draggable tab that can optionally be detached from its tab pane and shown
  * in a separate window. This can be added to any normal TabPane, however a
@@ -96,10 +91,6 @@ public class TabDraggable extends Tab {
 
             @Override
             public void handle(MouseEvent t) {
-//                mouseLeftButtonDown = t.isPrimaryButtonDown();
-//                mouseMiddleButtonDown = t.isMiddleButtonDown();
-//                mouseRightButtonDown = t.isSecondaryButtonDown();
-//              
 
                 if (!mouseLeftButtonDown) {
                     return;
@@ -138,17 +129,6 @@ public class TabDraggable extends Tab {
 
             @Override
             public void handle(MouseEvent t) {
-//                mouseLeftButtonDown = t.isPrimaryButtonDown();
-////                mouseMiddleButtonDown = t.isMiddleButtonDown();
-//                mouseRightButtonDown = t.isSecondaryButtonDown();
-//                
-//                if(mouseLeftButtonDown)
-//                    return;
-//                else if(mouseMiddleButtonDown && !t.isMiddleButtonDown()){
-//                    System.out.println("WOT");
-//                    mouseMiddleButtonDown = false;
-//                    getTabPane().getTabs().remove(TabDraggable.this);
-//                }
 
                 //Draggable case
                 if (mouseLeftButtonDown) {
@@ -158,9 +138,6 @@ public class TabDraggable extends Tab {
                     Rectangle2D tabRect = getAbsoluteRect(TabDraggable.this);
                     double x = t.getScreenX();
                     double y = t.getScreenY();
-//                    System.out.println("X" + x +" Y" +y );
-//                    System.out.println("minX" + tabRect.getMinX()+"maxX" + tabRect.getMaxX()+
-//                            "minY" + tabRect.getMinY()+"maxY" + tabRect.getMaxY() );
                     if (x > tabRect.getMinX() && x < tabRect.getMaxX()
                             && y > tabRect.getMinY() + 28 && y < tabRect.getMaxY() + 33) {
                         closeTab();
@@ -201,35 +178,13 @@ public class TabDraggable extends Tab {
                     }*/
                     //note: only external package dependency is StageController to comply with original code by Michael Berry
                     final StageController newStage = new StageController();
-//                    final TabPane pane = new TabPane();
-//                    pane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
                     TabPane pane = newStage.getTabPane();
                     tabPanes.add(pane);
-//                    newStage.setOnHiding(new EventHandler<WindowEvent>() {
-// 
-//                        @Override
-//                        public void handle(WindowEvent t) {
-//                            tabPanes.remove(pane);
-//                        }
-//                    });
+                    
                     getTabPane().getTabs().remove(TabDraggable.this);
                     pane.getTabs().add(TabDraggable.this);
-//                    pane.getTabs().addListener(new ListChangeListener<Tab>() {
-// 
-//                        @Override
-//                        public void onChanged(ListChangeListener.Change<? extends Tab> change) {
-//                            if(pane.getTabs().isEmpty()) {
-//                                //HIDE ONLY WHEN THE TAB GETS DRAGGED TO ANOTHER WINDOW. CLOSING SHOULD KEEP THE STAGE SHOWN
-//                                newStage.hide();
-//                            }
-//                        }
-//                    });
-//                    MenuBarController menuBar = newStage.getMenuBar();//new MenuBarController();
-//                    VBox vBox = new VBox();
-//                    vBox.getChildren().addAll(menuBar, pane);
-//                    newStage.setScene(new Scene(vBox, 550, 350));
+                    
                     newStage.setMinWidth(550);
-                    //newStage.initStyle(StageStyle.UTILITY);
                     newStage.setX(t.getScreenX());
                     newStage.setY(t.getScreenY());
                     newStage.show();
@@ -272,13 +227,8 @@ public class TabDraggable extends Tab {
         this.setOnCloseRequest(new EventHandler<Event>() {
             @Override
             public void handle(Event t) {
-//                if(mouseLeftButtonDown)
                 t.consume();
                 closable = true;
-
-//                if (TabDraggable.this.getContent() != null) {
-//                    System.out.println(TabDraggable.this.getContent().getBoundsInParent().getHeight());
-//                }
             }
         });
 
@@ -349,14 +299,6 @@ public class TabDraggable extends Tab {
             Variables.stageInFocus.postDeleteState = true;//set the state before tabPane change is detected
             getTabPane().getTabs().remove(this);
             ((ContentControl)this.getContent()).cleanUp();
-//            ((CompositionPaneSP)this.getContent()).pane.getChildren().clear();
-//            ((CompositionPaneSP)this.getContent()).content.getChildren().clear();
-//this.nameLabel.setOnMouseDragged(null);
-//this.nameLabel.setOnMouseReleased(null);
-//this.nameLabel.setOnMousePressed(null);
-//this.nameLabel.setOnMouseEntered(null);
-//            this.setOnCloseRequest(null);
-//            System.out.println("TEST");
         }
     }
 
