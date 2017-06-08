@@ -1,5 +1,7 @@
 package mpoverviewer.ui;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mpoverviewer.ui.tab.TabDraggable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,11 +16,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import mpoverviewer.global.Flags;
 import mpoverviewer.global.Variables;
-import mpoverviewer.image.ImageIndex;
 import mpoverviewer.ui.menubar.MenuBarController;
-import mpoverviewer.ui.ribbonmenu.RibbonMenuButton;
-import mpoverviewer.ui.ribbonmenu.RibbonMenuContainer;
 import mpoverviewer.ui.ribbonmenu.RibbonMenuController;
 
 /**
@@ -31,8 +31,17 @@ import mpoverviewer.ui.ribbonmenu.RibbonMenuController;
  */
 public class StageController extends Stage {
 
+    /**
+     * Vertically lay out the whole ui with a VBox.
+     */
+    private final VBox vBox;
     private MenuBarController menuBar;
     private TabPane tabPane;
+
+    /**
+     * Used to locate a class that derives the RibbonMenuController class.
+     */
+    private static String rmcResource = null;
 
     /**
      * Turn this flag on to signal that a tab has just been deleted. This flag
@@ -134,7 +143,7 @@ public class StageController extends Stage {
                 }
             }
         });
-        
+
         /**
          * Listener detects when the stage is focused. Focus this stage and then
          * set the stageInFocus global variable to this StageControls object.
@@ -158,27 +167,32 @@ public class StageController extends Stage {
             }
         });
 
-        RibbonMenuController rmc = new RibbonMenuController();
-        RibbonMenuContainer rmca = new RibbonMenuContainer("test");
-        RibbonMenuButton rmb = new RibbonMenuButton();
-        rmb.setGraphic(Variables.imageLoader.getImageView(ImageIndex.BOAT_SMA));
-        RibbonMenuButton rmb1 = new RibbonMenuButton();
-        rmb1.setGraphic(Variables.imageLoader.getImageView(ImageIndex.MUSHROOM_SMA));
-//        rmb.setText("TEST");
-        rmca.addButton(rmb,0,0);
-        rmca.addButton(rmb1,0,1);
-        rmc.addContainer(rmca);
-        RibbonMenuContainer rmca2 = new RibbonMenuContainer("test2");
-        RibbonMenuButton rmb2 = new RibbonMenuButton();
-        rmb2.setGraphic(Variables.imageLoader.getImageView(ImageIndex.PIG));
-//        rmb.setText("TEST");
-        rmca2.addButton(rmb2,0,0);
-        rmc.addContainer(rmca2);
-        
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(menuBar, rmc, tabPane);
+//        RibbonMenuController rmc = new RibbonMenuController();
+//        RibbonMenuContainer rmca = new RibbonMenuContainer("test");
+//        RibbonMenuButton rmb = new RibbonMenuButton();
+//        rmb.setGraphic(Variables.imageLoader.getImageView(ImageIndex.BOAT_SMA));
+//        RibbonMenuButton rmb1 = new RibbonMenuButton();
+//        rmb1.setGraphic(Variables.imageLoader.getImageView(ImageIndex.MUSHROOM_SMA));
+////        rmb.setText("TEST");
+//        rmca.addButton(rmb, 0, 0);
+//        rmca.addButton(rmb1, 0, 1);
+//        rmc.addContainer(rmca);
+//        RibbonMenuContainer rmca2 = new RibbonMenuContainer("test2");
+//        RibbonMenuButton rmb2 = new RibbonMenuButton();
+//        rmb2.setGraphic(Variables.imageLoader.getImageView(ImageIndex.PIG));
+////        rmb.setText("TEST");
+//        rmca2.addButton(rmb2, 0, 0);
+//        rmc.addContainer(rmca2);
+////        setRibbonMenu(new RMC());
+        vBox = new VBox();
+        vBox.getChildren().addAll(menuBar, tabPane);
+//        vBox.getChildren().add(1, rmc);
         Scene scene = new Scene(vBox, 550, 350);
         setScene(scene);
+
+        if (Flags.ribbonMenuRender && rmcResource != null) {
+            recreateRibbonMenu();
+        }
     }
 
     public MenuBarController getMenuBar() {
@@ -192,4 +206,48 @@ public class StageController extends Stage {
     private void focusThis() {
         Variables.stageInFocus = this;
     }
+
+    public void setRibbonMenu(RibbonMenuController rmc) {
+        if (!Flags.ribbonMenuRender) {
+            return;
+        }
+        if (rmcResource == null) {
+            rmcResource = rmc.getClass().toString();//.getComponentType();
+            rmcResource = rmcResource.substring(6);//remove "class "        
+            System.out.println(rmcResource);
+        }
+
+        //Add between menubar and tabpane
+        vBox.getChildren().add(1, rmc);
+    }
+
+    /**
+     * Use reflection to get any object derived from the base
+     * RibbonMenuController class creating a new object of that derived type.
+     * Set the stage's ribbon menu as that derived ribbon menu object.
+     */
+    private void recreateRibbonMenu() {
+
+        try {
+            Object rmc = Class.forName(rmcResource).newInstance();
+//            ((RibbonMenuController) b).test();
+            setRibbonMenu((RibbonMenuController) rmc);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(StageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+//    class test<T>{
+//        T test(){
+////            T a = a.getClass().newInstance();
+//          return null;  
+//        }
+//    }
 }
+
+//class RMC extends RibbonMenuController {
+//
+//    RMC() {
+//
+//    }
+//}

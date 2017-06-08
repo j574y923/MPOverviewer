@@ -20,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import mpoverviewer.composition.data.Song;
 import mpoverviewer.composition.deserialize.DataToMPC;
+import mpoverviewer.composition.ribbonmenu.RibbonMenuMPO;
 import mpoverviewer.composition.serialize.SongToData;
 import mpoverviewer.composition.tabcontent.CompositionPane;
 import mpoverviewer.composition.tabcontent.CompositionPaneSP;
@@ -99,6 +100,8 @@ public class MPOverviewer extends Application {
         Variables.stageInFocus.setMinWidth(550);
         Variables.stageInFocus.show();
         Variables.stageInFocus.setTitle("Hello World2!");
+        
+//        Variables.stageInFocus.setRibbonMenu(new RibbonMenuMPO());
     }
 
     public static void exit() {

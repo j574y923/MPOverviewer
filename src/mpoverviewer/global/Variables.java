@@ -13,6 +13,7 @@ public class Variables {
     public static ImageLoader imageLoader;
     public static StageController stageInFocus;
     public static File userDir;
+    
 
     public static void init() {
         imageLoader = new ImageLoader();

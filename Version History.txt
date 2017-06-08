@@ -1,4 +1,7 @@
-v0.2.3
+v0.2.4
+-Add custom ribbon menu code for a instruments ribbon menu
+
+v0.2.3 (02789bc043a0874bbb1dfccb2b466daf69d094a3)
 -Clean up code
 
 v0.2.2 (8d4c1928962b3b34070f9cce85319f617f9dd8ee)

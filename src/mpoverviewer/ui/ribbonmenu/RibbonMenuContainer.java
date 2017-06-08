@@ -13,16 +13,18 @@ import javafx.scene.layout.VBox;
  */
 public class RibbonMenuContainer extends GridPane {
 
+    private static final String STYLING = "-fx-padding: 3;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-color: gray;";
+    
     private final VBox titleVBox;
-
+//IDK HOW TO CENTER ALIGN A ROW'S CONTENTS, MAY HAVE TO MAKE THIS CLASS A VBOX OF HBOXES INSTEAD
     public RibbonMenuContainer(String title) {
         super();
 
 //        this.setPadding(new Insets(5, 5, 5, 5));
 //        this.setSpacing(10);
-        this.setStyle("-fx-padding: 3;"
-                + "-fx-border-width: 1;"
-                + "-fx-border-color: gray;");
+        this.setStyle(STYLING);
 
         Label titleLabel = new Label(title);
 //        this.getChildren().add(titleText);
