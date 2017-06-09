@@ -1,4 +1,4 @@
-package mpoverviewer.composition.ribbonmenu;
+package mpoverviewer.composition.ui;
 
 import mpoverviewer.ui.ribbonmenu.RibbonMenuController;
 

@@ -1,5 +1,10 @@
-v0.2.4
+v0.2.5
+-Alter instruments ribbon menu container to include filter slots
+-Alter Ribbon Menu container layout to be Vbox of Hboxes
+
+v0.2.4 (a4d903e5a53423abd258c0a82ef7b3cbbd1ee80e)
 -Add custom ribbon menu code for a instruments ribbon menu
+-Alter StageController to allow setting a ribbon menu
 
 v0.2.3 (02789bc043a0874bbb1dfccb2b466daf69d094a3)
 -Clean up code

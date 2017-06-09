@@ -26,7 +26,8 @@ public class ImageLoader {
         INSTR,
         HALFSTEP,
         INSTR_SMALL,
-        STAFF
+        STAFF,
+        MISC
     }
 
     private final HashMap<sheets, Image> spriteSheets;
@@ -39,9 +40,9 @@ public class ImageLoader {
                     + extension, sheetWidth(s), sheetHeight(s), false, false));
         }
     }
-    
-    private int sheetWidth(sheets s){
-        switch(s){
+
+    private int sheetWidth(sheets s) {
+        switch (s) {
             case INSTR:
                 return 640;
             case HALFSTEP:
@@ -50,13 +51,15 @@ public class ImageLoader {
                 return 458;
             case STAFF:
                 return 600;
+            case MISC:
+                return 64;
             default:
                 return 0;
         }
     }
-    
-    private int sheetHeight(sheets s){
-        switch(s){
+
+    private int sheetHeight(sheets s) {
+        switch (s) {
             case INSTR:
                 return 108;
             case HALFSTEP:
@@ -65,11 +68,13 @@ public class ImageLoader {
                 return 28;
             case STAFF:
                 return 276;
+            case MISC:
+                return 32;
             default:
                 return 0;
         }
     }
-    
+
     public ImageView getImageView(ImageIndex i) {
         ImageView iv = null;
         if (ImageIndex.MARIO_GRAY.ordinal() <= i.ordinal()
@@ -88,6 +93,10 @@ public class ImageLoader {
                 && i.ordinal() <= ImageIndex.STAFF_MLINE.ordinal()) {
             iv = new ImageView(spriteSheets.get(sheets.STAFF));
             iv.setViewport(getStaff(i));
+        } else if (ImageIndex.FILTER_ON.ordinal() <= i.ordinal()
+                && i.ordinal() <= ImageIndex.FILTER_OFF.ordinal()) {
+            iv = new ImageView(spriteSheets.get(sheets.MISC));
+            iv.setViewport(getMisc(i));
         }
 
         return iv;
@@ -110,6 +119,10 @@ public class ImageLoader {
 
     private Rectangle2D getStaff(ImageIndex i) {
         return new Rectangle2D(zsx(i), 0, 100, 276);
+    }
+
+    private Rectangle2D getMisc(ImageIndex i) {
+        return new Rectangle2D(zmx(i), 0, 32, 32);
     }
 
     /**
@@ -164,5 +177,9 @@ public class ImageLoader {
      */
     private int zsx(ImageIndex i) {
         return 100 * ((i.ordinal() - ImageIndex.TREBLE_CLEF_AMS.ordinal()) % 6);
+    }
+
+    private int zmx(ImageIndex i) {
+        return 32 * ((i.ordinal() - ImageIndex.FILTER_ON.ordinal()) % 2);
     }
 }

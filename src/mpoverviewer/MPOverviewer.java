@@ -20,7 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import mpoverviewer.composition.data.Song;
 import mpoverviewer.composition.deserialize.DataToMPC;
-import mpoverviewer.composition.ribbonmenu.RibbonMenuMPO;
+import mpoverviewer.composition.ui.RibbonMenuMPO;
 import mpoverviewer.composition.serialize.SongToData;
 import mpoverviewer.composition.tabcontent.CompositionPane;
 import mpoverviewer.composition.tabcontent.CompositionPaneSP;
@@ -33,7 +33,7 @@ import mpoverviewer.image.ImageLoader;
  *
  * @author j574y923
  * @since 2017.05.15
- * @version v0.2.3
+ * @version v0.2.5
  */
 public class MPOverviewer extends Application {
 
@@ -100,8 +100,10 @@ public class MPOverviewer extends Application {
         Variables.stageInFocus.setMinWidth(550);
         Variables.stageInFocus.show();
         Variables.stageInFocus.setTitle("Hello World2!");
-        
-//        Variables.stageInFocus.setRibbonMenu(new RibbonMenuMPO());
+
+        long a = System.currentTimeMillis();
+        Variables.stageInFocus.setRibbonMenu(new RibbonMenuMPO());
+        System.out.println("TIME RB " + (System.currentTimeMillis() - a));
     }
 
     public static void exit() {

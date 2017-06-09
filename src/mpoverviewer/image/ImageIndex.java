@@ -158,7 +158,12 @@ public enum ImageIndex {
     /**
      * Digits for the ImageViews of the measure lines.
      */
-    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE;
+    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
+    
+    /**
+     * Miscellaneous icons.
+     */
+    FILTER_ON, FILTER_OFF;
 
     /**
      * The alt version of this sprite. It can be null.

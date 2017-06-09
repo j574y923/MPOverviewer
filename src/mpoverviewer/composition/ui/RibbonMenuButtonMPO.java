@@ -1,4 +1,4 @@
-package mpoverviewer.composition.ribbonmenu;
+package mpoverviewer.composition.ui;
 
 import mpoverviewer.ui.ribbonmenu.RibbonMenuButton;
 
@@ -8,7 +8,7 @@ import mpoverviewer.ui.ribbonmenu.RibbonMenuButton;
  */
 public class RibbonMenuButtonMPO extends RibbonMenuButton {
 
-    private static final String STYLING = "-fx-padding:3;";
+    private static final String STYLING = "-fx-padding:1;";
 
     public RibbonMenuButtonMPO() {
         super();

@@ -4,21 +4,24 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
+ * ____VBox____ |HBox | |HBox | |. | |. | |. | |HBox | |titleVBox |
  *
  * @author J
  */
-public class RibbonMenuContainer extends GridPane {
+public class RibbonMenuContainer extends VBox {
 
     private static final String STYLING = "-fx-padding: 3;"
-                + "-fx-border-width: 1;"
-                + "-fx-border-color: gray;";
-    
+            + "-fx-border-width: 1;"
+            + "-fx-border-color: gray;";
+
     private final VBox titleVBox;
 //IDK HOW TO CENTER ALIGN A ROW'S CONTENTS, MAY HAVE TO MAKE THIS CLASS A VBOX OF HBOXES INSTEAD
+
     public RibbonMenuContainer(String title) {
         super();
 
@@ -34,27 +37,27 @@ public class RibbonMenuContainer extends GridPane {
         VBox.setVgrow(titleLabel, Priority.ALWAYS);
         titleVBox.setAlignment(Pos.BOTTOM_CENTER);
         titleVBox.setStyle("-fx-padding: 5 0 0 0");
-        this.add(titleVBox, 0, 1);
+        this.getChildren().add(titleVBox);
 //        GridPane test = null;test.getColumnIndex(null);
 //        this.add(this.get, 0, 2);
 
     }
 
-    public void addButton(RibbonMenuButton button, int col, int row) {
-        //move the container's title label downward if a button has come to block it
-        if (this.getRowIndex(titleVBox) == row) {
-            this.getChildren().remove(titleVBox);
-            this.add(titleVBox, 0, row + 1);
+    public void addButton(int row, RibbonMenuButton button) {
+        //make an extra row if necessary
+        if (this.getChildren().size() - 1 == row) {
+            HBox hBox = new HBox();
+            this.getChildren().add(row, hBox);
         }
-        this.add(button, col, row);
+        ((HBox) this.getChildren().get(row)).getChildren().add(button);
     }
 
-    public void addNode(Node node, int col, int row) {
-        //move the container's title label downward if a node has come to block it
-        if (this.getRowIndex(titleVBox) == row) {
-            this.getChildren().remove(titleVBox);
-            this.add(titleVBox, 0, row + 1);
+    public void addNode(int row, Node node) {
+        //make an extra row if necessary
+        if (this.getChildren().size() - 1 == row) {
+            HBox hBox = new HBox();
+            this.getChildren().add(row, hBox);
         }
-        this.getChildren().add(node);
+        ((HBox) this.getChildren().get(row)).getChildren().add(node);
     }
 }
