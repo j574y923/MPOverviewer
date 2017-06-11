@@ -1,4 +1,8 @@
-v0.2.5
+v0.2.6
+-Add filter ribbon menu behavior: filter toggle, fill filter slots
+-Add instrument selected icon
+
+v0.2.5 (59a0a389a71eaa26ed4681c73f836c3c0abdd1b0)
 -Alter instruments ribbon menu container to include filter slots
 -Alter Ribbon Menu container layout to be Vbox of Hboxes
 

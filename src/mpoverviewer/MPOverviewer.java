@@ -33,7 +33,7 @@ import mpoverviewer.image.ImageLoader;
  *
  * @author j574y923
  * @since 2017.05.15
- * @version v0.2.5
+ * @version v0.2.6
  */
 public class MPOverviewer extends Application {
 
