@@ -1,4 +1,7 @@
-v0.2.6
+v0.2.7
+-Add collapse button for ribbon menu
+
+v0.2.6 (64332d3aa3670bcac5d41850fee2229d02208955)
 -Add filter ribbon menu behavior: filter toggle, fill filter slots
 -Add instrument selected icon
 

@@ -8,7 +8,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
- * ____VBox____ 
+  * ____VBox____ 
  * |HBox       | 
  * |HBox       | 
  * |.          | 
@@ -65,5 +65,24 @@ public class RibbonMenuContainer extends VBox {
             this.getChildren().add(row, hBox);
         }
         ((HBox) this.getChildren().get(row)).getChildren().add(node);
+    }
+
+    public void collapse() {
+        for (int i = 0; i < this.getChildren().size() - 1; i++) {
+            this.getChildren().get(i).setVisible(false);
+        }
+        //swap title to 0th index
+        this.getChildren().remove(titleVBox);
+        this.getChildren().add(0, titleVBox);
+        this.setMinHeight(32);
+    }
+
+    public void expand() {
+        for (int i = 0; i < this.getChildren().size(); i++) {
+            this.getChildren().get(i).setVisible(true);
+        }
+        //swap title to 0th index
+        this.getChildren().remove(titleVBox);
+        this.getChildren().add(this.getChildren().size(), titleVBox);
     }
 }
