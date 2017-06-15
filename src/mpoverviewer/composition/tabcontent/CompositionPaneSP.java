@@ -13,10 +13,12 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import mpoverviewer.composition.data.Measure;
 import mpoverviewer.composition.data.Note;
@@ -52,13 +54,19 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
     private List<ImageView> composition;
     private List<Line> compositionVol;
 
+    private static RectangleRubberBand region;
+//    private static double regionMinX;
+//    private static double regionMinY;
+//    private static double regionMaxX;
+//    private static double regionMaxY;
+
     public CompositionPaneSP(Song song) {
         super();
         initBG();
         compositionVol = new ArrayList<>();
         composition = new ArrayList<>();
         initDraw(song);
-        
+
         pane.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
@@ -82,6 +90,27 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
 //        pane.getChildren().clear();
 //        composition.clear();
 //        compositionVol.clear();
+//        regionMinX = -1;
+//        regionMinY = -1;
+//        regionMaxX = -1;
+//        regionMaxY = -1;
+        region = new RectangleRubberBand();
+//        RectangleRubberBand.makeResizable(region);
+//        region.setVisible(false);
+        pane.getChildren().add(region);
+        pane.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED){
+                    region.begin(mouseEvent.getX(), mouseEvent.getY());
+//                    System.out.println("BEG"+ mouseEvent.getX());
+                }
+                else if(mouseEvent.isPrimaryButtonDown()){
+                    region.resize(mouseEvent.getX(), mouseEvent.getY());
+//                    System.out.println(mouseEvent.getX());
+                }
+            }
+        });
     }
 
     @Override
@@ -160,7 +189,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
         pane.getChildren().addAll(compositionBG);
         pane.getChildren().addAll(lineBG);
         pane.getChildren().addAll(measureNum);
-        
+
         if (song != null) {
             //put the song's imageview representation into pane
             this.song = song;
@@ -265,7 +294,7 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
 
                 paneSel.setScaleX(scaleVal);
                 paneSel.setScaleY(scaleVal);
-                
+
                 paneSel.setTranslateX(0);
                 paneSel.setTranslateX(-(int) paneSel.getBoundsInParent().getMinX());
                 paneSel.setTranslateY(0);

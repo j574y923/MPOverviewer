@@ -190,7 +190,7 @@ public class StageController extends Stage {
         Scene scene = new Scene(vBox, 550, 350);
         setScene(scene);
 
-        if (Flags.ribbonMenuRender && rmcResource != null) {
+        if (Flags.RIBBON_MENU_RENDER && rmcResource != null) {
             recreateRibbonMenu();
         }
     }
@@ -208,7 +208,7 @@ public class StageController extends Stage {
     }
 
     public void setRibbonMenu(RibbonMenuController rmc) {
-        if (!Flags.ribbonMenuRender) {
+        if (!Flags.RIBBON_MENU_RENDER) {
             return;
         }
         if (rmcResource == null) {

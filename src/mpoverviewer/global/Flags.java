@@ -6,6 +6,6 @@ package mpoverviewer.global;
  */
 public class Flags {
     
-    public static boolean ribbonMenuRender = true;
-    public static boolean statusBarRender = true;
+    public static final boolean RIBBON_MENU_RENDER = true;
+    public static final boolean STATUS_BAR_RENDER = true;
 }

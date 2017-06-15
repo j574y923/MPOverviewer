@@ -1,4 +1,8 @@
-v0.2.7
+v0.2.8
+-Add initial region selection/rubber band code
+-Add initial state machine code
+
+v0.2.7 (c944f1cef825ef7385b8c251c61799570cf1ce2c)
 -Add collapse button for ribbon menu
 
 v0.2.6 (64332d3aa3670bcac5d41850fee2229d02208955)
