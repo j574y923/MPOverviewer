@@ -54,12 +54,11 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
     private List<ImageView> composition;
     private List<Line> compositionVol;
 
-    private static RectangleRubberBand region;
+//    private static RectangleRubberBand region;
 //    private static double regionMinX;
 //    private static double regionMinY;
 //    private static double regionMaxX;
 //    private static double regionMaxY;
-
     public CompositionPaneSP(Song song) {
         super();
         initBG();
@@ -94,23 +93,11 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
 //        regionMinY = -1;
 //        regionMaxX = -1;
 //        regionMaxY = -1;
-        region = new RectangleRubberBand();
+//        region = new RectangleRubberBand();
 //        RectangleRubberBand.makeResizable(region);
 //        region.setVisible(false);
-        pane.getChildren().add(region);
-        pane.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED){
-                    region.begin(mouseEvent.getX(), mouseEvent.getY());
-//                    System.out.println("BEG"+ mouseEvent.getX());
-                }
-                else if(mouseEvent.isPrimaryButtonDown()){
-                    region.resize(mouseEvent.getX(), mouseEvent.getY());
-//                    System.out.println(mouseEvent.getX());
-                }
-            }
-        });
+//        pane.getChildren().add(region);
+        pane.addEventHandler(MouseEvent.ANY, new EventHandlerRubberBand(pane, this));
     }
 
     @Override
@@ -389,25 +376,32 @@ public class CompositionPaneSP extends ScrollPane implements ContentControl {
     public void keyControl(KeyCode key, boolean altDown, boolean ctrlDown, boolean shiftDown) {
         switch (key) {
             case LEFT:
-                getScrollBarH().decrement();
+//                getScrollBarH().decrement();
+//                System.out.println(this.getHvalue());
+                this.setHvalue(this.getHvalue() - 0.05);
                 break;
             case RIGHT:
-                getScrollBarH().increment();
+//                getScrollBarH().increment();
+                this.setHvalue(this.getHvalue() + 0.05);
                 break;
             case UP:
-                getScrollBarV().decrement();
+//                getScrollBarV().decrement();
+                this.setVvalue(this.getVvalue() - 0.01);
                 break;
             case DOWN:
-                getScrollBarV().increment();
+//                getScrollBarV().increment();
+                this.setVvalue(this.getVvalue() + 0.01);
                 break;
             case PAGE_UP:
                 for (int i = 0; i < this.heightProperty().intValue(); i += 50) {
-                    getScrollBarV().decrement();
+//                    getScrollBarV().decrement();
+                    this.setVvalue(this.getVvalue() - 0.01);
                 }
                 break;
             case PAGE_DOWN:
                 for (int i = 0; i < this.heightProperty().intValue(); i += 50) {
-                    getScrollBarV().increment();
+//                    getScrollBarV().increment();
+                    this.setVvalue(this.getVvalue() + 0.01);
                 }
                 break;
             case MINUS:

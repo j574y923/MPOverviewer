@@ -5,12 +5,21 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+//DONE:TODO: make scrollpane scroll as resizing toward the edges of the scrollpane
+//TODO: make rubberband region select all notes in that region
 /**
+ * Rubber band is drawn by the mouse. Click and drag to create a rectangle that
+ * will overlay a region on top of the composition. This rectangular region will
+ * grab all notes in that region.
+ *
  * Adapted from https://github.com/varren/JavaFX-Resizable-Draggable-Node
  */
 public class RectangleRubberBand extends Rectangle {
+
+    private static final Color FILL_TRANSPARENT = new Color(0.5, 0.5, 0.5, 0.5);
 
     public interface OnDragResizeEventListener {
 
@@ -70,15 +79,22 @@ public class RectangleRubberBand extends Rectangle {
     private OnDragResizeEventListener listener = defaultListener;
 
     private static final int MARGIN = 8;
-    private static final double MIN_W = 30;
-    private static final double MIN_H = 20;
+    private static final double MIN_W = 1;
+    private static final double MIN_H = 1;
 
-    
-    
     private double xOrigin;
     private double yOrigin;
+    private static final int HEIGHT_DEFAULT = 4366;
+    private static final int WIDTH_DEFAULT = 2216;
+
+    /* Allow resizing by dragging the edges of the rectangle, will prevent conventional resizing */
+    private boolean postResizable;
+
     public RectangleRubberBand() {
-        super(0, 0, 20, 20);
+        super();
+        this.setFill(FILL_TRANSPARENT);
+//        makeResizable(this);
+        postResizable = false;
 //        this.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent event) {
@@ -95,10 +111,20 @@ public class RectangleRubberBand extends Rectangle {
      * @param y y-coord to begin rectangle shape at
      */
     public void begin(double x, double y) {
+//        if (postResizable) {
+//            return;
+//        }
+
+        if (x > WIDTH_DEFAULT || y > HEIGHT_DEFAULT) {
+            return;
+        }
+
+        this.setWidth(0);
+        this.setHeight(0);
         this.setTranslateX(x);
         this.setTranslateY(y);
         this.setVisible(true);
-        
+
         xOrigin = x;
         yOrigin = y;
     }
@@ -110,6 +136,20 @@ public class RectangleRubberBand extends Rectangle {
      * @param y y-coord to resize to
      */
     public void resize(double x, double y) {
+//        if (postResizable) {
+//            return;
+//        }
+        if (x > WIDTH_DEFAULT) {
+            x = WIDTH_DEFAULT;
+        } else if (x < 0) {
+            x = 0;
+        }
+        if (y > HEIGHT_DEFAULT) {
+            y = HEIGHT_DEFAULT;
+        } else if (y < 0) {
+            y = 0;
+        }
+
         if (x >= xOrigin) {
             this.setTranslateX(xOrigin);
             this.setWidth(x - xOrigin);
@@ -117,7 +157,7 @@ public class RectangleRubberBand extends Rectangle {
             this.setTranslateX(x);
             this.setWidth(xOrigin - x);
         }
-        
+
         if (y >= yOrigin) {
             this.setTranslateY(yOrigin);
             this.setHeight(y - yOrigin);
@@ -133,6 +173,18 @@ public class RectangleRubberBand extends Rectangle {
      */
     public void end() {
         this.setVisible(false);
+    }
+
+    /**
+     * Finally call this to end drawing the rubber band BUT keep the rubber band
+     * visible and allow resizing by dragging the edges of the rectangle.
+     */
+    public void endButKeepUsable() {
+        setPostResizable(true);
+    }
+
+    private void setPostResizable(boolean postResizable) {
+        this.postResizable = postResizable;
     }
 
     private RectangleRubberBand(Node node, OnDragResizeEventListener listener) {

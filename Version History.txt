@@ -1,4 +1,8 @@
-v0.2.8
+v0.2.9
+-Alter rubber band to be transparent
+-Alter rubber band to respect boundaries and readjust the bounds to accomodate resizing that go out of bounds
+
+v0.2.8 (a76bb377af062c3da186e2b594c574f8b058ba09)
 -Add initial region selection/rubber band code
 -Add initial state machine code
 
