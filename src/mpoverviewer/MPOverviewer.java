@@ -2,7 +2,7 @@
 package mpoverviewer;
 
 import java.util.HashMap;
-import mpoverviewer.ui.tab.TabDraggable;
+import mpoverviewer.ui_layer.tab.TabDraggable;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -18,22 +18,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import mpoverviewer.composition.data.Song;
-import mpoverviewer.composition.deserialize.DataToMPC;
-import mpoverviewer.composition.ui.RibbonMenuMPO;
-import mpoverviewer.composition.serialize.SongToData;
-import mpoverviewer.composition.tabcontent.CompositionPane;
-import mpoverviewer.composition.tabcontent.CompositionPaneSP;
+import mpoverviewer.data_layer.data.Song;
+import mpoverviewer.data_layer.deserialize.DataToMPC;
+import mpoverviewer.image_layer.ribbonmenu.RibbonMenuMPO;
+import mpoverviewer.data_layer.serialize.SongToData;
+import mpoverviewer.image_layer.tabcontent.CompositionPane;
+import mpoverviewer.image_layer.tabcontent.CompositionPaneSP;
 import mpoverviewer.global.Variables;
-import mpoverviewer.image.ImageIndex;
-import mpoverviewer.image.ImageLoader;
+import mpoverviewer.image_layer.ImageIndex;
+import mpoverviewer.image_layer.ImageLoader;
 
 /**
  * Mario Paint OverViewer: A versatile editor for Mario Paint song files
  *
  * @author j574y923
  * @since 2017.05.15
- * @version v0.2.9
+ * @version v0.3.0
  */
 public class MPOverviewer extends Application {
 

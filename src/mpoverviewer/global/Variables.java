@@ -1,8 +1,8 @@
 package mpoverviewer.global;
 
 import java.io.File;
-import mpoverviewer.image.ImageLoader;
-import mpoverviewer.ui.StageController;
+import mpoverviewer.image_layer.ImageLoader;
+import mpoverviewer.ui_layer.StageController;
 
 /**
  *

@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
-import mpoverviewer.composition.serialize.SongToData;
-import mpoverviewer.composition.tabcontent.CompositionPaneSP;
-import mpoverviewer.ui.tab.TabDraggable;
-import mpoverviewer.ui.tab.content.ContentControl;
+import mpoverviewer.data_layer.serialize.SongToData;
+import mpoverviewer.image_layer.tabcontent.CompositionPaneSP;
+import mpoverviewer.ui_layer.tab.TabDraggable;
+import mpoverviewer.ui_layer.tab.content.ContentControl;
 
 /**
  * Class for easy reference to hotkey function definitions
