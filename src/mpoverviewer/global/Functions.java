@@ -6,7 +6,7 @@ import java.util.List;
 import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
 import mpoverviewer.data_layer.serialize.SongToData;
-import mpoverviewer.image_layer.tabcontent.CompositionPaneSP;
+import mpoverviewer.image_layer.tabcontent.CompositionPane;
 import mpoverviewer.ui_layer.tab.TabDraggable;
 import mpoverviewer.ui_layer.tab.content.ContentControl;
 
@@ -38,7 +38,7 @@ public class Functions {
         Variables.stageInFocus.getTabPane().getSelectionModel().selectNext();
 
         ((TabDraggable) Variables.stageInFocus.getTabPane().getSelectionModel()
-                .getSelectedItem()).setContentControl(new CompositionPaneSP(null));
+                .getSelectedItem()).setContentControl(new CompositionPane(null));
         ((ContentControl) Variables.stageInFocus.getTabPane().getSelectionModel()
                 .getSelectedItem().getContent()).constructedBehavior();
     }
@@ -70,8 +70,7 @@ public class Functions {
                         Variables.stageInFocus.getTabPane().getSelectionModel().selectNext();
 
                         ((TabDraggable) Variables.stageInFocus.getTabPane().getSelectionModel()
-                                .getSelectedItem()).setContentControl(
-                                        new CompositionPaneSP(new SongToData().getSongToData(file.toString())));
+                                .getSelectedItem()).setContentControl(new CompositionPane(new SongToData().getSongToData(file.toString())));
                         ((ContentControl) Variables.stageInFocus.getTabPane().getSelectionModel()
                                 .getSelectedItem().getContent()).constructedBehavior();
                     }

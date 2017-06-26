@@ -23,7 +23,6 @@ import mpoverviewer.data_layer.deserialize.DataToMPC;
 import mpoverviewer.image_layer.ribbonmenu.RibbonMenuMPO;
 import mpoverviewer.data_layer.serialize.SongToData;
 import mpoverviewer.image_layer.tabcontent.CompositionPane;
-import mpoverviewer.image_layer.tabcontent.CompositionPaneSP;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ImageIndex;
 import mpoverviewer.image_layer.ImageLoader;
@@ -44,8 +43,6 @@ public class MPOverviewer extends Application {
         long a = System.currentTimeMillis();
         Song song = new SongToData().getSongToData("C:/Users/J/Documents/MPC/Mario Paint Composer PC/Prefs/dont talk anymore chorus 3]MarioPaint.txt");
         System.out.println("TIME" + (System.currentTimeMillis() - a));
-        TabDraggable tab2 = new TabDraggable("Tab 2");
-        tab2.setContent(new Rectangle(500, 500, Color.RED));
         TabDraggable tab3 = new TabDraggable("Tab 3");
         tab3.setContent(new Rectangle(500, 500, Color.BLUE));
 
@@ -76,15 +73,12 @@ public class MPOverviewer extends Application {
         panetest.getChildren().add(line);
         ScrollPane panetest2 = new ScrollPane();
         panetest2.setContent(panetest);
-//        panetest2.setHbarPolicy(ScrollBarPolicy.ALWAYS);
-        CompositionPane panetest3 = new CompositionPane(song);
-        tab2.setContent(panetest3);
+//        tab2.setContent(panetest3);
 
-        CompositionPaneSP panetest4 = new CompositionPaneSP(song);
+        CompositionPane panetest4 = new CompositionPane(song);
         tab3.setContent(panetest4);
 
         TabPane tabs = Variables.stageInFocus.getTabPane();
-        tabs.getTabs().add(tab2);
         tabs.getTabs().add(tab3);
         BorderPane root1 = new BorderPane();
     }

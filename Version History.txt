@@ -1,4 +1,11 @@
-v0.2.9
+v0.3.1
+-Rename CompositionPaneSP to CompositionPane, deleting the original CompositionPane class
+-Alter rubber band to automatically scroll scrollpane when mouse is on edge of scene
+
+v0.3.0 (ef7e346ac8679418064fc0c039f3aef8978a3bbb)
+-Refactor into a more MVC type architecture (model:data_layer :: view:ui_layer :: controller:image_layer)
+
+v0.2.9 (54c852604b9966b106f66ede8e08301ade412bd6)
 -Alter rubber band to be transparent
 -Alter rubber band to respect boundaries and readjust the bounds to accomodate resizing that go out of bounds
 

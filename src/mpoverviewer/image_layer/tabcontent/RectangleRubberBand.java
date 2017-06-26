@@ -166,7 +166,54 @@ public class RectangleRubberBand extends Rectangle {
             this.setHeight(yOrigin - y);
         }
     }
+    
+    /**
+     * Second call this to redraw the rubber band to a new size. Alters only x 
+     * dimension.
+     *
+     * @param x x-coord to resize to
+     */
+    public void resizeX(double x){
+        
+        if (x > WIDTH_DEFAULT) {
+            x = WIDTH_DEFAULT;
+        } else if (x < 0) {
+            x = 0;
+        }
 
+        if (x >= xOrigin) {
+            this.setTranslateX(xOrigin);
+            this.setWidth(x - xOrigin);
+        } else {
+            this.setTranslateX(x);
+            this.setWidth(xOrigin - x);
+        }
+    }
+    
+    /**
+     * Second call this to redraw the rubber band to a new size. Alters only y 
+     * dimension.
+     *
+     * @param y y-coord to resize to
+     */
+    public void resizeY(double y){
+
+        if (y > HEIGHT_DEFAULT) {
+            y = HEIGHT_DEFAULT;
+        } else if (y < 0) {
+            y = 0;
+        }
+        
+        if (y >= yOrigin) {
+            this.setTranslateY(yOrigin);
+            this.setHeight(y - yOrigin);
+        } else {
+            this.setTranslateY(y);
+            this.setHeight(yOrigin - y);
+        }
+        
+    }
+    
     /**
      * Finally call this to end drawing the rubber band and hide it. Sets rubber
      * band invisible.
