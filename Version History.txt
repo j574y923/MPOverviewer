@@ -1,3 +1,6 @@
+v0.3.2
+-Fix rubber band to properly stop auto scroll, dynamically change scroll directions
+
 v0.3.1
 -Rename CompositionPaneSP to CompositionPane, deleting the original CompositionPane class
 -Alter rubber band to automatically scroll scrollpane when mouse is on edge of scene
