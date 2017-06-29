@@ -1,3 +1,7 @@
+v0.3.3
+-Fix rubber band to prevent stack overflow
+-Fix rubber band resizing to correct sizes
+
 v0.3.2
 -Fix rubber band to properly stop auto scroll, dynamically change scroll directions
 

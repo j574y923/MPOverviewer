@@ -30,12 +30,16 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
      * and the mouse resizes into this margin, the scrollpane will scroll to
      * accommodate resizing.
      */
-    private static final double MARGIN = 4;
+    private static final double MARGIN = 8;
 
     private volatile boolean autoFlagH;
     private volatile boolean autoFlagV;
     private Timeline autoAnimationH;
     private Timeline autoAnimationV;
+
+    /* Fix for a stack overflow error that was happening in the change listener */
+    private boolean mutexH;
+    private boolean mutexV;
 
     /**
      *
@@ -52,10 +56,17 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if (autoFlagH) {
-                    if(newValue.doubleValue() > oldValue.doubleValue())
-                        rubberBand.resizeX(newValue.doubleValue() * 2216 + scrollPane.localToScene(scrollPane.getBoundsInLocal()).getMaxX());
-                    else
-                        rubberBand.resizeX(newValue.doubleValue() * 2216);//??
+                    if (mutexH) {
+                        return;
+                    }
+                    mutexH = true;
+                    double sizeOffset = scrollPane.getViewportBounds().getWidth();
+                    if (newValue.doubleValue() > oldValue.doubleValue() && newValue.doubleValue() > 0) {
+                        rubberBand.resizeX(newValue.doubleValue() * (2216 - sizeOffset) + sizeOffset);
+                    } else if (newValue.doubleValue() < 1) {
+                        rubberBand.resizeX(newValue.doubleValue() * (2216 - sizeOffset));
+                    }
+                    mutexH = false;
                 }
             }
 
@@ -64,7 +75,20 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if (autoFlagV) {
-                    rubberBand.resizeY(newValue.doubleValue() * 4366 + scrollPane.localToScene(scrollPane.getBoundsInLocal()).getMaxY());
+                    if (mutexV) {
+                        return;
+                    }
+                    mutexV = true;
+                    double sizeOffset = scrollPane.getViewportBounds().getHeight();
+                    /* prevent from redrawing rubberband to the bottom of viewport, scroll goes from 0.0 to -0.005 then -0.005 to 0.0 triggering this if statement */
+                    if (newValue.doubleValue() > oldValue.doubleValue() && newValue.doubleValue() > 0) {
+                        rubberBand.resizeY(newValue.doubleValue() * (4366 - sizeOffset) + sizeOffset);
+                    } 
+                    /* prevent from redrawing rubberband to the top of viewport, scroll goes from 1.0 to 1.005 then 1.005 to 1.0 triggering this statement */ 
+                    else if (newValue.doubleValue() < 1) {
+                        rubberBand.resizeY(newValue.doubleValue() * (4366 - sizeOffset));
+                    }
+                    mutexV = false;
                 }
             }
 
@@ -80,8 +104,10 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             navigatePane(mouseEvent);
         } else if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
             rubberBand.end();
-            autoFlagH = false;
-            autoFlagV = false;
+//            autoFlagH = false;
+//            autoFlagV = false;
+            autoScrollH(false, 0);
+            autoScrollV(false, 0);
         }
     }
 
@@ -97,7 +123,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             destX = 0;
             enableX = true;
         } else {
-            autoFlagH = false;
+//            autoFlagH = false;
             enableX = false;
         }
 
@@ -112,7 +138,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             destY = 0;
             enableY = true;
         } else {
-            autoFlagV = false;
+//            autoFlagV = false;
             enableY = false;
         }
 
@@ -120,8 +146,14 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         autoScrollV(enableY, destY);
     }
 
+    /**
+     *
+     * @param enable to enable or disable auto scroll
+     * @param destX the direction to auto scroll in, 0 (left) or 1 (right)
+     */
     private void autoScrollH(boolean enable, int destX) {
         if (!enable) {
+            autoFlagH = false;
             return;
         }
         if (autoFlagH) {
@@ -153,8 +185,14 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         test.start();
     }
 
-    private void autoScrollV(boolean enable, int destY) {        
+    /**
+     *
+     * @param enable to enable or disable auto scroll
+     * @param destX the direction to auto scroll in, 0 (top) or 1 (bottom)
+     */
+    private void autoScrollV(boolean enable, int destY) {
         if (!enable) {
+            autoFlagV = false;
             return;
         }
         if (autoFlagV) {
@@ -182,18 +220,20 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         };
         test.start();
     }
-    
-    private double zdh(int destX){
-        if(destX == 1)
+
+    private double zdh(int destX) {
+        if (destX == 1) {
             return 2 - scrollPane.hvalueProperty().get() * 2;
-        else
+        } else {
             return scrollPane.hvalueProperty().get() * 2;
-    }    
-    
-    private double zdv(int destY){
-        if(destY == 1)
-            return 2 - scrollPane.hvalueProperty().get() * 2;
-        else
-            return scrollPane.hvalueProperty().get() * 2;
+        }
+    }
+
+    private double zdv(int destY) {
+        if (destY == 1) {
+            return 2 - scrollPane.vvalueProperty().get() * 2;
+        } else {
+            return scrollPane.vvalueProperty().get() * 2;
+        }
     }
 }
