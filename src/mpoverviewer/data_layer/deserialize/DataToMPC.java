@@ -1,7 +1,7 @@
 package mpoverviewer.data_layer.deserialize;
 
 import java.util.List;
-import mpoverviewer.data_layer.data.Measure;
+import mpoverviewer.data_layer.data.MeasureLine;
 import mpoverviewer.data_layer.data.Note;
 import mpoverviewer.data_layer.data.Song;
 
@@ -126,16 +126,16 @@ public class DataToMPC {
 
         String songContent = "";
 
-        List<Measure> composition = data.composition;
+        List<MeasureLine> composition = data.composition;
 
         for (int i = 0; i < Math.min(composition.size(), 384); i++) {
-            Measure m = composition.get(i);
-            if (m.measure.isEmpty() && m.getVolume() == Measure.MAX_VELOCITY) {
+            MeasureLine m = composition.get(i);
+            if (m.measureLine.isEmpty() && m.getVolume() == MeasureLine.MAX_VELOCITY) {
                 songContent += ":";
                 continue;
             }
 
-            List<Note> notes = m.measure;
+            List<Note> notes = m.measureLine;
             int numPluses = 0;
             for (int j = 0; j < notes.size(); j++) {
                 songContent += convI(notes.get(j).getInstrument());
@@ -158,11 +158,11 @@ public class DataToMPC {
     }
 
     private char convVolume(int volume) {
-        if (volume == Measure.MAX_VELOCITY) {
+        if (volume == MeasureLine.MAX_VELOCITY) {
             return 'q';
         }
-        return (char) ((double) Math.min(volume + 1, Measure.MAX_VELOCITY - 1)
-                / Measure.MAX_VELOCITY * ('q' - 'a') + 'a');
-        //return (char)((double)volume / Measure.MAX_VELOCITY * ('q' - 'a') + 'a');
+        return (char) ((double) Math.min(volume + 1, MeasureLine.MAX_VELOCITY - 1)
+                / MeasureLine.MAX_VELOCITY * ('q' - 'a') + 'a');
+        //return (char)((double)volume / MeasureLine.MAX_VELOCITY * ('q' - 'a') + 'a');
     }
 }

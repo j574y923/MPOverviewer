@@ -1,6 +1,6 @@
 package mpoverviewer.data_layer.serialize;
 
-import mpoverviewer.data_layer.data.Measure;
+import mpoverviewer.data_layer.data.MeasureLine;
 import mpoverviewer.data_layer.data.Note;
 import mpoverviewer.data_layer.data.Song;
 
@@ -76,7 +76,7 @@ public class MPCToData {
             //ab+cd+ef+gh+ij++q -> ab cd ef gh ij q
             String[] c = b[i].split("\\+");
 
-            Measure m = song.composition.get(i);//new Measure();
+            MeasureLine m = song.composition.get(i);//new MeasureLine();
             for (int j = 0; j < c.length - 1; j++) {//length-1 to avoid VOLUME
                 if (c[j].isEmpty()) {
                     continue;
@@ -204,8 +204,8 @@ public class MPCToData {
      */
     private int parseVolume(char s) {
         if (s > 'r' || s < 'a') {
-            return Measure.MAX_VELOCITY;
+            return MeasureLine.MAX_VELOCITY;
         }
-        return (int) ((s - (double) 'a') / ('q' - 'a') * Measure.MAX_VELOCITY);
+        return (int) ((s - (double) 'a') / ('q' - 'a') * MeasureLine.MAX_VELOCITY);
     }
 }

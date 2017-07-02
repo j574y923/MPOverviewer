@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Container class for all notes on a measure.
+ * Container class for all notes on a line.
  *
  * @author j574y923
  */
-public class Measure {
+public class MeasureLine {
 
     public static final int MAX_VELOCITY = 127;
     
-    public List<Note> measure;
+    public List<Note> measureLine;
 
     private int volume;
 
-    public Measure() {
-        measure = new ArrayList<>();
+    public MeasureLine() {
+        measureLine = new ArrayList<>();
         volume = 127;
     }
 
     public void addNote(Note note) {
-        measure.add(note);
+        measureLine.add(note);
     }
 
     /**
@@ -31,9 +31,9 @@ public class Measure {
      * @param position
      */
     public void deleteNote(int position) {
-        for (int i = 0; i < measure.size(); i++) {
-            if (measure.get(i).getPositionInt() == position) {
-                measure.remove(i);
+        for (int i = 0; i < measureLine.size(); i++) {
+            if (measureLine.get(i).getPositionInt() == position) {
+                measureLine.remove(i);
                 return;
             }
         }

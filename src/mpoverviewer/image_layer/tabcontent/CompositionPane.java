@@ -1,6 +1,7 @@
 package mpoverviewer.image_layer.tabcontent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import javafx.event.EventHandler;
@@ -18,11 +19,11 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import mpoverviewer.data_layer.data.Measure;
+import mpoverviewer.data_layer.data.MeasureLine;
 import mpoverviewer.data_layer.data.Note;
 import mpoverviewer.data_layer.data.Song;
+import mpoverviewer.global.Constants;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ImageIndex;
 import mpoverviewer.ui_layer.tab.TabDraggable;
@@ -51,7 +52,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     private final List<Line> lineBG = new ArrayList<>();
     private final List<Text> measureNum = new ArrayList<>();
 
-    private List<ImageView> composition;
+    private HashMap<Note, ImageView[]> composition;
     private List<Line> compositionVol;
 
 //    private static RectangleRubberBand region;
@@ -61,9 +62,16 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //    private static double regionMaxY;
     public CompositionPane(Song song) {
         super();
+        
+        //<note, imageNote (0) and imageAccidental (1)>
+//        HashMap<Note, ImageView[]> test;
+//        test = new HashMap<>();
+//        pane.getChildren().addAll(test.get(new Note(0,0,0)));
+//        to get notes in a rectangle, use math to determine min and max bounds and Song to iterate over notes
+        
         initBG();
         compositionVol = new ArrayList<>();
-        composition = new ArrayList<>();
+        composition = new HashMap<>();
         initDraw(song);
 
         pane.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
@@ -89,15 +97,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //        pane.getChildren().clear();
 //        composition.clear();
 //        compositionVol.clear();
-//        regionMinX = -1;
-//        regionMinY = -1;
-//        regionMaxX = -1;
-//        regionMaxY = -1;
-//        region = new RectangleRubberBand();
-//        RectangleRubberBand.makeResizable(region);
-//        region.setVisible(false);
-//        pane.getChildren().add(region);
         pane.addEventHandler(MouseEvent.ANY, new EventHandlerRubberBand(pane, this));
+        pane.addEventFilter(MouseEvent.ANY, new StaffInstrumentEventHandler(this));
     }
 
     @Override
@@ -116,38 +117,40 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
         for (int i = 0; i < 22 * 12; i++) {
             ImageView iv = Variables.imageLoader.getImageView(ImageIndex.STAFF_BG);
-            iv.setTranslateX((i % 22) * 100 + 8);
-            iv.setTranslateY((i / 22) * 364 + 16);
+            iv.setTranslateX((i % 22) * 100 + Constants.EDGE_MARGIN);
+            iv.setTranslateY((i / 22) * Constants.ROW_HEIGHT_TOTAL + 16);
             compositionBG.add(iv);
         }
 
         for (int i = 0; i < 12; i++) {
             ImageView iv = Variables.imageLoader.getImageView(ImageIndex.TREBLE_CLEF_MPC);
-            iv.setTranslateX(8);
-            iv.setTranslateY(i * 364 + 16);
+            iv.setTranslateX(Constants.EDGE_MARGIN);
+            iv.setTranslateY(i * Constants.ROW_HEIGHT_TOTAL + 16);
             compositionBG.add(iv);
-            for (int j = 0; j < 8; j++) {
-                Text t = new Text(8 + 144 + j * 256, i * 364 + 16 - 4, "" + (1 + i * 8 + j));
+            int eight = Constants.LINES_IN_A_ROW / 4;
+            for (int j = 0; j < eight; j++) {
+                Text t = new Text(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + j * Constants.MEASURE_NUM_SPACING_4 - 2,
+                        i * Constants.ROW_HEIGHT_TOTAL + 16 - 4, "" + (1 + i * eight + j));
                 measureNum.add(t);
 
                 ImageView iv1 = Variables.imageLoader.getImageView(ImageIndex.STAFF_MLINE);
-                iv1.setTranslateX(8 + 144 + j * 256);
-                iv1.setTranslateY(i * 364 + 16);
+                iv1.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + j * Constants.MEASURE_NUM_SPACING_4);
+                iv1.setTranslateY(i * Constants.ROW_HEIGHT_TOTAL + 16);
                 compositionBG.add(iv1);
 
                 ImageView iv2 = Variables.imageLoader.getImageView(ImageIndex.STAFF_LINE);
-                iv2.setTranslateX(8 + 144 + j * 256 + 64);
-                iv2.setTranslateY(i * 364 + 16);
+                iv2.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + j * Constants.MEASURE_NUM_SPACING_4 + Constants.LINE_SPACING);
+                iv2.setTranslateY(i * Constants.ROW_HEIGHT_TOTAL + 16);
                 compositionBG.add(iv2);
 
                 ImageView iv3 = Variables.imageLoader.getImageView(ImageIndex.STAFF_LINE);
-                iv3.setTranslateX(8 + 144 + j * 256 + 128);
-                iv3.setTranslateY(i * 364 + 16);
+                iv3.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + j * Constants.MEASURE_NUM_SPACING_4 + Constants.LINE_SPACING * 2);
+                iv3.setTranslateY(i * Constants.ROW_HEIGHT_TOTAL + 16);
                 compositionBG.add(iv3);
 
                 ImageView iv4 = Variables.imageLoader.getImageView(ImageIndex.STAFF_LINE);
-                iv4.setTranslateX(8 + 144 + j * 256 + 192);
-                iv4.setTranslateY(i * 364 + 16);
+                iv4.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + j * Constants.MEASURE_NUM_SPACING_4 + Constants.LINE_SPACING * 3);
+                iv4.setTranslateY(i * Constants.ROW_HEIGHT_TOTAL + 16);
                 compositionBG.add(iv4);
             }
         }
@@ -155,17 +158,17 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         for (int i = 0; i < 12; i++) {
             Line line = new Line();
             line.setStartX(0f);
-            line.setStartY(i * 364 + 296);
-            line.setEndX(2216f);
-            line.setEndY(i * 364 + 296);
+            line.setStartY(i * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES);
+            line.setEndX((float)Constants.WIDTH_DEFAULT);
+            line.setEndY(i * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES);
             line.setStrokeWidth(2);
             lineBG.add(line);
 
             Line line2 = new Line();
             line2.setStartX(0f);
-            line2.setStartY(i * 364 + 296 + 64 + 2);
-            line2.setEndX(2216f);
-            line2.setEndY(i * 364 + 296 + 64 + 2);
+            line2.setStartY(i * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 2);
+            line2.setEndX((float)Constants.WIDTH_DEFAULT);
+            line2.setEndY(i * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 2);
             line2.setStrokeWidth(2);
             lineBG.add(line2);
         }
@@ -199,31 +202,43 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     public void drawSong(Song song) {
 
         for (int i = 0; i < song.composition.size(); i++) {
-            Measure m = song.composition.get(i);
-            for (Note n : m.measure) {
+            MeasureLine m = song.composition.get(i);
+            for (Note n : m.measureLine) {
 
                 Line vol = new Line();
-                vol.setStartX(8 + 144 + (i % 32) * 64);
-                vol.setStartY((i / 32) * 364 + 296 + 64 + 1);
-                vol.setEndX(8 + 144 + (i % 32) * 64);
-                vol.setEndY((i / 32) * 364 + 296 + 64 + 1 - m.getVolume() / 2);
+                vol.setStartX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
+                vol.setStartY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1);
+                vol.setEndX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
+                vol.setEndY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1 - m.getVolume() / 2);
                 vol.setStroke(Color.GREEN);
                 vol.setStrokeWidth(4);
                 this.compositionVol.add(vol);
 
                 ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
                 ImageView iv = Variables.imageLoader.getImageView(imageIndex);
-                iv.setTranslateX(8 + 144 + (i % 32) * 64 - 16);
-                iv.setTranslateY(16 + (i / 32) * 364 + zdy(n.getPosition()) - 11);
+                iv.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING - 16);
+                iv.setTranslateY(16 + (i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + zdy(n.getPosition()) - 11);
                 iv.setSmooth(false);
-                this.composition.add(iv);
+                ImageView[] ivArray = new ImageView[2];
+                ivArray[0] = iv;
+                this.composition.put(n, ivArray);
 
-                zMod(iv, n);
+                zMod(iv, n);            
+                
+                pane.getChildren().addAll(vol, ivArray[0]);
+                if(ivArray[1] != null)
+                    pane.getChildren().add(ivArray[1]);
             }
         }
 
-        pane.getChildren().addAll(compositionVol);
-        pane.getChildren().addAll(composition);
+//        pane.getChildren().addAll(compositionVol);
+        //not in order...
+//        for(Note n : composition.keySet()){
+//            ImageView[] ivArray = composition.get(n);
+//            pane.getChildren().addAll(ivArray[0]);
+//            if(ivArray[1] != null)
+//                pane.getChildren().addAll(ivArray[1]);
+//        }
     }
 
     //public void redraw(){}//song data gets modified then call redraw...
@@ -300,7 +315,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             case FLAT:
             case DOUBLESHARP:
             case DOUBLEFLAT:
-                zModHalfStep(iv, n.getModifier());
+                zModHalfStep(iv, n);
             case NONE:
                 //nothing changes
                 break;
@@ -313,12 +328,16 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
     }
 
-    private void zModHalfStep(ImageView iv, Note.Modifier m) {
+    private void zModHalfStep(ImageView iv, Note n) {
+        Note.Modifier m = n.getModifier();
         ImageIndex imageIndex = ImageIndex.valueOf(m.toString());
         ImageView hs = Variables.imageLoader.getImageView(imageIndex);
         hs.setTranslateX(iv.getTranslateX() - 32);
         hs.setTranslateY(iv.getTranslateY());
-        composition.add(hs);
+        
+        ImageView[] ivArray = composition.get(n);
+        ivArray[1] = hs;
+//        composition.add(hs);
     }
 
     private ScrollBar getScrollBarH() {

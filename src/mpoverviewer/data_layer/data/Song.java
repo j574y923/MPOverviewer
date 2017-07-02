@@ -19,7 +19,7 @@ public class Song {
 
     private static final int COMPOSITION_LENGTH = 400;
 
-    public List<Measure> composition;
+    public List<MeasureLine> composition;
 
     private int tempo;
 
@@ -34,7 +34,7 @@ public class Song {
         composition = new ArrayList<>(COMPOSITION_LENGTH);
         //initialization of all values
         for(int i = 0 ;i < COMPOSITION_LENGTH; i++){
-            composition.add(new Measure());
+            composition.add(new MeasureLine());
         }
     }
 
