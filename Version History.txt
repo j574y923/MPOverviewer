@@ -1,15 +1,21 @@
-v0.4.0
+v0.4.1
+-Add addNote to StaffInstrumentEventHandler
+-Add removeNote to StaffInstrumentEventHandler
+-Add getRibbonMenu in stageController used to get Button Line info
+-Fix Note Instrument enum order
+
+v0.4.0 (baadb92e9c7eb69076ba4768ebc812d8120858ae)
 -Add Constants class to contain layout values for CompositionPane
 -Add initial StaffInstrumentEventHandler
 
-v0.3.3
+v0.3.3 (4dcb2f4fd62348b8600f87788c5f700cfb908e13)
 -Fix rubber band to prevent stack overflow
 -Fix rubber band resizing to correct sizes
 
-v0.3.2
+v0.3.2 (6b2196933da55d562c594709a3c3fbda1e50f7c0)
 -Fix rubber band to properly stop auto scroll, dynamically change scroll directions
 
-v0.3.1
+v0.3.1 (79c0ef093041b193ef7b2411adcde12d92372ae0)
 -Rename CompositionPaneSP to CompositionPane, deleting the original CompositionPane class
 -Alter rubber band to automatically scroll scrollpane when mouse is on edge of scene
 

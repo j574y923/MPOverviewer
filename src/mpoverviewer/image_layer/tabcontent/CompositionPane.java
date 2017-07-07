@@ -13,10 +13,13 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -77,34 +80,41 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         pane.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                if (event.isControlDown()) {
-                    if (event.getDeltaY() < 0) {
-                        zoomOut();
-//                        keyControl(KeyCode.UP);
-                    } else {
-                        zoomIn();
-
-//                        keyControl(KeyCode.UP);
-                    }
-                    scaleShared = scale;
-                    event.consume();
-                }
+//                if (event.isControlDown()) {
+//                    if (event.getDeltaY() < 0) {
+//                        zoomOut();
+////                        keyControl(KeyCode.UP);
+//                    } else {
+//                        zoomIn();
+//
+////                        keyControl(KeyCode.UP);
+//                    }
+//                    scaleShared = scale;
+//                    event.consume();
+//                }
             }
         });
 
 //        sharedZoom();
         //OPTIMIZATION: do this when switching away to another tab??
 //        pane.getChildren().clear();
-//        composition.clear();
+//        staff.clear();
 //        compositionVol.clear();
         pane.addEventHandler(MouseEvent.ANY, new EventHandlerRubberBand(pane, this));
-        pane.addEventFilter(MouseEvent.ANY, new StaffInstrumentEventHandler(this));
+        pane.addEventFilter(InputEvent.ANY, new StaffInstrumentEventHandler(this, Variables.imageLoader));
+        
+//        ArrayList<StackPane> lol = new ArrayList<>();
+//        for(int i =0 ;i  < 7200; i++){
+//            System.out.println(i);
+//            lol.add(new StackPane());
+//        }
+//        pane.getChildren().addAll(lol);
     }
 
     @Override
     public void cleanUp() {
 //        pane.getChildren().clear();
-//        composition.clear();
+//        staff.clear();
 //        compositionVol.clear();
 //        compositionBG.clear();
 //        lineBG.clear();
@@ -201,8 +211,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
      */
     public void drawSong(Song song) {
 
-        for (int i = 0; i < song.composition.size(); i++) {
-            MeasureLine m = song.composition.get(i);
+        for (int i = 0; i < song.staff.size(); i++) {
+            MeasureLine m = song.staff.get(i);
             for (Note n : m.measureLine) {
 
                 Line vol = new Line();
@@ -233,8 +243,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 
 //        pane.getChildren().addAll(compositionVol);
         //not in order...
-//        for(Note n : composition.keySet()){
-//            ImageView[] ivArray = composition.get(n);
+//        for(Note n : staff.keySet()){
+//            ImageView[] ivArray = staff.get(n);
 //            pane.getChildren().addAll(ivArray[0]);
 //            if(ivArray[1] != null)
 //                pane.getChildren().addAll(ivArray[1]);
@@ -337,7 +347,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         
         ImageView[] ivArray = composition.get(n);
         ivArray[1] = hs;
-//        composition.add(hs);
+//        staff.add(hs);
     }
 
     private ScrollBar getScrollBarH() {
@@ -462,5 +472,69 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     @Override
     public void constructedBehavior() {
         sharedZoom();
+    }
+    
+    public void removeNote(int line, Note.Position position){
+        System.out.println(position);
+        Note n = song.staff.get(line).removeNote(position.ordinal());
+        if(n != null){
+            pane.getChildren().remove(composition.get(n)[0]);
+            if(composition.get(n)[1] != null)
+                pane.getChildren().remove(composition.get(n)[1]);
+            composition.remove(n);
+        }
+    }
+    
+    public void addNote(int line, Note.Instrument instrument, Note.Position position, Note.Modifier modifier){
+        System.out.println(position + " " + instrument);
+        Note n = new Note(instrument, position, modifier);
+        if(song.staff.get(line).addNote(n)){
+            //TODO: add new note imageview...
+            ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
+            ImageView iv = Variables.imageLoader.getImageView(imageIndex);
+            iv.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (line % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING - 16);
+            iv.setTranslateY(16 + (line / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + zdy(n.getPosition()) - 11);
+            ImageView[] ivArray = new ImageView[2];
+            ivArray[0] = iv;
+            this.composition.put(n, ivArray);
+
+            zMod(iv, n);            
+
+            redrawLine(line);
+//            pane.getChildren().add(ivArray[0]);
+//            if(ivArray[1] != null)
+//                pane.getChildren().add(ivArray[1]);
+        }
+        else {
+            song.staff.get(line).bringNoteToFront(n);
+            
+            redrawLine(line);
+        }
+    }
+    
+    /**
+     * Should be called whenever a new note is added to properly organize the
+     * notes. New note should be added to the song and composition before
+     * calling this. First remove all note ImageViews on that line from the
+     * pane. Then put all note ImageViews on that line into the pane again.
+     *
+     * @param line at which new note is placed
+     */
+    public void redrawLine(int line){
+        for(Note n : song.staff.get(line).measureLine){
+            ImageView[] ivArray = this.composition.get(n);
+            
+            pane.getChildren().remove(ivArray[0]);
+            if(ivArray[1] != null)
+                pane.getChildren().remove(ivArray[1]);
+        }
+        
+        for(Note n : song.staff.get(line).measureLine){
+            ImageView[] ivArray = this.composition.get(n);
+            
+            pane.getChildren().add(ivArray[0]);
+            if(ivArray[1] != null)
+                pane.getChildren().add(ivArray[1]);
+        }
     }
 }

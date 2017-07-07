@@ -97,6 +97,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent mouseEvent) {
+        rubberBand.toFront();
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
             rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
         } else if (mouseEvent.isPrimaryButtonDown()) {

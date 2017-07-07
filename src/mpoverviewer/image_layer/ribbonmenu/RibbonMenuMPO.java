@@ -8,8 +8,15 @@ import mpoverviewer.ui_layer.ribbonmenu.RibbonMenuController;
  */
 public class RibbonMenuMPO extends RibbonMenuController {
 
+    private RibbonMenuContainerInstr buttonLine;
+    
     public RibbonMenuMPO() {
         super();
-        this.addContainer(new RibbonMenuContainerInstr());
+        buttonLine = new RibbonMenuContainerInstr(); 
+        this.addContainer(buttonLine);
+    }
+    
+    public RibbonMenuContainerInstr getButtonLine() {
+        return buttonLine;
     }
 }

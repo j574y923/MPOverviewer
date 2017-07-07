@@ -76,7 +76,7 @@ public class MPCToData {
             //ab+cd+ef+gh+ij++q -> ab cd ef gh ij q
             String[] c = b[i].split("\\+");
 
-            MeasureLine m = song.composition.get(i);//new MeasureLine();
+            MeasureLine m = song.staff.get(i);//new MeasureLine();
             for (int j = 0; j < c.length - 1; j++) {//length-1 to avoid VOLUME
                 if (c[j].isEmpty()) {
                     continue;
@@ -92,7 +92,7 @@ public class MPCToData {
             }
             m.setVolume(parseVolume(b[i].charAt(b[i].length() - 1)));
 
-//            song.composition.set(i, m);
+//            song.staff.set(i, m);
         }
 
         return song;

@@ -9,7 +9,7 @@ public class Note {
 
     public enum Instrument {
         MARIO, MUSHROOM, YOSHI, STAR, FLOWER, GAMEBOY, DOG, CAT, PIG, SWAN,
-        FACE, PLANE, BOAT, CAR, HEART, COIN, PIRANHA, SHYGUY, BOO
+        FACE, PLANE, BOAT, CAR, HEART, PIRANHA, COIN, SHYGUY, BOO
     }
 
     public enum Position {

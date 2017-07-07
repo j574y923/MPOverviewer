@@ -126,7 +126,7 @@ public class DataToMPC {
 
         String songContent = "";
 
-        List<MeasureLine> composition = data.composition;
+        List<MeasureLine> composition = data.staff;
 
         for (int i = 0; i < Math.min(composition.size(), 384); i++) {
             MeasureLine m = composition.get(i);

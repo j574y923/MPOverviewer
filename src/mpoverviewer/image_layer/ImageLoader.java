@@ -102,6 +102,25 @@ public class ImageLoader {
         return iv;
     }
 
+    public void setImage(ImageView iv, ImageIndex i){
+        if (ImageIndex.MARIO_GRAY.ordinal() <= i.ordinal()
+                && i.ordinal() <= ImageIndex.LUIGI.ordinal()) {
+            iv.setViewport(getInstr(i));
+        } else if (ImageIndex.SHARP_GRAY.ordinal() <= i.ordinal()
+                && i.ordinal() <= ImageIndex.DOUBLEFLAT.ordinal()) {
+            iv.setViewport(getHalfStep(i));
+        } else if (ImageIndex.MARIO_SMA.ordinal() <= i.ordinal()
+                && i.ordinal() <= ImageIndex.LUIGI_SM.ordinal()) {
+            iv.setViewport(getInstrSmall(i));
+        } else if (ImageIndex.TREBLE_CLEF_AMS.ordinal() <= i.ordinal()
+                && i.ordinal() <= ImageIndex.STAFF_MLINE.ordinal()) {
+            iv.setViewport(getStaff(i));
+        } else if (ImageIndex.FILTER_ON.ordinal() <= i.ordinal()
+                && i.ordinal() <= ImageIndex.FILTER_OFF.ordinal()) {
+            iv.setViewport(getMisc(i));
+        }
+    }
+    
     private Rectangle2D getInstr(ImageIndex i) {
         return new Rectangle2D(zix(i),//x offset
                 ziy(i),//y offset

@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import mpoverviewer.data_layer.data.Note;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ImageIndex;
 import mpoverviewer.ui_layer.ribbonmenu.RibbonMenuButton;
@@ -87,6 +88,7 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
                     instrSelectedButton.setGraphic(Variables.imageLoader.getImageView(
                             ImageIndex.values()[i2 - ImageIndex.MARIO_SMA.ordinal() + ImageIndex.MARIO.ordinal()]));
                     instrSelected = i2 - ImageIndex.MARIO_SMA.ordinal();
+                    System.out.println(Note.Instrument.values()[instrSelected]);
                 }
             });
             this.addButton(0, rmb);
@@ -151,8 +153,8 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
         }
     }
 
-    public int getInstrSelected() {
-        return instrSelected;
+    public Note.Instrument getInstrSelected() {
+        return Note.Instrument.values()[instrSelected];
     }
 
     public boolean getFilterFlag() {

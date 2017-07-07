@@ -2,7 +2,6 @@ package mpoverviewer.ui_layer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mpoverviewer.ui_layer.tab.TabDraggable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -20,6 +19,7 @@ import mpoverviewer.global.Flags;
 import mpoverviewer.global.Variables;
 import mpoverviewer.ui_layer.menubar.MenuBarController;
 import mpoverviewer.ui_layer.ribbonmenu.RibbonMenuController;
+import mpoverviewer.ui_layer.tab.TabDraggable;
 
 /**
  * Stage that represents a window and its components. Every window is
@@ -37,6 +37,7 @@ public class StageController extends Stage {
     private final VBox vBox;
     private MenuBarController menuBar;
     private TabPane tabPane;
+    private RibbonMenuController rmc;
 
     /**
      * Used to locate a class that derives the RibbonMenuController class.
@@ -202,6 +203,10 @@ public class StageController extends Stage {
     public TabPane getTabPane() {
         return tabPane;
     }
+    
+    public RibbonMenuController getRibbonMenu() {
+        return rmc;
+    }
 
     private void focusThis() {
         Variables.stageInFocus = this;
@@ -219,6 +224,7 @@ public class StageController extends Stage {
 
         //Add between menubar and tabpane
         vBox.getChildren().add(1, rmc);
+        this.rmc = rmc;
     }
 
     /**
