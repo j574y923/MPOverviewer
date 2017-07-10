@@ -9,9 +9,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import mpoverviewer.data_layer.data.Note;
+import mpoverviewer.data_layer.dataclipboard.DataClipboardFunctions;
+import mpoverviewer.global.Variables;
+import mpoverviewer.image_layer.ribbonmenu.RibbonMenuMPO;
 
 /**
  * Event Handler for rubber band which follows mouse movements. Mouse moves and
@@ -93,10 +98,25 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             }
 
         });
+        
+        scrollPane.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.isControlDown()){
+                    switch(event.getCode()){
+//                        case C:
+//                            DataClipboardFunctions.copy(song, 0, Note.Position.B4, 0, Note.Position.E4);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void handle(MouseEvent mouseEvent) {
+        Note.Instrument theInd = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().getInstrSelected();
+        if(theInd != null)
+            return;
         rubberBand.toFront();
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
             rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());

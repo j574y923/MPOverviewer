@@ -154,7 +154,7 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
     }
 
     public Note.Instrument getInstrSelected() {
-        return Note.Instrument.values()[instrSelected];
+        return instrSelected < 0 ? null : Note.Instrument.values()[instrSelected];
     }
 
     public boolean getFilterFlag() {

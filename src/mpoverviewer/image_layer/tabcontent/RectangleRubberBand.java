@@ -4,9 +4,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import mpoverviewer.data_layer.data.Note;
+import mpoverviewer.global.Constants;
 
 //DONE:TODO: make scrollpane scroll as resizing toward the edges of the scrollpane
 //TODO: make rubberband region select all notes in that region
@@ -84,8 +87,8 @@ public class RectangleRubberBand extends Rectangle {
 
     private double xOrigin;
     private double yOrigin;
-    private static final int HEIGHT_DEFAULT = 4366;
-    private static final int WIDTH_DEFAULT = 2216;
+//    private static final int HEIGHT_DEFAULT = 4366;
+//    private static final int WIDTH_DEFAULT = 2216;
 
     /* Allow resizing by dragging the edges of the rectangle, will prevent conventional resizing */
     private boolean postResizable;
@@ -95,12 +98,6 @@ public class RectangleRubberBand extends Rectangle {
         this.setFill(FILL_TRANSPARENT);
 //        makeResizable(this);
         postResizable = false;
-//        this.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-////                System.out.println("WORKS" + event.getX());
-//            }
-//        });
     }
 
     /**
@@ -115,7 +112,7 @@ public class RectangleRubberBand extends Rectangle {
 //            return;
 //        }
 
-        if (x > WIDTH_DEFAULT || y > HEIGHT_DEFAULT) {
+        if (x > Constants.WIDTH_DEFAULT || y > Constants.HEIGHT_DEFAULT) {
             return;
         }
 
@@ -127,6 +124,7 @@ public class RectangleRubberBand extends Rectangle {
 
         xOrigin = x;
         yOrigin = y;
+        
     }
 
     /**
@@ -139,13 +137,13 @@ public class RectangleRubberBand extends Rectangle {
 //        if (postResizable) {
 //            return;
 //        }
-        if (x > WIDTH_DEFAULT) {
-            x = WIDTH_DEFAULT;
+        if (x > Constants.WIDTH_DEFAULT) {
+            x = Constants.WIDTH_DEFAULT;
         } else if (x < 0) {
             x = 0;
         }
-        if (y > HEIGHT_DEFAULT) {
-            y = HEIGHT_DEFAULT;
+        if (y > Constants.HEIGHT_DEFAULT) {
+            y = Constants.HEIGHT_DEFAULT;
         } else if (y < 0) {
             y = 0;
         }
@@ -175,8 +173,8 @@ public class RectangleRubberBand extends Rectangle {
      */
     public void resizeX(double x){
         
-        if (x > WIDTH_DEFAULT) {
-            x = WIDTH_DEFAULT;
+        if (x > Constants.WIDTH_DEFAULT) {
+            x = Constants.WIDTH_DEFAULT;
         } else if (x < 0) {
             x = 0;
         }
@@ -198,8 +196,8 @@ public class RectangleRubberBand extends Rectangle {
      */
     public void resizeY(double y){
 
-        if (y > HEIGHT_DEFAULT) {
-            y = HEIGHT_DEFAULT;
+        if (y > Constants.HEIGHT_DEFAULT) {
+            y = Constants.HEIGHT_DEFAULT;
         } else if (y < 0) {
             y = 0;
         }
@@ -230,6 +228,22 @@ public class RectangleRubberBand extends Rectangle {
         setPostResizable(true);
     }
 
+    public int getLineBegin() {
+        return getLine(xOrigin, yOrigin);
+    }
+
+    public int getLineEnd() {
+        return getLine(xOrigin + this.getWidth(), yOrigin + this.getHeight());
+    }
+
+    public Note.Position getPositionBegin() {
+        return Note.Position.values()[getPosition(yOrigin)];
+    }
+
+    public Note.Position getPositionEnd() {
+        return Note.Position.values()[getPosition(yOrigin + this.getHeight())];
+    }
+    
     private void setPostResizable(boolean postResizable) {
         this.postResizable = postResizable;
     }
@@ -458,4 +472,37 @@ public class RectangleRubberBand extends Rectangle {
     private double nodeH() {
         return node.getBoundsInParent().getHeight();
     }
+    
+    /* The following helper functions are also in StaffInstrumentEventHandler. */
+    
+    /**
+     * 
+     * @param x mouse pos for entire scene
+     * @param y mouse pos for entire scene
+     * @return line based on x and y coord
+     */
+    private int getLine(double x, double y){
+
+    	if(x < 122 || x > Constants.WIDTH_DEFAULT - 48 || !zby(y))//122 is arbitrary, 48 is arbitrary
+            return -1;
+    	return (((int)x - 122) / 64) + 
+                ((int)y / Constants.ROW_HEIGHT_TOTAL) * Constants.LINES_IN_A_ROW;
+    }
+    
+    /**
+     * 
+     * @param y mouse pos for entire scene
+     * @return note position based on y coord
+     */
+    private int getPosition(double y){
+    	if(!zby(y))
+            return -1;
+    	return (((int)y % Constants.ROW_HEIGHT_TOTAL - 10) / 16);//10 is arbitrary
+    }    
+    
+    /* If valid y */
+    private boolean zby(double y){
+        return y % Constants.ROW_HEIGHT_TOTAL <= Constants.ROW_HEIGHT_NOTES;
+    }
+    
 }

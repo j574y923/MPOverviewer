@@ -133,6 +133,8 @@ accAndNote = new HBox();
 //                if(test % 8 > 3){
 //                    return;
 //                }System.out.println(event.getY());
+if(blockSOMM)
+    return;
                 mouseEntered();
                 
                 //focus needed to register key presses...
@@ -157,8 +159,6 @@ accAndNote = new HBox();
                 updateAccidental();
             }
         });
-        
-///////////////////////        s.vvalueProperty()
 
 
 //        position = pos;
@@ -173,9 +173,14 @@ accAndNote = new HBox();
 //        }
     }
 
+    private boolean blockSOMM;
     private ImageIndex optimizeTest;
 	@Override
     public void handle(Event event) {
+        
+        Note.Instrument theInd = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().getInstrSelected();
+        if(theInd == null)
+            return;
         
         accAndNote.toFront();
         
@@ -239,7 +244,7 @@ accAndNote = new HBox();
         }
 //    	
 //        InstrumentIndex theInd = ButtonLine.getSelectedInstrument();        
-Note.Instrument theInd = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().getInstrSelected();
+//Note.Instrument theInd = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().getInstrSelected();
 ImageIndex optA = ImageIndex.values()[ImageIndex.MARIO_SIL.ordinal() + theInd.ordinal()];
 if(!optA.equals(optimizeTest)){
 il.setImage(silhouette, ImageIndex.values()[ImageIndex.MARIO_SIL.ordinal() + theInd.ordinal()]);
@@ -249,7 +254,7 @@ optimizeTest = optA;
 		if (event instanceof MouseEvent && ((MouseEvent) event).isPrimaryButtonDown()
 				&& newNote) {                    
 //this is only working when the cursor is right of the note its hovering over (??)
-
+blockSOMM = true;
 			leftMousePressed(theInd);
 System.out.println("TESTA");
 			event.consume();
@@ -285,6 +290,9 @@ System.out.println("TESTA");
 //            event.consume();
 //        }
 //
+                else if(event.getEventType() == MouseEvent.MOUSE_RELEASED){
+                    blockSOMM = false;
+                }
     }
 
     /**
