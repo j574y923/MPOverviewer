@@ -240,18 +240,15 @@ public class CompositionPane extends ScrollPane implements ContentControl {
                     pane.getChildren().add(ivArray[1]);
             }
         }
-
-//        pane.getChildren().addAll(compositionVol);
-        //not in order...
-//        for(Note n : staff.keySet()){
-//            ImageView[] ivArray = staff.get(n);
-//            pane.getChildren().addAll(ivArray[0]);
-//            if(ivArray[1] != null)
-//                pane.getChildren().addAll(ivArray[1]);
-//        }
     }
+    
+    //song data gets modified then call redraw...
+//    public void redrawSong() {
+//        this.composition.clear();
+//        this.pane.getChildren().clear();
+//        drawSong(song);
+//    }
 
-    //public void redraw(){}//song data gets modified then call redraw...
     private void zoomOut() {
 //        System.out.println("zoom Out");
         if (scale > 2) {
@@ -350,43 +347,6 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //        staff.add(hs);
     }
 
-    private ScrollBar getScrollBarH() {
-        if (scrollBarH == null) {
-            searchSB();
-        }
-        return scrollBarH;
-    }
-
-    private ScrollBar getScrollBarV() {
-        if (scrollBarV == null) {
-            searchSB();
-        }
-        return scrollBarV;
-    }
-
-    private void searchSB() {
-        Set<Node> nodes = this.lookupAll(".scroll-bar");
-        for (Node node : nodes) {
-            System.out.println(node);
-            if (node instanceof ScrollBar) {
-                ScrollBar sb = (ScrollBar) node;
-                if (sb.getOrientation() == Orientation.HORIZONTAL) {
-                    System.out.println("horizontal scrollbar visible = " + sb.isVisible());
-                    System.out.println("width = " + sb.getWidth());
-                    System.out.println("height = " + sb.getHeight());
-                    System.out.println("max = " + sb.getMax());
-                    scrollBarH = sb;
-                } else if (sb.getOrientation() == Orientation.VERTICAL) {
-                    System.out.println("vertical scrollbar visible = " + sb.isVisible());
-                    System.out.println("width = " + sb.getWidth());
-                    System.out.println("height = " + sb.getHeight());
-                    System.out.println("max = " + sb.getMax());
-                    scrollBarV = sb;
-                }
-            }
-        }
-    }
-
     /**
      * @return pane for zooming calls
      * @see #zoomOut()
@@ -394,6 +354,10 @@ public class CompositionPane extends ScrollPane implements ContentControl {
      */
     public Pane getPane() {
         return pane;
+    }
+    
+    public Song getSong() {
+        return song;
     }
 
     @Override
@@ -485,6 +449,25 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
     }
     
+    public void removeNote(int line, Note n){
+//        System.out.println(n.getPosition());
+//remove all... seems to have same behavior
+//List<ImageView> ivArr = new ArrayList<>();
+//for(Note n : notes){
+//    ivArr.add(composition.get(n)[0]);
+//    if(composition.get(n)[1] != null)
+//        ivArr.add(composition.get(n)[1]);
+//}
+//pane.getChildren().removeAll(ivArr);
+        song.staff.get(line).measureLine.remove(n);
+        if(n != null){
+            pane.getChildren().remove(composition.get(n)[0]);
+            if(composition.get(n)[1] != null)
+                pane.getChildren().remove(composition.get(n)[1]);
+            composition.remove(n);
+        }
+    }
+    
     public void addNote(int line, Note.Instrument instrument, Note.Position position, Note.Modifier modifier){
         System.out.println(position + " " + instrument);
         Note n = new Note(instrument, position, modifier);
@@ -513,10 +496,11 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     }
     
     /**
-     * Should be called whenever a new note is added to properly organize the
-     * notes. New note should be added to the song and composition before
-     * calling this. First remove all note ImageViews on that line from the
-     * pane. Then put all note ImageViews on that line into the pane again.
+     * Should be called whenever a new note is added to the composition hashmap
+     * to properly organize the notes. New note should be added to the song and
+     * composition before calling this. First remove all note ImageViews on that
+     * line from the pane. Then put all note ImageViews on that line into the
+     * pane again.
      *
      * @param line at which new note is placed
      */
@@ -535,6 +519,31 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             pane.getChildren().add(ivArray[0]);
             if(ivArray[1] != null)
                 pane.getChildren().add(ivArray[1]);
+        }
+    }
+    
+    /**
+     * Should be called whenever a new note is added or a line is modified in
+     * the song object THEN redrawLine should happen subsequently. This will
+     * compare the notes in composition hashmap and the notes in the song.
+     * Updates composition to include the notes that have been added or removed
+     * and adds or removes respective imageViews.
+     *
+     * @param line at which notes have changed
+     */
+    public void reloadLine(int line) {
+        for(Note n : song.staff.get(line).measureLine){
+            if(!this.composition.containsKey(n)) {
+                ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
+                ImageView iv = Variables.imageLoader.getImageView(imageIndex);
+                iv.setTranslateX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (line % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING - 16);
+                iv.setTranslateY(16 + (line / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + zdy(n.getPosition()) - 11);
+                ImageView[] ivArray = new ImageView[2];
+                ivArray[0] = iv;
+                this.composition.put(n, ivArray);
+
+                zMod(iv, n);
+            }
         }
     }
 }

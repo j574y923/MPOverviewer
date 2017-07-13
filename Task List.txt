@@ -1,0 +1,31 @@
+[--/--/--]cut
+[--/--/--]initialize new tab with empty song
+[--/--/--]save song
+[--/--/--]song modified
+[--/--/--]filter notes
+[--/--/--]arrangement pane
+[--/--/--]arrangement appending songs onto one another (connecting tabs)
+[--/--/--]status bar
+[--/--/--]change tempo
+[--/--/--]SMP songs
+[--/--/--]AMS songs
+[--/--/--]MIDI reading
+[--/--/--]MIDI writing
+[--/--/--]song type restrictions
+[--/--/--]rubber band option that stays visible in the same place for all tabs
+[--/--/--]multi-rubber band
+[--/--/--]rubber band to only include notes within the region, not notes it touches position with
+[--/--/--]rubber band option to copy with volume
+[--/--/--]copy volume only
+[--/--/--]paste volume only
+[--/--/--]cut volume only
+[--/--/--]delete volume only
+[--/--/--]show volume when placing new note
+[--/--/--]volume text
+[--/--/--]change volume
+[--/--/--]undo
+[--/--/--]redo
+[07/12/17]delete
+
+
+[--/--/--] is completion date

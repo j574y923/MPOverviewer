@@ -1,5 +1,6 @@
 package mpoverviewer.data_layer.dataclipboard;
 
+import java.util.ArrayList;
 import java.util.List;
 import mpoverviewer.data_layer.data.MeasureLine;
 
@@ -13,7 +14,7 @@ public class DataClipboard {
      * Multiple selections of parts of a song. Separate different selections
      * with empty MeasureLines.
      */
-    private static List<MeasureLine> content;
+    private static List<MeasureLine> content = new ArrayList<>();
 
     private static boolean[] instrFiltered;
     

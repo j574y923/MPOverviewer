@@ -1,5 +1,6 @@
 package mpoverviewer.image_layer.tabcontent;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
@@ -13,8 +14,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import mpoverviewer.data_layer.data.MeasureLine;
 import mpoverviewer.data_layer.data.Note;
+import mpoverviewer.data_layer.dataclipboard.DataClipboard;
 import mpoverviewer.data_layer.dataclipboard.DataClipboardFunctions;
+import mpoverviewer.global.Constants;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ribbonmenu.RibbonMenuMPO;
 
@@ -28,7 +32,7 @@ import mpoverviewer.image_layer.ribbonmenu.RibbonMenuMPO;
 public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
 
     RectangleRubberBand rubberBand;
-    ScrollPane scrollPane;
+    CompositionPane scrollPane;
 
     /**
      * Margin at the edge of the scrollpane. When a rectangle is being created
@@ -45,6 +49,10 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
     /* Fix for a stack overflow error that was happening in the change listener */
     private boolean mutexH;
     private boolean mutexV;
+    
+    /* Get line with these */
+    private static double mouseX;
+    private static double mouseY;
 
     /**
      *
@@ -52,7 +60,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
      * @param parent is the layout container for child and needed for retrieving
      * scene dimensions
      */
-    public EventHandlerRubberBand(Pane child, ScrollPane parent) {
+    public EventHandlerRubberBand(Pane child, CompositionPane parent) {
         rubberBand = new RectangleRubberBand();
         child.getChildren().add(rubberBand);
         this.scrollPane = parent;
@@ -67,9 +75,9 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                     mutexH = true;
                     double sizeOffset = scrollPane.getViewportBounds().getWidth();
                     if (newValue.doubleValue() > oldValue.doubleValue() && newValue.doubleValue() > 0) {
-                        rubberBand.resizeX(newValue.doubleValue() * (2216 - sizeOffset) + sizeOffset);
+                        rubberBand.resizeX(newValue.doubleValue() * (Constants.WIDTH_DEFAULT - sizeOffset) + sizeOffset);
                     } else if (newValue.doubleValue() < 1) {
-                        rubberBand.resizeX(newValue.doubleValue() * (2216 - sizeOffset));
+                        rubberBand.resizeX(newValue.doubleValue() * (Constants.WIDTH_DEFAULT- sizeOffset));
                     }
                     mutexH = false;
                 }
@@ -87,11 +95,11 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                     double sizeOffset = scrollPane.getViewportBounds().getHeight();
                     /* prevent from redrawing rubberband to the bottom of viewport, scroll goes from 0.0 to -0.005 then -0.005 to 0.0 triggering this if statement */
                     if (newValue.doubleValue() > oldValue.doubleValue() && newValue.doubleValue() > 0) {
-                        rubberBand.resizeY(newValue.doubleValue() * (4366 - sizeOffset) + sizeOffset);
+                        rubberBand.resizeY(newValue.doubleValue() * (Constants.HEIGHT_DEFAULT - sizeOffset) + sizeOffset);
                     } 
                     /* prevent from redrawing rubberband to the top of viewport, scroll goes from 1.0 to 1.005 then 1.005 to 1.0 triggering this statement */ 
                     else if (newValue.doubleValue() < 1) {
-                        rubberBand.resizeY(newValue.doubleValue() * (4366 - sizeOffset));
+                        rubberBand.resizeY(newValue.doubleValue() * (Constants.HEIGHT_DEFAULT - sizeOffset));
                     }
                     mutexV = false;
                 }
@@ -104,8 +112,53 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             public void handle(KeyEvent event) {
                 if(event.isControlDown()){
                     switch(event.getCode()){
-//                        case C:
-//                            DataClipboardFunctions.copy(song, 0, Note.Position.B4, 0, Note.Position.E4);
+                        case X:
+                            System.out.println("EHRB: CUT");
+                            break;
+                        case C:
+//                            System.out.println(rubberBand.getLineBegin());
+//                            System.out.println(rubberBand.getPositionBegin());
+//                            System.out.println( rubberBand.getLineEnd());
+//                            System.out.println(rubberBand.getPositionEnd());
+                            DataClipboardFunctions.copy(scrollPane.getSong(), 
+                                    rubberBand.getLineBegin(), 
+                                    rubberBand.getPositionBegin(), 
+                                    rubberBand.getLineEnd(), 
+                                    rubberBand.getPositionEnd());
+                            break;
+                        case V:
+                            int lineMoveTo = getLine(mouseX, mouseY);
+                            DataClipboardFunctions.paste(scrollPane.getSong(),
+                                    lineMoveTo);
+                            for(int i = lineMoveTo; i < DataClipboard.getContent().size() + lineMoveTo; i++){
+                                if(!DataClipboard.getContent().get(i - lineMoveTo).measureLine.isEmpty()){//optimization...
+                                    scrollPane.reloadLine(i);
+                                    scrollPane.redrawLine(i);
+                                }
+                            }
+//                            scrollPane.redrawSong();
+                            break;
+                    }
+                }
+                else {
+                    switch (event.getCode()) {
+                        case BACK_SPACE:
+                        case DELETE:
+                            System.out.println("EHRB: DEL");
+                            int line = rubberBand.getLineBegin();
+                            List<MeasureLine> deletedNotes = DataClipboardFunctions.delete(scrollPane.getSong(), 
+                                    line,//rubberBand.getLineBegin(), 
+                                    rubberBand.getPositionBegin(), 
+                                    rubberBand.getLineEnd(), 
+                                    rubberBand.getPositionEnd());
+                            
+                            for (int i = 0; i < deletedNotes.size(); i++) {
+                                MeasureLine ml = deletedNotes.get(i);
+                                for (Note n : ml.measureLine) {
+                                    scrollPane.removeNote(line + i, n);
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -117,6 +170,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         Note.Instrument theInd = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().getInstrSelected();
         if(theInd != null)
             return;
+        mouseX = mouseEvent.getX();
+        mouseY = mouseEvent.getY();
         rubberBand.toFront();
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
             rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
@@ -256,5 +311,26 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         } else {
             return scrollPane.vvalueProperty().get() * 2;
         }
+    }
+    
+    /**
+     *
+     * @param x mouse pos for entire scene
+     * @param y mouse pos for entire scene
+     * @return line based on x and y coord
+     */
+    private int getLine(double x, double y) {
+
+        if (x < 122 || x > Constants.WIDTH_DEFAULT - 48 || !zby(y))//122 is arbitrary, 48 is arbitrary
+        {
+            return -1;
+        }
+        return (((int) x - 122) / 64)
+                + ((int) y / Constants.ROW_HEIGHT_TOTAL) * Constants.LINES_IN_A_ROW;
+    }
+
+    /* If valid y */
+    private boolean zby(double y) {
+        return y % Constants.ROW_HEIGHT_TOTAL <= Constants.ROW_HEIGHT_NOTES;
     }
 }

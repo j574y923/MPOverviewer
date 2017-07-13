@@ -1,3 +1,6 @@
+v0.4.3
+-Add more clipboard code (remove)
+
 v0.4.2
 -Add initial clipboard code
 
