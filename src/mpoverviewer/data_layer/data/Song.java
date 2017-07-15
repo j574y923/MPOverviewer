@@ -26,6 +26,8 @@ public class Song {
     private int time;
 
     private type type;
+    
+    private boolean modified;
 
     public Song(int tempo, int time, type type) {
         this.tempo = tempo;
@@ -36,6 +38,8 @@ public class Song {
         for(int i = 0 ;i < COMPOSITION_LENGTH; i++){
             staff.add(new MeasureLine());
         }
+        
+        this.modified = false;
     }
 
     public void setTempo(int tempo) {
@@ -65,5 +69,13 @@ public class Song {
 
     public type getType() {
         return type;
+    }
+    
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
+    public boolean getModified() {
+        return modified;
     }
 }

@@ -42,8 +42,6 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 
     private Pane pane;
     private Group content;
-    private static final int HEIGHT_DEFAULT = 4366;
-    private static final int WIDTH_DEFAULT = 2216;
     private int scale = 10;
     private static final int SCALE_DEFAULT = 10;
     private static int scaleShared = 10;
@@ -57,6 +55,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 
     private HashMap<Note, ImageView[]> composition;
     private List<Line> compositionVol;
+    private List<Text> compositionVolText;
 
 //    private static RectangleRubberBand region;
 //    private static double regionMinX;
@@ -74,6 +73,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         
         initBG();
         compositionVol = new ArrayList<>();
+        compositionVolText = new ArrayList<>();
         composition = new HashMap<>();
         initDraw(song);
 
@@ -213,16 +213,31 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 
         for (int i = 0; i < song.staff.size(); i++) {
             MeasureLine m = song.staff.get(i);
+            
+            Line vol = new Line();
+            vol.setStartX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
+            vol.setStartY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1);
+            vol.setEndX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
+            vol.setEndY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1 - m.getVolume() / 2);
+            vol.setStroke(Color.GREEN);
+            vol.setStrokeWidth(4);
+            this.compositionVol.add(vol);
+            
+            Text volText = new Text(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING,
+                    (i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1,
+                    "" + m.getVolume());
+            this.compositionVolText.add(volText);
+            
+            pane.getChildren().add(vol);
+            pane.getChildren().add(volText);
+            if(m.measureLine.isEmpty()){
+                vol.setVisible(false);
+                volText.setVisible(false);
+            }
+            
             for (Note n : m.measureLine) {
 
-                Line vol = new Line();
-                vol.setStartX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
-                vol.setStartY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1);
-                vol.setEndX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
-                vol.setEndY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1 - m.getVolume() / 2);
-                vol.setStroke(Color.GREEN);
-                vol.setStrokeWidth(4);
-                this.compositionVol.add(vol);
+
 
                 ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
                 ImageView iv = Variables.imageLoader.getImageView(imageIndex);
@@ -235,7 +250,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 
                 zMod(iv, n);            
                 
-                pane.getChildren().addAll(vol, ivArray[0]);
+                pane.getChildren().add(ivArray[0]);
                 if(ivArray[1] != null)
                     pane.getChildren().add(ivArray[1]);
             }
@@ -447,6 +462,11 @@ public class CompositionPane extends ScrollPane implements ContentControl {
                 pane.getChildren().remove(composition.get(n)[1]);
             composition.remove(n);
         }
+        if(song.staff.get(line).measureLine.isEmpty()){
+//            System.out.println("SRSLY?" +compositionVol.get(line) );
+            compositionVol.get(line).setVisible(false);
+            compositionVolText.get(line).setVisible(false);
+        }
     }
     
     public void removeNote(int line, Note n){
@@ -465,6 +485,11 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             if(composition.get(n)[1] != null)
                 pane.getChildren().remove(composition.get(n)[1]);
             composition.remove(n);
+        }
+        if(song.staff.get(line).measureLine.isEmpty()){
+//            System.out.println("SRSLY?" +compositionVol.get(line) );
+            compositionVol.get(line).setVisible(false);
+            compositionVolText.get(line).setVisible(false);
         }
     }
     
@@ -520,6 +545,9 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             if(ivArray[1] != null)
                 pane.getChildren().add(ivArray[1]);
         }
+        
+        compositionVol.get(line).setVisible(true);
+        compositionVolText.get(line).setVisible(true);
     }
     
     /**
@@ -546,4 +574,6 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             }
         }
     }
+    
+    
 }

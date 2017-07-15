@@ -35,6 +35,8 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
     private boolean filterFlag;
     private boolean[] instrFiltered;
     private final List<RibbonMenuButtonMPO> instrFilteredButtons;
+    
+    private RibbonMenuButton instrSelectedButton;
 
     //remove blue border when clicking on the button
 //    private static final String STYLE_BORDER_OFF = "-fx-focus-color: transparent;-fx-padding:1;";
@@ -46,7 +48,7 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
         instrFiltered = new boolean[ImageIndex.BOO_SMA.ordinal() - ImageIndex.MARIO_SMA.ordinal() + 1];
         instrFilteredButtons = new ArrayList<>();
 
-        RibbonMenuButton instrSelectedButton = new RibbonMenuButton();
+        instrSelectedButton = new RibbonMenuButton();
         instrSelectedButton.setPrefHeight(34);
         instrSelectedButton.setPrefWidth(34);
         instrSelectedButton.setMinWidth(34);
@@ -163,6 +165,11 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
 
     public boolean[] getInstrFiltered() {
         return instrFiltered;
+    }
+    
+    public void setNoInstr() {
+        instrSelected = -1;
+        instrSelectedButton.setGraphic(null);
     }
 
     private void instrFilterGraphic(int buttonIndex) {

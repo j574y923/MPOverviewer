@@ -113,7 +113,21 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 if(event.isControlDown()){
                     switch(event.getCode()){
                         case X:
+                            //reset rubberband after cutting because ctrl+x click is inaccurate and prone to triggering cut twice: thus cut content first time, cut nothing the second time
                             System.out.println("EHRB: CUT");
+                            int line = rubberBand.getLineBegin();
+                            List<MeasureLine> deletedNotes = DataClipboardFunctions.cut(scrollPane.getSong(), 
+                                    line,//rubberBand.getLineBegin(), 
+                                    rubberBand.getPositionBegin(), 
+                                    rubberBand.getLineEnd(), 
+                                    rubberBand.getPositionEnd());
+                            
+                            for (int i = 0; i < deletedNotes.size(); i++) {
+                                MeasureLine ml = deletedNotes.get(i);
+                                for (Note n : ml.measureLine) {
+                                    scrollPane.removeNote(line + i, n);
+                                }
+                            }
                             break;
                         case C:
 //                            System.out.println(rubberBand.getLineBegin());
@@ -128,6 +142,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             break;
                         case V:
                             int lineMoveTo = getLine(mouseX, mouseY);
+                            System.out.println("lineMoveTo = " + lineMoveTo);
+                            System.out.println("PASTE getContent().size() == " + DataClipboard.getContent().size());
                             DataClipboardFunctions.paste(scrollPane.getSong(),
                                     lineMoveTo);
                             for(int i = lineMoveTo; i < DataClipboard.getContent().size() + lineMoveTo; i++){

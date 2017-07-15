@@ -50,7 +50,7 @@ public class DataClipboardFunctions {
             
             //empty filler for pasting correct offset
             if(y != rowEnd) {
-                for (int i = 0; i < Constants.LINES_IN_A_ROW - (rowLineEnd - rowLineBegin); i++) {
+                for (int i = 0; i < Constants.LINES_IN_A_ROW - (rowLineEnd - rowLineBegin + 1); i++) {
                     content.add(new MeasureLine());
                 }
             }
@@ -62,9 +62,9 @@ public class DataClipboardFunctions {
     /**
      * Copy and delete.
      */
-    public static void cut(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
+    public static List<MeasureLine> cut(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
         copy(song, lineBegin, positionBegin, lineEnd, positionEnd);
-        delete(song, lineBegin, positionBegin, lineEnd, positionEnd);
+        return delete(song, lineBegin, positionBegin, lineEnd, positionEnd);
     }
 
     /**

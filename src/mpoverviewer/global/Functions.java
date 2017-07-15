@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
+import mpoverviewer.data_layer.data.Song;
 import mpoverviewer.data_layer.serialize.SongToData;
 import mpoverviewer.image_layer.tabcontent.CompositionPane;
 import mpoverviewer.ui_layer.tab.TabDraggable;
@@ -38,7 +39,7 @@ public class Functions {
         Variables.stageInFocus.getTabPane().getSelectionModel().selectNext();
 
         ((TabDraggable) Variables.stageInFocus.getTabPane().getSelectionModel()
-                .getSelectedItem()).setContentControl(new CompositionPane(null));
+                .getSelectedItem()).setContentControl(new CompositionPane(new Song(400,4,Song.type.MPC)));
         ((ContentControl) Variables.stageInFocus.getTabPane().getSelectionModel()
                 .getSelectedItem().getContent()).constructedBehavior();
     }

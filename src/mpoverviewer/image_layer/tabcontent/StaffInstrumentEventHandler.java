@@ -149,6 +149,7 @@ if(blockSOMM)
             public void handle(KeyEvent event) {
                 StateMachine.getButtonsPressed().add(event.getCode());
                 updateAccidental();
+                escNoInstr();
             }
         });
         
@@ -633,6 +634,12 @@ System.out.println("TESTA");
                 return Note.Modifier.DOUBLEFLAT;
             default:
                 return Note.Modifier.NONE;
+        }
+    }
+    
+    private void escNoInstr() {
+        if(StateMachine.getButtonsPressed().contains(KeyCode.ESCAPE)) {
+            ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().setNoInstr();
         }
     }
 }

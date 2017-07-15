@@ -1,31 +1,71 @@
-[--/--/--]cut
-[--/--/--]initialize new tab with empty song
-[--/--/--]save song
-[--/--/--]song modified
-[--/--/--]filter notes
-[--/--/--]arrangement pane
-[--/--/--]arrangement appending songs onto one another (connecting tabs)
-[--/--/--]status bar
-[--/--/--]change tempo
-[--/--/--]SMP songs
-[--/--/--]AMS songs
-[--/--/--]MIDI reading
-[--/--/--]MIDI writing
-[--/--/--]song type restrictions
-[--/--/--]rubber band option that stays visible in the same place for all tabs
-[--/--/--]multi-rubber band
-[--/--/--]rubber band to only include notes within the region, not notes it touches position with
-[--/--/--]rubber band option to copy with volume
+(data_layer)CLIPBOARD
 [--/--/--]copy volume only
 [--/--/--]paste volume only
 [--/--/--]cut volume only
 [--/--/--]delete volume only
-[--/--/--]show volume when placing new note
-[--/--/--]volume text
-[--/--/--]change volume
+[--/--/--]filter notes
+[--/--/--]move
+[--/--/--]insert
+[--/--/--]move volume only
+[--/--/--]insert volume only
+[--/--/--]functions for both notes and volume
+[--/--/--]replace instrument
+[--/--/--]replace line
+[--/--/--]replace line selection
+[--/--/--]find
+[--/--/--]copy/cut history
+[--/--/--]octave shift up/down
 [--/--/--]undo
 [--/--/--]redo
+[--/--/--]insert empty line
+[07/14/17]cut
 [07/12/17]delete
+
+(data_layer)SONG
+[--/--/--]save song
+[--/--/--]song modified
+[--/--/--]SMP songs
+[--/--/--]AMS songs
+[--/--/--]MIDI reading
+[--/--/--]MIDI writing
+[--/--/--]calculate line chord
+
+(image_layer)COMPOSITIONPANE
+[--/--/--]change tempo
+[--/--/--]song type restrictions
+[--/--/--]change volume
+[--/--/--]rubber band selection highlights all notes it selects
+[--/--/--]option to apply clipboard functions to all tabs
+[--/--/--]change time
+[07/15/17]volume text
+[07/15/17]show volume when placing first new note on a line
+[07/15/17]hide volume when removing all notes on a line
+
+(image_layer)RUBBERBANDSELECTION
+[--/--/--]show which position hovering over
+[--/--/--]select all
+[--/--/--]multi-rubber band
+[--/--/--]rubber band option to copy with volume
+[--/--/--]rubber band option to copy only volume
+[--/--/--]rubber band option that stays visible in the same place for all tabs
+[07/14/17]rubber band to only include notes within the region, not notes it touches position with
+
+(image_layer)RIBBONMENU
+[--/--/--]rubberband tools
+[--/--/--]clipboard tools
+[--/--/--]tempo changer
+
+(ui_layer)UI
+[--/--/--]arrangement pane
+[--/--/--]arrangement appending songs onto one another (connecting tabs)
+[--/--/--]status bar
+[--/--/--]fill out menu bar
+[--/--/--]tab label: make an O instead of X for an unsaved tab
+[07/15/17]initialize new tab with empty song
+
+GLOBAL
+[--/--/--]save program state before exiting (# of windows, # of tabs and their files, window sizes, etc...)
+[--/--/--]uncaught exception handler that will save file that caused the exception and log the exception
 
 
 [--/--/--] is completion date

@@ -1,10 +1,16 @@
-v0.4.3
+v0.4.4
+-Add escape to select no instrument and be able to use rubber band
+-Add volume text
+-Fix rubber band to only include notes within the region, not notes it touches position with
+-Fix a problem with copying new rows where there was an additional line getting added in with each row
+
+v0.4.3 (5dfdc76c4f08d495649bb18751525ce4974b9448)
 -Add more clipboard code (remove)
 
-v0.4.2
+v0.4.2 (e1fe9ffe9c174f6aa641acb95d34344a4cb11774)
 -Add initial clipboard code
 
-v0.4.1
+v0.4.1 (ead1f4c3b4e0c2b7443e0a83f157f25604513990)
 -Add addNote to StaffInstrumentEventHandler
 -Add removeNote to StaffInstrumentEventHandler
 -Add getRibbonMenu in stageController used to get Button Line info
