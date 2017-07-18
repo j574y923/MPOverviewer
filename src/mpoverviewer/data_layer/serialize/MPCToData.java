@@ -3,6 +3,7 @@ package mpoverviewer.data_layer.serialize;
 import mpoverviewer.data_layer.data.MeasureLine;
 import mpoverviewer.data_layer.data.Note;
 import mpoverviewer.data_layer.data.Song;
+import mpoverviewer.global.Constants;
 
 /**
  * Pass path to MPC txt file and serialize the file's contents into data
@@ -204,8 +205,8 @@ public class MPCToData {
      */
     private int parseVolume(char s) {
         if (s > 'r' || s < 'a') {
-            return MeasureLine.MAX_VELOCITY;
+            return Constants.MAX_VELOCITY;
         }
-        return (int) ((s - (double) 'a') / ('q' - 'a') * MeasureLine.MAX_VELOCITY);
+        return (int) ((s - (double) 'a') / ('q' - 'a') * Constants.MAX_VELOCITY);
     }
 }

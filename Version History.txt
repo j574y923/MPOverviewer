@@ -1,3 +1,9 @@
+v0.4.5
+-Add basic save state logic with observable lists
+-Add filter notes
+-Add highlight note when selecting with rubber band
+-Fix rubber band issue where you select from bottom or right to top or left which would select nothing
+
 v0.4.4
 -Add escape to select no instrument and be able to use rubber band
 -Add volume text

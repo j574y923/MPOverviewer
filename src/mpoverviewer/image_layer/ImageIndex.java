@@ -163,8 +163,28 @@ public enum ImageIndex {
     /**
      * Miscellaneous icons.
      */
-    FILTER_ON, FILTER_OFF;
+    FILTER_ON, FILTER_OFF,;//;
 
+    
+    /* Highlight images of note and accidental images. */
+//    MARIO_GRAY_HL, MUSHROOM_GRAY_HL, YOSHI_GRAY_HL, STAR_GRAY_HL, FLOWER_GRAY_HL,
+//    GAMEBOY_GRAY_HL, DOG_GRAY_HL, CAT_GRAY_HL, PIG_GRAY_HL, SWAN_GRAY_HL, FACE_GRAY_HL,
+//    PLANE_GRAY_HL, BOAT_GRAY_HL, CAR_GRAY_HL, HEART_GRAY_HL, PIRANHA_GRAY_HL, COIN_GRAY_HL,
+//    SHYGUY_GRAY_HL, BOO_GRAY_HL, LUIGI_GRAY_HL,
+//    
+//    MARIO_SIL_HL, MUSHROOM_SIL_HL, YOSHI_SIL_HL, STAR_SIL_HL, FLOWER_SIL_HL,
+//    GAMEBOY_SIL_HL, DOG_SIL_HL, CAT_SIL_HL, PIG_SIL_HL, SWAN_SIL_HL, FACE_SIL_HL,
+//    PLANE_SIL_HL, BOAT_SIL_HL, CAR_SIL_HL, HEART_SIL_HL, PIRANHA_SIL_HL, COIN_SIL_HL,
+//    SHYGUY_SIL_HL, BOO_SIL_HL, LUIGI_SIL_HL,
+//    
+//    MARIO_HL, MUSHROOM_HL, YOSHI_HL, STAR_HL, FLOWER_HL,
+//    GAMEBOY_HL, DOG_HL, CAT_HL, PIG_HL, SWAN_HL, FACE_HL,
+//    PLANE_HL, BOAT_HL, CAR_HL, HEART_HL, PIRANHA_HL, COIN_HL,
+//    SHYGUY_HL, BOO_HL, LUIGI_HL,
+//    
+//    SHARP_GRAY_HL, FLAT_GRAY_HL, DOUBLESHARP_GRAY_HL, DOUBLEFLAT_GRAY_HL,
+//    SHARP_SIL_HL, FLAT_SIL_HL, DOUBLESHARP_SIL_HL, DOUBLEFLAT_SIL_HL,
+//    SHARP_HL, FLAT_HL, DOUBLESHARP_HL, DOUBLEFLAT_HL;
     /**
      * The alt version of this sprite. It can be null.
      */
@@ -204,5 +224,8 @@ public enum ImageIndex {
     public ImageIndex silhouette() {
         return silhouette;
     }
-
+    
+    public ImageIndex getHighlight(ImageIndex i) {
+        return ImageIndex.valueOf(i.toString() + "_HL");
+    }
 }

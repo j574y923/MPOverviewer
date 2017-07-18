@@ -2,6 +2,9 @@ package mpoverviewer.data_layer.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 /**
  * Container class for all notes on a line.
@@ -10,14 +13,15 @@ import java.util.List;
  */
 public class MeasureLine {
 
-    public static final int MAX_VELOCITY = 127;
+    private Song song;
     
-    public List<Note> measureLine;
+    
+    public ObservableList<Note> measureLine;
 
     private int volume;
 
     public MeasureLine() {
-        measureLine = new ArrayList<>();
+        measureLine = FXCollections.observableArrayList();
         volume = 127;
     }
 
@@ -92,5 +96,23 @@ public class MeasureLine {
         }
         Note noteTmp = measureLine.remove(index);
         measureLine.add(noteTmp);
+    }
+    
+    /**
+     * Used to refer to the song the measureLine belongs to. This way when a
+     * change occurs to the measureLine (added or removed notes), the song can
+     * be set to modified indicating a save is necessary.
+     *
+     * @param song that the measureLine belongs to
+     */
+    public void setSong(Song song) {
+        this.song = song;
+        measureLine.addListener(new ListChangeListener() {
+ 
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+                song.setModified(true);
+            }
+        });
     }
 }

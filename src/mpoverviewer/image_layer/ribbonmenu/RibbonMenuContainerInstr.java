@@ -11,6 +11,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import mpoverviewer.data_layer.data.Note;
+import mpoverviewer.data_layer.dataclipboard.DataClipboard;
+import mpoverviewer.global.Constants;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ImageIndex;
 import mpoverviewer.ui_layer.ribbonmenu.RibbonMenuButton;
@@ -45,7 +47,7 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
 
         instrSelected = -1;
         filterFlag = true;
-        instrFiltered = new boolean[ImageIndex.BOO_SMA.ordinal() - ImageIndex.MARIO_SMA.ordinal() + 1];
+        instrFiltered = new boolean[Constants.INSTRUMENTS];//ImageIndex.BOO_SMA.ordinal() - ImageIndex.MARIO_SMA.ordinal() + 1];
         instrFilteredButtons = new ArrayList<>();
 
         instrSelectedButton = new RibbonMenuButton();
@@ -69,10 +71,14 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
                     filter.setGraphic(Variables.imageLoader.getImageView(ImageIndex.FILTER_ON));
                     filterFlag = true;
                     sil_to_sma();
+                    
+                    DataClipboard.setInstrFiltered(instrFiltered);
                 } else {
                     filter.setGraphic(Variables.imageLoader.getImageView(ImageIndex.FILTER_OFF));
                     filterFlag = false;
                     sma_to_sil();
+                    
+                    DataClipboard.setInstrFiltered(null);
                 }
             }
         });
@@ -112,6 +118,8 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
 //                            rmbFilter.setGraphic(Variables.imageLoader.getImageView(ImageIndex.values()[i2]));
                         instrFilterGraphic(buttonIndex);
                         instrFiltered[buttonIndex] = true;
+                        
+                        DataClipboard.setInstrFiltered(instrFiltered);
                     } else {
                         rmbFilter.setGraphic(null);
                         instrFiltered[buttonIndex] = false;
@@ -141,7 +149,9 @@ public class RibbonMenuContainerInstr extends RibbonMenuContainer {
                         if (!instrFiltered[buttonIndex]) {
 //                            rmbFilter.setGraphic(Variables.imageLoader.getImageView(ImageIndex.values()[i2]));
                             instrFilterGraphic(buttonIndex);
-                            instrFiltered[buttonIndex] = true;
+                            instrFiltered[buttonIndex] = true;      
+                            
+                            DataClipboard.setInstrFiltered(instrFiltered);
                         } else {
                             rmbFilter.setGraphic(null);
                             instrFiltered[buttonIndex] = false;

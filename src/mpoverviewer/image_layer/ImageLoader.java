@@ -4,6 +4,7 @@ import java.util.HashMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import mpoverviewer.global.Constants;
 
 /**
  *
@@ -27,7 +28,9 @@ public class ImageLoader {
         HALFSTEP,
         INSTR_SMALL,
         STAFF,
-        MISC
+        MISC,
+        HIGHLIGHT_INSTR,
+        HIGHLIGHT_HALFSTEP,
     }
 
     private final HashMap<sheets, Image> spriteSheets;
@@ -44,15 +47,17 @@ public class ImageLoader {
     private int sheetWidth(sheets s) {
         switch (s) {
             case INSTR:
-                return 640;
+            case HIGHLIGHT_INSTR:
+                return Constants.INSTR_SS_WIDTH;
             case HALFSTEP:
-                return 128;
+            case HIGHLIGHT_HALFSTEP:
+                return Constants.HALFSTEP_SS_WIDTH;
             case INSTR_SMALL:
-                return 458;
+                return Constants.INSTR_SMALL_SS_WIDTH;
             case STAFF:
-                return 600;
+                return Constants.STAFF_SS_WIDTH;
             case MISC:
-                return 64;
+                return Constants.MISC_SS_WIDTH;
             default:
                 return 0;
         }
@@ -61,15 +66,17 @@ public class ImageLoader {
     private int sheetHeight(sheets s) {
         switch (s) {
             case INSTR:
-                return 108;
+            case HIGHLIGHT_INSTR:
+                return Constants.INSTR_SS_HEIGHT;
             case HALFSTEP:
-                return 96;
+            case HIGHLIGHT_HALFSTEP:
+                return Constants.HALFSTEP_SS_HEIGHT;
             case INSTR_SMALL:
-                return 28;
+                return Constants.INSTR_SMALL_SS_HEIGHT;
             case STAFF:
-                return 276;
+                return Constants.STAFF_SS_HEIGHT;
             case MISC:
-                return 32;
+                return Constants.MISC_SS_HEIGHT;
             default:
                 return 0;
         }
@@ -102,7 +109,14 @@ public class ImageLoader {
         return iv;
     }
 
-    public void setImage(ImageView iv, ImageIndex i){
+    /**
+     * Use this for existing imageViews that need to change the image within the
+     * same spritesheet.
+     *
+     * @param iv imageview
+     * @param i new image on same spritesheet
+     */
+    public void setImageViewport(ImageView iv, ImageIndex i){
         if (ImageIndex.MARIO_GRAY.ordinal() <= i.ordinal()
                 && i.ordinal() <= ImageIndex.LUIGI.ordinal()) {
             iv.setViewport(getInstr(i));
@@ -118,6 +132,30 @@ public class ImageLoader {
         } else if (ImageIndex.FILTER_ON.ordinal() <= i.ordinal()
                 && i.ordinal() <= ImageIndex.FILTER_OFF.ordinal()) {
             iv.setViewport(getMisc(i));
+        }
+    }
+    
+    public void setImageHighlight(ImageView iv, boolean highlight) {
+        if(highlight){
+            if(iv.getImage().equals(spriteSheets.get(sheets.INSTR))) {//instr image
+                Rectangle2D vp = iv.getViewport();
+                iv.setImage(spriteSheets.get(sheets.HIGHLIGHT_INSTR));
+                iv.setViewport(vp);
+            } else if (iv.getImage().equals(spriteSheets.get(sheets.HALFSTEP))) {//accidental image
+                Rectangle2D vp = iv.getViewport();
+                iv.setImage(spriteSheets.get(sheets.HIGHLIGHT_HALFSTEP));
+                iv.setViewport(vp);
+            }
+        } else {
+            if(iv.getImage().equals(spriteSheets.get(sheets.HIGHLIGHT_INSTR))) {//instr image
+                Rectangle2D vp = iv.getViewport();
+                iv.setImage(spriteSheets.get(sheets.INSTR));
+                iv.setViewport(vp);
+            } else if (iv.getImage().equals(spriteSheets.get(sheets.HIGHLIGHT_HALFSTEP))) {//accidental image
+                Rectangle2D vp = iv.getViewport();
+                iv.setImage(spriteSheets.get(sheets.HALFSTEP));
+                iv.setViewport(vp);
+            }
         }
     }
     

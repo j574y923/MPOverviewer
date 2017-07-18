@@ -36,7 +36,9 @@ public class Song {
         staff = new ArrayList<>(COMPOSITION_LENGTH);
         //initialization of all values
         for(int i = 0 ;i < COMPOSITION_LENGTH; i++){
-            staff.add(new MeasureLine());
+            MeasureLine ml = new MeasureLine();
+            staff.add(ml);
+            ml.setSong(this);
         }
         
         this.modified = false;

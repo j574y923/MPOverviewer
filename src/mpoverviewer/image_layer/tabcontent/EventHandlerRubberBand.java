@@ -106,39 +106,23 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             }
 
         });
-        
+        //
+        //KEY EVENT HANDLER
+        //
         scrollPane.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>(){
             @Override
             public void handle(KeyEvent event) {
                 if(event.isControlDown()){
                     switch(event.getCode()){
-                        case X:
-                            //reset rubberband after cutting because ctrl+x click is inaccurate and prone to triggering cut twice: thus cut content first time, cut nothing the second time
-                            System.out.println("EHRB: CUT");
-                            int line = rubberBand.getLineBegin();
-                            List<MeasureLine> deletedNotes = DataClipboardFunctions.cut(scrollPane.getSong(), 
-                                    line,//rubberBand.getLineBegin(), 
-                                    rubberBand.getPositionBegin(), 
-                                    rubberBand.getLineEnd(), 
-                                    rubberBand.getPositionEnd());
-                            
-                            for (int i = 0; i < deletedNotes.size(); i++) {
-                                MeasureLine ml = deletedNotes.get(i);
-                                for (Note n : ml.measureLine) {
-                                    scrollPane.removeNote(line + i, n);
-                                }
-                            }
-                            break;
                         case C:
-//                            System.out.println(rubberBand.getLineBegin());
-//                            System.out.println(rubberBand.getPositionBegin());
-//                            System.out.println( rubberBand.getLineEnd());
-//                            System.out.println(rubberBand.getPositionEnd());
                             DataClipboardFunctions.copy(scrollPane.getSong(), 
                                     rubberBand.getLineBegin(), 
                                     rubberBand.getPositionBegin(), 
                                     rubberBand.getLineEnd(), 
                                     rubberBand.getPositionEnd());
+                            break;
+                        case I:
+                            System.out.println("EHRB: INSERT");
                             break;
                         case V:
                             int lineMoveTo = getLine(mouseX, mouseY);
@@ -153,6 +137,22 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                                 }
                             }
 //                            scrollPane.redrawSong();
+                            break;
+                        case X:
+                            //reset rubberband after cutting because ctrl+x click is inaccurate and prone to triggering cut twice: thus cut content first time, cut nothing the second time
+                            int line = rubberBand.getLineBegin();
+                            List<MeasureLine> deletedNotes = DataClipboardFunctions.cut(scrollPane.getSong(), 
+                                    line,//rubberBand.getLineBegin(), 
+                                    rubberBand.getPositionBegin(), 
+                                    rubberBand.getLineEnd(), 
+                                    rubberBand.getPositionEnd());
+                            
+                            for (int i = 0; i < deletedNotes.size(); i++) {
+                                MeasureLine ml = deletedNotes.get(i);
+                                for (Note n : ml.measureLine) {
+                                    scrollPane.removeNote(line + i, n);
+                                }
+                            }
                             break;
                     }
                 }
@@ -179,6 +179,9 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 }
             }
         });
+        //
+        //END KEY EVENT HANDLER
+        //
     }
 
     @Override
@@ -191,11 +194,27 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         rubberBand.toFront();
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
             rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
+            
+            scrollPane.unhighlightAllNotes();
+            
         } else if (mouseEvent.isPrimaryButtonDown()) {
             rubberBand.resize(mouseEvent.getX(), mouseEvent.getY());
             navigatePane(mouseEvent);
         } else if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
             rubberBand.end();
+            
+            List<MeasureLine> selection = DataClipboardFunctions.selection(scrollPane.getSong(),
+                    rubberBand.getLineBegin(),
+                    rubberBand.getPositionBegin(),
+                    rubberBand.getLineEnd(),
+                    rubberBand.getPositionEnd());
+            for(MeasureLine ml : selection) {
+                for(Note n : ml.measureLine) {
+                    scrollPane.highlightNote(n, true);
+                }
+            }
+            
+            
 //            autoFlagH = false;
 //            autoFlagV = false;
             autoScrollH(false, 0);

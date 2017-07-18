@@ -40,7 +40,9 @@ public class DataClipboardFunctions {
                     //if rowBegin, consider positionBegin
                     //if rowEnd, consider positionEnd
                     if(!(y == rowBegin && n.getPosition().ordinal() < positionBegin.ordinal()
-                            || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())){
+                            || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())
+                            && instrFiltered(n.getInstrument())){
+                        
                         Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
                         measureLineCopy.measureLine.add(nCopy);
                     }
@@ -92,8 +94,9 @@ public class DataClipboardFunctions {
                     Note n = measureLineOriginal.measureLine.get(i);
                     //if rowBegin, consider positionBegin
                     //if rowEnd, consider positionEnd
-                    if(!(y == rowBegin && n.getPosition().ordinal() < positionBegin.ordinal()
-                            || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())){
+                    if (!(y == rowBegin && n.getPosition().ordinal() < positionBegin.ordinal()
+                            || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal()) 
+                            && instrFiltered(n.getInstrument())){
                         
                         measureLineOriginal.measureLine.remove(n);
                         measureLineCopy.measureLine.add(n);
@@ -143,5 +146,53 @@ public class DataClipboardFunctions {
                 ml.addNote(new Note(n.getInstrument(), n.getPosition(), n.getModifier()));
             }
         }
+    }
+    
+    /**
+     * 
+     * @return reference of notes found in the given selection
+     */
+    public static List<MeasureLine> selection(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
+        //TODO: use instrFiltered in DataClipboard
+        int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
+        int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
+        int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
+        int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
+        
+        List<MeasureLine> content = new ArrayList<>();
+        for (int y = rowBegin; y <= rowEnd; y++) {
+            for (int x = rowLineBegin; x <= rowLineEnd; x++) {
+                MeasureLine measureLineCopy = new MeasureLine();
+
+                int line = y * Constants.LINES_IN_A_ROW + x;
+                MeasureLine measureLineOriginal = song.staff.get(line);
+
+                for (Note n : measureLineOriginal.measureLine) {
+
+                    //TODO: use instrFiltered in DataClipboard
+                    //if rowBegin, consider positionBegin
+                    //if rowEnd, consider positionEnd
+                    if (!(y == rowBegin && n.getPosition().ordinal() < positionBegin.ordinal()
+                            || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())
+                            && instrFiltered(n.getInstrument())) {
+//                        Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
+                        measureLineCopy.measureLine.add(n);//nCopy);
+                    }
+                }
+                content.add(measureLineCopy);
+            }
+
+            //empty filler for pasting correct offset
+            if (y != rowEnd) {
+                for (int i = 0; i < Constants.LINES_IN_A_ROW - (rowLineEnd - rowLineBegin + 1); i++) {
+                    content.add(new MeasureLine());
+                }
+            }
+        }
+        return content;
+    }
+    
+    public static boolean instrFiltered(Note.Instrument instr) {
+        return DataClipboard.getInstrFiltered() == null || DataClipboard.getInstrFiltered()[instr.ordinal()];
     }
 }

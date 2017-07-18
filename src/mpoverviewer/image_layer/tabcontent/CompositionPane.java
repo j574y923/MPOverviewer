@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
@@ -575,5 +576,35 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
     }
     
+    /**
+     * Create a shadow around the note image for the note passed in.
+     * 
+     * @param n Note passed in
+     * @param highlight flag to create the highlight effect
+     */
+    private List<Note> highlightedNotes = new ArrayList<>();
+    public void highlightNote(Note n, boolean highlight){
+        ImageView[] ivArray = this.composition.get(n);
+        Variables.imageLoader.setImageHighlight(ivArray[0], highlight);
+        if (ivArray[1] != null) {
+            Variables.imageLoader.setImageHighlight(ivArray[1], highlight);
+        }
+        if(highlight) {
+            highlightedNotes.add(n);
+        }
+    }
     
+    public void unhighlightAllNotes() {
+        for(Note n : highlightedNotes) {
+            ImageView[] ivArray = this.composition.get(n);
+            
+            if(ivArray != null){
+                Variables.imageLoader.setImageHighlight(ivArray[0], false);
+                if(ivArray[1] != null) {
+                    Variables.imageLoader.setImageHighlight(ivArray[1], false);
+                }
+            }
+        }
+        highlightedNotes.clear();
+    }
 }

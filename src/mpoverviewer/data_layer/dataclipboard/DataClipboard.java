@@ -40,4 +40,8 @@ public class DataClipboard {
     public static void setInstrFiltered(boolean[] instrFiltered) {
         DataClipboard.instrFiltered = instrFiltered;
     }
+    
+    public static boolean[] getInstrFiltered() {
+        return instrFiltered;
+    }
 }

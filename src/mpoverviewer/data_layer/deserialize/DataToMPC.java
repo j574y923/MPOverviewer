@@ -4,6 +4,7 @@ import java.util.List;
 import mpoverviewer.data_layer.data.MeasureLine;
 import mpoverviewer.data_layer.data.Note;
 import mpoverviewer.data_layer.data.Song;
+import mpoverviewer.global.Constants;
 
 /**
  *
@@ -130,7 +131,7 @@ public class DataToMPC {
 
         for (int i = 0; i < Math.min(composition.size(), 384); i++) {
             MeasureLine m = composition.get(i);
-            if (m.measureLine.isEmpty() && m.getVolume() == MeasureLine.MAX_VELOCITY) {
+            if (m.measureLine.isEmpty() && m.getVolume() == Constants.MAX_VELOCITY) {
                 songContent += ":";
                 continue;
             }
@@ -158,11 +159,11 @@ public class DataToMPC {
     }
 
     private char convVolume(int volume) {
-        if (volume == MeasureLine.MAX_VELOCITY) {
+        if (volume == Constants.MAX_VELOCITY) {
             return 'q';
         }
-        return (char) ((double) Math.min(volume + 1, MeasureLine.MAX_VELOCITY - 1)
-                / MeasureLine.MAX_VELOCITY * ('q' - 'a') + 'a');
+        return (char) ((double) Math.min(volume + 1, Constants.MAX_VELOCITY - 1)
+                / Constants.MAX_VELOCITY * ('q' - 'a') + 'a');
         //return (char)((double)volume / MeasureLine.MAX_VELOCITY * ('q' - 'a') + 'a');
     }
 }

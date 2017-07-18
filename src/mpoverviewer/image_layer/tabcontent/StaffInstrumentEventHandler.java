@@ -122,7 +122,7 @@ accAndNote = new HBox();
         accSilhouette = Variables.imageLoader.getImageView(ImageIndex.SHARP_SIL);
         accSilhouette.setOpacity(0.9);
         accSilhouette.setVisible(false);
-//        il.setImage(accSilhouette, ImageIndex.DOUBLESHARP_SIL);
+//        il.setImageViewport(accSilhouette, ImageIndex.DOUBLESHARP_SIL);
         accAndNote.getChildren().addAll(accSilhouette, silhouette);
         
         //this is the smoothest 
@@ -248,7 +248,7 @@ if(blockSOMM)
 //Note.Instrument theInd = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getButtonLine().getInstrSelected();
 ImageIndex optA = ImageIndex.values()[ImageIndex.MARIO_SIL.ordinal() + theInd.ordinal()];
 if(!optA.equals(optimizeTest)){
-il.setImage(silhouette, ImageIndex.values()[ImageIndex.MARIO_SIL.ordinal() + theInd.ordinal()]);
+il.setImageViewport(silhouette, ImageIndex.values()[ImageIndex.MARIO_SIL.ordinal() + theInd.ordinal()]);
 optimizeTest = optA;
 }
         //Drag-add notes, hold e to drag-remove notes
@@ -333,16 +333,16 @@ System.out.println("TESTA");
 //        theStaffNote.setMuteNote(muteA ? 2 : mute ? 1 : 0);
 //
 //        if (!mute && !muteA) {
-//            theStaffNote.setImage(il.getSpriteFX(theInd.imageIndex()));
+//            theStaffNote.setImageViewport(il.getSpriteFX(theInd.imageIndex()));
 //        } else if (mute) {
-//            theStaffNote.setImage(il.getSpriteFX(theInd.imageIndex().alt()));
+//            theStaffNote.setImageViewport(il.getSpriteFX(theInd.imageIndex().alt()));
 //        } else if (muteA) {
-//            theStaffNote.setImage(il.getSpriteFX(theInd.imageIndex()
+//            theStaffNote.setImageViewport(il.getSpriteFX(theInd.imageIndex()
 //                    .silhouette()));
 //        }
 //
 //        accidental = new StaffAccidental(theStaffNote);
-//        accidental.setImage(il.getSpriteFX(Staff.switchAcc(acc)));
+//        accidental.setImageViewport(il.getSpriteFX(Staff.switchAcc(acc)));
 //
 //        theImages.remove(silhouette);
 //        accList.remove(accSilhouette);
@@ -433,13 +433,13 @@ System.out.println("TESTA");
 //        StateMachine.setFocusPane(this);
 //        theStaff.getNoteMatrix().setFocusPane(this);
 //        updateAccidental();
-//        silhouette.setImage(il.getSpriteFX(theInd.imageIndex().silhouette()));
+//        silhouette.setImageViewport(il.getSpriteFX(theInd.imageIndex().silhouette()));
         if (!s.getPane().getChildren().contains(accAndNote))//        if (!theImages.contains(silhouette))
             s.getPane().getChildren().add(accAndNote);//            theImages.add(silhouette);
         //high cpu usage, use a newNote flag to prevent translate from happening every time mouse moved
         accAndNote.setTranslateX((line % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING + Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X - 48);
         accAndNote.setTranslateY((line / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + (position) * 16 + 5);
-//        accSilhouette.setImage(il
+//        accSilhouette.setImageViewport(il
 //                .getSpriteFX(Staff.switchAcc(acc).silhouette()));
 //        if (!accList.contains(accSilhouette))
 //            accList.add(accSilhouette);
@@ -492,16 +492,16 @@ System.out.println("TESTA");
 
         switch (acc) {
         case 2:
-            il.setImage(accSilhouette, ImageIndex.DOUBLESHARP_SIL);//accSilhouette.setImage(il.getSpriteFX(ImageIndex.DOUBLESHARP_SIL));
+            il.setImageViewport(accSilhouette, ImageIndex.DOUBLESHARP_SIL);//accSilhouette.setImageViewport(il.getSpriteFX(ImageIndex.DOUBLESHARP_SIL));
             break;
         case 1:
-            il.setImage(accSilhouette, ImageIndex.SHARP_SIL);//accSilhouette.setImage(il.getSpriteFX(ImageIndex.SHARP_SIL));
+            il.setImageViewport(accSilhouette, ImageIndex.SHARP_SIL);//accSilhouette.setImageViewport(il.getSpriteFX(ImageIndex.SHARP_SIL));
             break;
         case -1:
-            il.setImage(accSilhouette, ImageIndex.FLAT_SIL);//accSilhouette.setImage(il.getSpriteFX(ImageIndex.FLAT_SIL));
+            il.setImageViewport(accSilhouette, ImageIndex.FLAT_SIL);//accSilhouette.setImageViewport(il.getSpriteFX(ImageIndex.FLAT_SIL));
             break;
         case -2:
-            il.setImage(accSilhouette, ImageIndex.DOUBLEFLAT_SIL);//accSilhouette.setImage(il.getSpriteFX(ImageIndex.DOUBLEFLAT_SIL));
+            il.setImageViewport(accSilhouette, ImageIndex.DOUBLEFLAT_SIL);//accSilhouette.setImageViewport(il.getSpriteFX(ImageIndex.DOUBLEFLAT_SIL));
             break;
         default:
             accSilhouette.setVisible(false);
@@ -515,7 +515,7 @@ System.out.println("TESTA");
 //            accList.add(accSilhouette);
 //        if (acc != 0 && !theImages.contains(silhouette)) {
 //            theImages.add(silhouette);
-//            silhouette.setImage(il.getSpriteFX(ButtonLine
+//            silhouette.setImageViewport(il.getSpriteFX(ButtonLine
 //                    .getSelectedInstrument().imageIndex().silhouette()));
 //            silhouette.setVisible(true);
 //        }

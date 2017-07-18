@@ -3,7 +3,6 @@
 [--/--/--]paste volume only
 [--/--/--]cut volume only
 [--/--/--]delete volume only
-[--/--/--]filter notes
 [--/--/--]move
 [--/--/--]insert
 [--/--/--]move volume only
@@ -18,25 +17,27 @@
 [--/--/--]undo
 [--/--/--]redo
 [--/--/--]insert empty line
+[07/17/17]filter notes
 [07/14/17]cut
 [07/12/17]delete
 
 (data_layer)SONG
+[--/--/--]detect change to song file outside of program and load those changes in
 [--/--/--]save song
-[--/--/--]song modified
 [--/--/--]SMP songs
 [--/--/--]AMS songs
 [--/--/--]MIDI reading
 [--/--/--]MIDI writing
 [--/--/--]calculate line chord
+[07/17/17]song modified
 
 (image_layer)COMPOSITIONPANE
 [--/--/--]change tempo
 [--/--/--]song type restrictions
 [--/--/--]change volume
-[--/--/--]rubber band selection highlights all notes it selects
 [--/--/--]option to apply clipboard functions to all tabs
 [--/--/--]change time
+[07/16/17]rubber band selection highlights all notes it selects
 [07/15/17]volume text
 [07/15/17]show volume when placing first new note on a line
 [07/15/17]hide volume when removing all notes on a line
