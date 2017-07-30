@@ -58,11 +58,27 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     private List<Line> compositionVol;
     private List<Text> compositionVolText;
 
-//    private static RectangleRubberBand region;
-//    private static double regionMinX;
-//    private static double regionMinY;
-//    private static double regionMaxX;
-//    private static double regionMaxY;
+    /* 0 = no mediator, 1 = sieh and block sveh, 2 = sveh and block sieh, note: this is temporary */
+    private int siehSvehMediator;    
+    public void setSiehSvehMediator(int siehSvehMediator) {
+        switch (siehSvehMediator) {
+            case 0:
+                this.siehSvehMediator = 0;
+                break;
+            case 1:
+                this.siehSvehMediator = 1;
+                break;
+            case 2:
+                this.siehSvehMediator = 2;
+                break;
+            default:
+                this.siehSvehMediator = 0;
+        }
+    }
+    public int getSiehSvehMediator() {
+        return siehSvehMediator;
+    }
+    
     public CompositionPane(Song song) {
         super();
         
@@ -103,6 +119,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //        compositionVol.clear();
         pane.addEventHandler(MouseEvent.ANY, new EventHandlerRubberBand(pane, this));
         pane.addEventFilter(InputEvent.ANY, new StaffInstrumentEventHandler(this, Variables.imageLoader));
+        pane.addEventFilter(InputEvent.ANY, new StaffVolumeEventHandler(this));
         
 //        ArrayList<StackPane> lol = new ArrayList<>();
 //        for(int i =0 ;i  < 7200; i++){
@@ -606,5 +623,11 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             }
         }
         highlightedNotes.clear();
+    }
+    
+    public void setVolume(int line, int volume) {
+        song.staff.get(line).setVolume(volume);
+        compositionVol.get(line).setEndY((line / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1 - volume / 2);
+        compositionVolText.get(line).setText("" + volume);
     }
 }

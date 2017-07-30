@@ -1,3 +1,7 @@
+v0.4.6
+-Add initial selection toolbar
+-Add initial volume event handler, change volume
+
 v0.4.5
 -Add basic save state logic with observable lists
 -Add filter notes

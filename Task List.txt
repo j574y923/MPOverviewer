@@ -34,9 +34,9 @@
 (image_layer)COMPOSITIONPANE
 [--/--/--]change tempo
 [--/--/--]song type restrictions
-[--/--/--]change volume
 [--/--/--]option to apply clipboard functions to all tabs
 [--/--/--]change time
+[07/29/17]change volume
 [07/16/17]rubber band selection highlights all notes it selects
 [07/15/17]volume text
 [07/15/17]show volume when placing first new note on a line
@@ -52,6 +52,7 @@
 [07/14/17]rubber band to only include notes within the region, not notes it touches position with
 
 (image_layer)RIBBONMENU
+[--/--/--]mute button in instruments
 [--/--/--]rubberband tools
 [--/--/--]clipboard tools
 [--/--/--]tempo changer

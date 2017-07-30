@@ -101,7 +101,7 @@ public class ImageLoader {
             iv = new ImageView(spriteSheets.get(sheets.STAFF));
             iv.setViewport(getStaff(i));
         } else if (ImageIndex.FILTER_ON.ordinal() <= i.ordinal()
-                && i.ordinal() <= ImageIndex.FILTER_OFF.ordinal()) {
+                && i.ordinal() <= ImageIndex.SELECTION_LINEAR_OFF.ordinal()) {
             iv = new ImageView(spriteSheets.get(sheets.MISC));
             iv.setViewport(getMisc(i));
         }
@@ -130,7 +130,7 @@ public class ImageLoader {
                 && i.ordinal() <= ImageIndex.STAFF_MLINE.ordinal()) {
             iv.setViewport(getStaff(i));
         } else if (ImageIndex.FILTER_ON.ordinal() <= i.ordinal()
-                && i.ordinal() <= ImageIndex.FILTER_OFF.ordinal()) {
+                && i.ordinal() <= ImageIndex.SELECTION_LINEAR_OFF.ordinal()) {
             iv.setViewport(getMisc(i));
         }
     }
@@ -162,24 +162,24 @@ public class ImageLoader {
     private Rectangle2D getInstr(ImageIndex i) {
         return new Rectangle2D(zix(i),//x offset
                 ziy(i),//y offset
-                32,//width
-                36);//height
+                Constants.INSTR_SPRITE_WIDTH,//width
+                Constants.INSTR_SPRITE_HEIGHT);//height
     }
 
     private Rectangle2D getHalfStep(ImageIndex i) {
-        return new Rectangle2D(zhx(i), zhy(i), 32, 32);
+        return new Rectangle2D(zhx(i), zhy(i), Constants.HALFSTEP_SPRITE_WIDTH, Constants.HALFSTEP_SPRITE_HEIGHT);
     }
 
     private Rectangle2D getInstrSmall(ImageIndex i) {
-        return new Rectangle2D(zisx(i), 0, 26, 28);
+        return new Rectangle2D(zisx(i), 0, Constants.INSTR_SMALL_SPRITE_WIDTH, Constants.INSTR_SMALL_SPRITE_HEIGHT);
     }
 
     private Rectangle2D getStaff(ImageIndex i) {
-        return new Rectangle2D(zsx(i), 0, 100, 276);
+        return new Rectangle2D(zsx(i), 0, Constants.STAFF_SPRITE_WIDTH, Constants.STAFF_SPRITE_HEIGHT);
     }
 
     private Rectangle2D getMisc(ImageIndex i) {
-        return new Rectangle2D(zmx(i), 0, 32, 32);
+        return new Rectangle2D(zmx(i), 0, Constants.MISC_SPRITE_WIDTH, Constants.MISC_SPRITE_HEIGHT);
     }
 
     /**
@@ -191,7 +191,7 @@ public class ImageLoader {
      * @return x offset
      */
     private int zix(ImageIndex i) {
-        return 32 * ((i.ordinal() - ImageIndex.MARIO_GRAY.ordinal()) % 20);
+        return 32 * ((i.ordinal() - ImageIndex.MARIO_GRAY.ordinal()) % Constants.INSTR_TILES_X);
     }
 
     /**
@@ -205,38 +205,38 @@ public class ImageLoader {
      * @return y offset
      */
     private int ziy(ImageIndex i) {
-        return 36 * (((i.ordinal() - ImageIndex.MARIO_GRAY.ordinal()) / 20 + 1) % 3);
+        return 36 * (((i.ordinal() - ImageIndex.MARIO_GRAY.ordinal()) / Constants.INSTR_TILES_X + 1) % Constants.INSTR_TILES_Y);
     }
 
     /**
      * Similar to zix.
      */
     private int zhx(ImageIndex i) {
-        return 32 * ((i.ordinal() - ImageIndex.SHARP_GRAY.ordinal()) % 4);
+        return 32 * ((i.ordinal() - ImageIndex.SHARP_GRAY.ordinal()) % Constants.HALFSTEP_TILES_X);
     }
 
     /**
      * Similar to ziy.
      */
     private int zhy(ImageIndex i) {
-        return 32 * (((i.ordinal() - ImageIndex.SHARP_GRAY.ordinal()) / 4 + 1) % 3);
+        return 32 * (((i.ordinal() - ImageIndex.SHARP_GRAY.ordinal()) / Constants.HALFSTEP_TILES_X + 1) % Constants.HALFSTEP_TILES_Y);
     }
 
     /**
      * Similar to zix.
      */
     private int zisx(ImageIndex i) {
-        return 24 * ((i.ordinal() - ImageIndex.MARIO_SMA.ordinal()) % 20);
+        return 24 * ((i.ordinal() - ImageIndex.MARIO_SMA.ordinal()) % Constants.INSTR_SMALL_TILES_X);
     }
 
     /**
      * Similar to zix.
      */
     private int zsx(ImageIndex i) {
-        return 100 * ((i.ordinal() - ImageIndex.TREBLE_CLEF_AMS.ordinal()) % 6);
+        return 100 * ((i.ordinal() - ImageIndex.TREBLE_CLEF_AMS.ordinal()) % Constants.STAFF_TILES_X);
     }
 
     private int zmx(ImageIndex i) {
-        return 32 * ((i.ordinal() - ImageIndex.FILTER_ON.ordinal()) % 2);
+        return 32 * ((i.ordinal() - ImageIndex.FILTER_ON.ordinal()) % Constants.MISC_TILES_X);
     }
 }

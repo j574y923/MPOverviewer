@@ -17,36 +17,50 @@ public class Constants {
     public static final int HALFSTEP_SS_HEIGHT = 96;
     public static final int HALFSTEP_SPRITE_WIDTH = 32;
     public static final int HALFSTEP_SPRITE_HEIGHT = 32;
+    public static final int HALFSTEP_TILES_X = HALFSTEP_SS_WIDTH / HALFSTEP_SPRITE_WIDTH;
+    public static final int HALFSTEP_TILES_Y = HALFSTEP_SS_HEIGHT / HALFSTEP_SPRITE_HEIGHT;
 
     public static final int INSTR_SS_WIDTH = 640;
     public static final int INSTR_SS_HEIGHT = 108;
     public static final int INSTR_SPRITE_WIDTH = 32;
     public static final int INSTR_SPRITE_HEIGHT = 36;
+    public static final int INSTR_TILES_X = INSTR_SS_WIDTH / INSTR_SPRITE_WIDTH;
+    public static final int INSTR_TILES_Y = INSTR_SS_HEIGHT / INSTR_SPRITE_HEIGHT;
 
     public static final int HIGHLIGHT_HALFSTEP_SS_WIDTH = 128;
     public static final int HIGHLIGHT_HALFSTEP_SS_HEIGHT = 96;
     public static final int HIGHLIGHT_HALFSTEP_SPRITE_WIDTH = 32;
     public static final int HIGHLIGHT_HALFSTEP_SPRITE_HEIGHT = 32;
+    public static final int HIGHLIGHT_HALFSTEP_TILES_X = HIGHLIGHT_HALFSTEP_SS_WIDTH / HIGHLIGHT_HALFSTEP_SPRITE_WIDTH;
+    public static final int HIGHLIGHT_HALFSTEP_TILES_Y = HIGHLIGHT_HALFSTEP_SS_HEIGHT / HIGHLIGHT_HALFSTEP_SPRITE_HEIGHT;
 
     public static final int HIGHLIGHT_INSTR_SS_WIDTH = 640;
     public static final int HIGHLIGHT_INSTR_SS_HEIGHT = 108;
     public static final int HIGHLIGHT_INSTR_SPRITE_WIDTH = 32;
     public static final int HIGHLIGHT_INSTR_SPRITE_HEIGHT = 36;
+    public static final int HIGHLIGHT_INSTR_TILES_X = HIGHLIGHT_INSTR_SS_WIDTH / HIGHLIGHT_INSTR_SPRITE_WIDTH;
+    public static final int HIGHLIGHT_INSTR_TILES_Y = HIGHLIGHT_INSTR_SS_HEIGHT / HIGHLIGHT_INSTR_SPRITE_HEIGHT;
 
     public static final int INSTR_SMALL_SS_WIDTH = 458;
     public static final int INSTR_SMALL_SS_HEIGHT = 28;
     public static final int INSTR_SMALL_SPRITE_WIDTH = 26;
     public static final int INSTR_SMALL_SPRITE_HEIGHT = 28;
+    public static final int INSTR_SMALL_TILES_X = 20;//INSTR_SMALL_SS_WIDTH / INSTR_SMALL_SPRITE_WIDTH;
+    public static final int INSTR_SMALL_TILES_Y = INSTR_SMALL_SS_HEIGHT / INSTR_SMALL_SPRITE_HEIGHT;
 
-    public static final int MISC_SS_WIDTH = 64;
+    public static final int MISC_SS_WIDTH = 384;
     public static final int MISC_SS_HEIGHT = 32;
     public static final int MISC_SPRITE_WIDTH = 32;
     public static final int MISC_SPRITE_HEIGHT = 32;
+    public static final int MISC_TILES_X = MISC_SS_WIDTH / MISC_SPRITE_WIDTH;
+    public static final int MISC_TILES_Y = MISC_SS_HEIGHT / MISC_SPRITE_HEIGHT;
 
     public static final int STAFF_SS_WIDTH = 600;
     public static final int STAFF_SS_HEIGHT = 276;
     public static final int STAFF_SPRITE_WIDTH = 100;
     public static final int STAFF_SPRITE_HEIGHT = 276;
+    public static final int STAFF_TILES_X = STAFF_SS_WIDTH / STAFF_SPRITE_WIDTH;
+    public static final int STAFF_TILES_Y = STAFF_SS_HEIGHT / STAFF_SPRITE_HEIGHT;
 
     //
     //-------------------------------------------------------------------------

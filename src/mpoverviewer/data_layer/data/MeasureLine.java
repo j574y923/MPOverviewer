@@ -58,8 +58,16 @@ public class MeasureLine {
         return null;
     }
 
+    /**
+     * Set volume for the measure line. Will also set the song (if not null) to modified.
+     * 
+     * @param volume
+     */
     public void setVolume(int volume) {
         this.volume = volume;
+        if(song != null) {
+            song.setModified(true);
+        }
     }
 
     public int getVolume() {
