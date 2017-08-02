@@ -196,6 +196,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
             
             scrollPane.unhighlightAllNotes();
+//            scrollPane.unhighlightAllVols();
             
         } else if (mouseEvent.isPrimaryButtonDown()) {
             rubberBand.resize(mouseEvent.getX(), mouseEvent.getY());
@@ -203,14 +204,31 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         } else if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
             rubberBand.end();
             
+            int lineBegin = rubberBand.getLineBegin();
             List<MeasureLine> selection = DataClipboardFunctions.selection(scrollPane.getSong(),
-                    rubberBand.getLineBegin(),
+                    lineBegin,
                     rubberBand.getPositionBegin(),
                     rubberBand.getLineEnd(),
                     rubberBand.getPositionEnd());
-            for(MeasureLine ml : selection) {
+            for(int i = 0 ;i < selection.size(); i++) {
+                MeasureLine ml = selection.get(i);
                 for(Note n : ml.measureLine) {
                     scrollPane.highlightNote(n, true);
+                }
+//                if(!ml.measureLine.isEmpty()) {
+//                    scrollPane.highlightVol(lineBegin + i, true);
+//                }
+            }
+            int lineBeginVol = rubberBand.getLineBeginVol();
+            int lineEndVol = rubberBand.getLineEndVol();
+            System.out.println("lineBeginVol" + lineBeginVol);
+            System.out.println("lineEndVol" + lineEndVol);
+            List<Integer> selectionVol = DataClipboardFunctions.selectionVol(scrollPane.getSong(),
+                    lineBeginVol,
+                    lineEndVol);
+            for(int i = 0 ;i < selectionVol.size(); i++) {
+                if(selectionVol.get(i) != null) {
+                    scrollPane.highlightVol(lineBeginVol + i, true);
                 }
             }
             

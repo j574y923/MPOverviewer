@@ -61,6 +61,16 @@ public class Constants {
     public static final int STAFF_SPRITE_HEIGHT = 276;
     public static final int STAFF_TILES_X = STAFF_SS_WIDTH / STAFF_SPRITE_WIDTH;
     public static final int STAFF_TILES_Y = STAFF_SS_HEIGHT / STAFF_SPRITE_HEIGHT;
+    
+    public static final int VOL_BAR_SS_WIDTH = 6;
+    public static final int VOL_BAR_SS_HEIGHT = 2;
+    public static final int VOL_BAR_SPRITE_WIDTH = 6;
+    public static final int VOL_BAR_SPRITE_HEIGHT = 2;    
+    
+    public static final int VOL_BAR_HL_SS_WIDTH = 6;
+    public static final int VOL_BAR_HL_SS_HEIGHT = 2;
+    public static final int VOL_BAR_HL_SPRITE_WIDTH = 6;
+    public static final int VOL_BAR_HL_SPRITE_HEIGHT = 2;
 
     //
     //-------------------------------------------------------------------------

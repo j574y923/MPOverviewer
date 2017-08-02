@@ -36,6 +36,7 @@
 [--/--/--]song type restrictions
 [--/--/--]option to apply clipboard functions to all tabs
 [--/--/--]change time
+[--/--/--]rubber band selection highlights all volumes it selects
 [07/29/17]change volume
 [07/16/17]rubber band selection highlights all notes it selects
 [07/15/17]volume text

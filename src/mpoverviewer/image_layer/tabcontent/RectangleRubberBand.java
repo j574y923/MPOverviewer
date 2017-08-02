@@ -553,4 +553,28 @@ public class RectangleRubberBand extends Rectangle {
     private boolean zby(double y){
         return y % Constants.ROW_HEIGHT_TOTAL <= Constants.ROW_HEIGHT_NOTES;
     }
+    
+    /**
+     * Like getLine() but does not check zby().
+     */
+    private int getLineSimple(double x, double y){
+
+    	if(x < 122 || x > Constants.WIDTH_DEFAULT - 48)//122 is arbitrary, 48 is arbitrary
+            return -1;
+    	return (((int)x - 122) / Constants.LINE_SPACING) + 
+                ((int)y / Constants.ROW_HEIGHT_TOTAL) * Constants.LINES_IN_A_ROW;
+    }
+    
+    public int getLineBeginVol() {
+        return getLineSimple(this.getTranslateX(), this.getTranslateY());
+    }
+    
+    public int getLineEndVol() {
+        if(zby(this.getTranslateY() + this.getHeight())) {
+            return getLineSimple(this.getTranslateX() + this.getWidth(), this.getTranslateY() + this.getHeight()) - Constants.LINES_IN_A_ROW;
+        }
+        else {
+            return getLineSimple(this.getTranslateX() + this.getWidth(), this.getTranslateY() + this.getHeight());
+        }
+    }
 }

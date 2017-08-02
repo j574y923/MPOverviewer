@@ -1,3 +1,7 @@
+v0.4.7
+-Add initial highlight volume
+-Use image for vol bar instead of line
+
 v0.4.6
 -Add initial selection toolbar
 -Add initial volume event handler, change volume

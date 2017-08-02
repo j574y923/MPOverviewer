@@ -29,8 +29,10 @@ public class ImageLoader {
         INSTR_SMALL,
         STAFF,
         MISC,
+        VOL_BAR,
         HIGHLIGHT_INSTR,
         HIGHLIGHT_HALFSTEP,
+        HIGHLIGHT_VOL_BAR,
     }
 
     private final HashMap<sheets, Image> spriteSheets;
@@ -58,6 +60,9 @@ public class ImageLoader {
                 return Constants.STAFF_SS_WIDTH;
             case MISC:
                 return Constants.MISC_SS_WIDTH;
+            case VOL_BAR:
+            case HIGHLIGHT_VOL_BAR:
+                return Constants.VOL_BAR_SS_WIDTH;
             default:
                 return 0;
         }
@@ -77,6 +82,9 @@ public class ImageLoader {
                 return Constants.STAFF_SS_HEIGHT;
             case MISC:
                 return Constants.MISC_SS_HEIGHT;
+            case VOL_BAR:
+            case HIGHLIGHT_VOL_BAR:
+                return Constants.VOL_BAR_SS_HEIGHT;
             default:
                 return 0;
         }
@@ -104,6 +112,10 @@ public class ImageLoader {
                 && i.ordinal() <= ImageIndex.SELECTION_LINEAR_OFF.ordinal()) {
             iv = new ImageView(spriteSheets.get(sheets.MISC));
             iv.setViewport(getMisc(i));
+        } else if (i.equals(ImageIndex.VOL_BAR)) {
+            iv = new ImageView(spriteSheets.get(sheets.VOL_BAR));
+        } else if (i.equals(ImageIndex.VOL_BAR_HL)) {
+            iv = new ImageView(spriteSheets.get(sheets.HIGHLIGHT_VOL_BAR));
         }
 
         return iv;
@@ -145,6 +157,8 @@ public class ImageLoader {
                 Rectangle2D vp = iv.getViewport();
                 iv.setImage(spriteSheets.get(sheets.HIGHLIGHT_HALFSTEP));
                 iv.setViewport(vp);
+            } else if (iv.getImage().equals(spriteSheets.get(sheets.VOL_BAR))) {//vol image
+                iv.setImage(spriteSheets.get(sheets.HIGHLIGHT_VOL_BAR));
             }
         } else {
             if(iv.getImage().equals(spriteSheets.get(sheets.HIGHLIGHT_INSTR))) {//instr image
@@ -155,6 +169,8 @@ public class ImageLoader {
                 Rectangle2D vp = iv.getViewport();
                 iv.setImage(spriteSheets.get(sheets.HALFSTEP));
                 iv.setViewport(vp);
+            } else if (iv.getImage().equals(spriteSheets.get(sheets.HIGHLIGHT_VOL_BAR))) {//vol image
+                iv.setImage(spriteSheets.get(sheets.VOL_BAR));
             }
         }
     }

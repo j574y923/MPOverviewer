@@ -39,6 +39,7 @@ public class Song {
             MeasureLine ml = new MeasureLine();
             staff.add(ml);
             ml.setSong(this);
+            ml.setLineNumber(i);
         }
         
         this.modified = false;

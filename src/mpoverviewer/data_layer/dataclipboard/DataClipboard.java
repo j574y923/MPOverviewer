@@ -15,6 +15,7 @@ public class DataClipboard {
      * with empty MeasureLines.
      */
     private static List<MeasureLine> content = new ArrayList<>();
+    private static List<Integer> contentVol = new ArrayList<>();
 
     private static boolean[] instrFiltered;
     
@@ -32,9 +33,21 @@ public class DataClipboard {
     public static List<MeasureLine> getContent() {
         return content;
     }
+    
+    public static void setContentVol(List<Integer> contentVol) {
+        DataClipboard.contentVol = contentVol;
+    }
+    
+    public static List<Integer> getContentVol() {
+        return contentVol;
+    }
 
+    /**
+     * clear both content and contentVol
+     */
     public static void clearContent() {
         content.clear();
+        contentVol.clear();
     }
     
     public static void setInstrFiltered(boolean[] instrFiltered) {

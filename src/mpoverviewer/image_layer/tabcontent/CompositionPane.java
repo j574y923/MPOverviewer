@@ -55,7 +55,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     private final List<Text> measureNum = new ArrayList<>();
 
     private HashMap<Note, ImageView[]> composition;
-    private List<Line> compositionVol;
+    private List<ImageView> compositionVol;
     private List<Text> compositionVolText;
 
     /* 0 = no mediator, 1 = sieh and block sveh, 2 = sveh and block sieh, note: this is temporary */
@@ -232,13 +232,11 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         for (int i = 0; i < song.staff.size(); i++) {
             MeasureLine m = song.staff.get(i);
             
-            Line vol = new Line();
-            vol.setStartX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
-            vol.setStartY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1);
-            vol.setEndX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
-            vol.setEndY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1 - m.getVolume() / 2);
-            vol.setStroke(Color.GREEN);
-            vol.setStrokeWidth(4);
+            ImageView vol = Variables.imageLoader.getImageView(ImageIndex.VOL_BAR);
+            vol.setX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
+            vol.setY((i / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1);
+            vol.setFitHeight(m.getVolume() / 2);
+            vol.setTranslateY(-m.getVolume()/2);
             this.compositionVol.add(vol);
             
             Text volText = new Text(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING,
@@ -254,8 +252,6 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             }
             
             for (Note n : m.measureLine) {
-
-
 
                 ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
                 ImageView iv = Variables.imageLoader.getImageView(imageIndex);
@@ -570,10 +566,10 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     
     /**
      * Should be called whenever a new note is added or a line is modified in
-     * the song object THEN redrawLine should happen subsequently. This will
-     * compare the notes in composition hashmap and the notes in the song.
-     * Updates composition to include the notes that have been added or removed
-     * and adds or removes respective imageViews.
+     * the song object THEN redrawLine should happen after. This will compare
+     * the notes in composition hashmap and the notes in the song. Updates
+     * composition to include the notes that have been added or removed and adds
+     * or removes their respective imageViews.
      *
      * @param line at which notes have changed
      */
@@ -611,6 +607,15 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
     }
     
+    private List<Integer> highlightedVols = new ArrayList<>();
+    public void highlightVol (int line, boolean highlight){
+        ImageView iv = this.compositionVol.get(line);
+        Variables.imageLoader.setImageHighlight(iv, highlight);
+        if(highlight) {
+            highlightedVols.add(line);
+        }
+    }
+    
     public void unhighlightAllNotes() {
         for(Note n : highlightedNotes) {
             ImageView[] ivArray = this.composition.get(n);
@@ -625,9 +630,19 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         highlightedNotes.clear();
     }
     
+    public void unhighlightAllVols() {
+        for(Integer line : highlightedVols) {
+            ImageView iv = this.compositionVol.get(line);
+            
+            Variables.imageLoader.setImageHighlight(iv, false);
+        }
+        highlightedVols.clear();
+    }
+    
     public void setVolume(int line, int volume) {
         song.staff.get(line).setVolume(volume);
-        compositionVol.get(line).setEndY((line / Constants.LINES_IN_A_ROW) * Constants.ROW_HEIGHT_TOTAL + Constants.ROW_HEIGHT_NOTES + Constants.ROW_HEIGHT_VOL + 1 - volume / 2);
+        compositionVol.get(line).setFitHeight(volume / 2);
+        compositionVol.get(line).setTranslateY(-volume / 2);
         compositionVolText.get(line).setText("" + volume);
     }
 }

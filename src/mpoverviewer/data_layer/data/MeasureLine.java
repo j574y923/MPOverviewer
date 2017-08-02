@@ -15,6 +15,7 @@ public class MeasureLine {
 
     private Song song;
     
+    private int lineNumber;
     
     public ObservableList<Note> measureLine;
 
@@ -122,5 +123,13 @@ public class MeasureLine {
                 song.setModified(true);
             }
         });
+    }
+    
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+    
+    public int getLineNumber(int lineNumber) {
+        return lineNumber;
     }
 }

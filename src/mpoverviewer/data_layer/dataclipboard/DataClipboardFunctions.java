@@ -17,7 +17,8 @@ public class DataClipboardFunctions {
 
     /**
      * Use the bounds for notes to copy in the song. Put those notes into
-     * clipboard. 
+     * clipboard. This copy will be a deep copy so a reference of those notes
+     * cannot be used.
      */
     public static void copy(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
         //TODO: use instrFiltered in DataClipboard
@@ -29,7 +30,7 @@ public class DataClipboardFunctions {
         List<MeasureLine> content = new ArrayList<>();
         for(int y = rowBegin; y <= rowEnd; y ++) {
             for (int x = rowLineBegin; x <= rowLineEnd; x++) {
-                MeasureLine measureLineCopy = new MeasureLine();
+                MeasureLine measureLineDeepCopy = new MeasureLine();
                 
                 int line = y * Constants.LINES_IN_A_ROW + x;
                 MeasureLine measureLineOriginal = song.staff.get(line);
@@ -44,10 +45,10 @@ public class DataClipboardFunctions {
                             && instrFiltered(n.getInstrument())){
                         
                         Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
-                        measureLineCopy.measureLine.add(nCopy);
+                        measureLineDeepCopy.measureLine.add(nCopy);
                     }
                 }
-                content.add(measureLineCopy);
+                content.add(measureLineDeepCopy);
             }
             
             //empty filler for pasting correct offset
@@ -83,7 +84,7 @@ public class DataClipboardFunctions {
         List<MeasureLine> content = new ArrayList<>();
         for(int y = rowBegin; y <= rowEnd; y ++) {
             for (int x = rowLineBegin; x <= rowLineEnd; x++) {
-                MeasureLine measureLineCopy = new MeasureLine();
+                MeasureLine measureLineShallowCopy = new MeasureLine();
 
                 int line = y * Constants.LINES_IN_A_ROW + x;
                 MeasureLine measureLineOriginal = song.staff.get(line);
@@ -99,11 +100,11 @@ public class DataClipboardFunctions {
                             && instrFiltered(n.getInstrument())){
                         
                         measureLineOriginal.measureLine.remove(n);
-                        measureLineCopy.measureLine.add(n);
+                        measureLineShallowCopy.measureLine.add(n);
                         i--;//element removed, adjust index back
                     }
                 }
-                content.add(measureLineCopy);
+                content.add(measureLineShallowCopy);
             }          
             
             //empty filler for pasting correct offset
@@ -162,7 +163,7 @@ public class DataClipboardFunctions {
         List<MeasureLine> content = new ArrayList<>();
         for (int y = rowBegin; y <= rowEnd; y++) {
             for (int x = rowLineBegin; x <= rowLineEnd; x++) {
-                MeasureLine measureLineCopy = new MeasureLine();
+                MeasureLine measureLineShallowCopy = new MeasureLine();
 
                 int line = y * Constants.LINES_IN_A_ROW + x;
                 MeasureLine measureLineOriginal = song.staff.get(line);
@@ -176,10 +177,10 @@ public class DataClipboardFunctions {
                             || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())
                             && instrFiltered(n.getInstrument())) {
 //                        Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
-                        measureLineCopy.measureLine.add(n);//nCopy);
+                        measureLineShallowCopy.measureLine.add(n);//nCopy);
                     }
                 }
-                content.add(measureLineCopy);
+                content.add(measureLineShallowCopy);
             }
 
             //empty filler for pasting correct offset
@@ -194,5 +195,81 @@ public class DataClipboardFunctions {
     
     public static boolean instrFiltered(Note.Instrument instr) {
         return DataClipboard.getInstrFiltered() == null || DataClipboard.getInstrFiltered()[instr.ordinal()];
+    }
+    
+    public static void copyVol(Song song, int lineBegin, int lineEnd) {
+        DataClipboard.setContentVol(selectionVol(song,lineBegin,lineEnd));
+    }
+    
+    public static List<Integer> deleteVol(Song song, int lineBegin, int lineEnd) {
+        int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
+        int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
+        int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
+        int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
+        
+        List<Integer> contentVol = new ArrayList<>();
+        for(int y = rowBegin; y <= rowEnd; y ++) {
+            for (int x = rowLineBegin; x <= rowLineEnd; x++) {
+                Integer vol = null;
+                
+                int line = y * Constants.LINES_IN_A_ROW + x;
+                MeasureLine measureLineOriginal = song.staff.get(line);
+
+                if(!song.staff.get(line).measureLine.isEmpty()) {
+                    vol = song.staff.get(line).getVolume();
+                    song.staff.get(line).setVolume(Constants.MAX_VELOCITY);
+                }
+                contentVol.add(vol);
+            }          
+            
+            //empty filler for pasting correct offset
+            if(y != rowEnd) {
+                for (int i = 0; i < Constants.LINES_IN_A_ROW - (rowLineEnd - rowLineBegin); i++) {
+                    contentVol.add(null);
+                }
+            }
+        }
+        return contentVol;
+    }
+    
+    public static void pasteVol(Song song, int lineMoveTo) {
+        List<Integer> contentVol = DataClipboard.getContentVol();
+        for (int i = 0; i < contentVol.size(); i++) {    
+            MeasureLine ml = song.staff.get(lineMoveTo + i);
+
+            ml.setVolume(contentVol.get(i));
+        }
+    }
+    
+    /**
+     * 
+     * @return copy of volumes found in the given selection
+     */
+    public static List<Integer> selectionVol(Song song, int lineBegin, int lineEnd) {
+        int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
+        int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
+        int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
+        int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
+        
+        List<Integer> contentVol = new ArrayList<>();
+        for (int y = rowBegin; y <= rowEnd; y++) {
+            for (int x = rowLineBegin; x <= rowLineEnd; x++) {
+                Integer vol = null;
+                
+                int line = y * Constants.LINES_IN_A_ROW + x;
+                if(!song.staff.get(line).measureLine.isEmpty()) {
+                    vol = song.staff.get(line).getVolume();
+                }
+                contentVol.add(vol);
+            }
+            //empty filler for pasting correct offset
+            if (y != rowEnd) {
+                for (int i = 0; i < Constants.LINES_IN_A_ROW - (rowLineEnd - rowLineBegin + 1); i++) {
+                    contentVol.add(null);
+                }
+            }
+        }
+        
+        return contentVol;
     }
 }
