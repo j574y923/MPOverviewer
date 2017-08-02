@@ -80,6 +80,10 @@ public class Constants {
     //-------------------------------------------------------------------------
     //
     /**
+     * The number of lines in a song.
+     */
+    public static final int SONG_LENGTH = 400;
+    /**
      * The number of distinct steps of notes in a note line on the staff. This
      * number is typically 18.
      */

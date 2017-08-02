@@ -61,6 +61,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
      * scene dimensions
      */
     public EventHandlerRubberBand(Pane child, CompositionPane parent) {
+        DataClipboard.initialize();
+        
         rubberBand = new RectangleRubberBand();
         child.getChildren().add(rubberBand);
         this.scrollPane = parent;
@@ -127,11 +129,12 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         case V:
                             int lineMoveTo = getLine(mouseX, mouseY);
                             System.out.println("lineMoveTo = " + lineMoveTo);
-                            System.out.println("PASTE getContent().size() == " + DataClipboard.getContent().size());
+                            System.out.println("PASTE getContent().size() == " + DataClipboard.getCopiedContent().size());
                             DataClipboardFunctions.paste(scrollPane.getSong(),
                                     lineMoveTo);
-                            for(int i = lineMoveTo; i < DataClipboard.getContent().size() + lineMoveTo; i++){
-                                if(!DataClipboard.getContent().get(i - lineMoveTo).measureLine.isEmpty()){//optimization...
+                            for(int i = lineMoveTo; i < DataClipboard.getCopiedContent().size() + lineMoveTo; i++){
+                                if(DataClipboard.getCopiedContent().get(i - lineMoveTo) != null 
+                                        && !DataClipboard.getCopiedContent().get(i - lineMoveTo).measureLine.isEmpty()){//optimization...
                                     scrollPane.reloadLine(i);
                                     scrollPane.redrawLine(i);
                                 }
@@ -197,6 +200,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             
             scrollPane.unhighlightAllNotes();
 //            scrollPane.unhighlightAllVols();
+            DataClipboard.clearContent();
             
         } else if (mouseEvent.isPrimaryButtonDown()) {
             rubberBand.resize(mouseEvent.getX(), mouseEvent.getY());

@@ -1,3 +1,6 @@
+v0.5.0
+-Change clipboard architecture
+
 v0.4.7
 -Add initial highlight volume
 -Use image for vol bar instead of line
@@ -43,14 +46,14 @@ v0.3.2 (6b2196933da55d562c594709a3c3fbda1e50f7c0)
 
 v0.3.1 (79c0ef093041b193ef7b2411adcde12d92372ae0)
 -Rename CompositionPaneSP to CompositionPane, deleting the original CompositionPane class
--Alter rubber band to automatically scroll scrollpane when mouse is on edge of scene
+-Change rubber band to automatically scroll scrollpane when mouse is on edge of scene
 
 v0.3.0 (ef7e346ac8679418064fc0c039f3aef8978a3bbb)
 -Refactor into a more MVC type architecture (model:data_layer :: view:ui_layer :: controller:image_layer)
 
 v0.2.9 (54c852604b9966b106f66ede8e08301ade412bd6)
--Alter rubber band to be transparent
--Alter rubber band to respect boundaries and readjust the bounds to accomodate resizing that go out of bounds
+-Change rubber band to be transparent
+-Change rubber band to respect boundaries and readjust the bounds to accomodate resizing that go out of bounds
 
 v0.2.8 (a76bb377af062c3da186e2b594c574f8b058ba09)
 -Add initial region selection/rubber band code
@@ -64,12 +67,12 @@ v0.2.6 (64332d3aa3670bcac5d41850fee2229d02208955)
 -Add instrument selected icon
 
 v0.2.5 (59a0a389a71eaa26ed4681c73f836c3c0abdd1b0)
--Alter instruments ribbon menu container to include filter slots
--Alter Ribbon Menu container layout to be Vbox of Hboxes
+-Change instruments ribbon menu container to include filter slots
+-Change Ribbon Menu container layout to be Vbox of Hboxes
 
 v0.2.4 (a4d903e5a53423abd258c0a82ef7b3cbbd1ee80e)
 -Add custom ribbon menu code for a instruments ribbon menu
--Alter StageController to allow setting a ribbon menu
+-Change StageController to allow setting a ribbon menu
 
 v0.2.3 (02789bc043a0874bbb1dfccb2b466daf69d094a3)
 -Clean up code
@@ -82,7 +85,7 @@ v0.2.1 (67e6ff252330faa3fb6efb0a288a45b9f9e9adb8)
 -Add hotkeys for scrolling and zooming
 
 v0.2.0 (009f6a84912cc018d6d78c20a005fec78b98667b)
--Alter Tab's ContentControl interface to include post-constructor behavior
+-Change Tab's ContentControl interface to include post-constructor behavior
 -Fix bug that blurs pane wrapped in a group (don't really know why setting line stroke width fixed it)
 -Fix bug where zoom applied to new tab but that tab is not fully constructed yet
 
@@ -90,7 +93,7 @@ v0.1.0 (a1b6b28c73691eb8ffc506ac632a97223b16e11e)
 -Add Draggable tabs
 -Add Graphical representation for MPC txt file in tab content
 -Add Scroll and zoom for tab content
--Alter Zoom so it is applied to all tabs at once
+-Change Zoom so it is applied to all tabs at once
 -Create UI layout
 
 

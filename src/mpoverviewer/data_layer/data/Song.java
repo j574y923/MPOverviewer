@@ -2,6 +2,7 @@ package mpoverviewer.data_layer.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import mpoverviewer.global.Constants;
 
 /**
  * Container for all the song's information
@@ -17,8 +18,6 @@ public class Song {
         SMP
     }
 
-    private static final int COMPOSITION_LENGTH = 400;
-
     public List<MeasureLine> staff;
 
     private int tempo;
@@ -33,9 +32,9 @@ public class Song {
         this.tempo = tempo;
         this.time = time;
         this.type = type;
-        staff = new ArrayList<>(COMPOSITION_LENGTH);
+        staff = new ArrayList<>(Constants.SONG_LENGTH);
         //initialization of all values
-        for(int i = 0 ;i < COMPOSITION_LENGTH; i++){
+        for(int i = 0 ;i < Constants.SONG_LENGTH; i++){
             MeasureLine ml = new MeasureLine();
             staff.add(ml);
             ml.setSong(this);

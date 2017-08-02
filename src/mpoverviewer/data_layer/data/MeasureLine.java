@@ -129,7 +129,7 @@ public class MeasureLine {
         this.lineNumber = lineNumber;
     }
     
-    public int getLineNumber(int lineNumber) {
+    public int getLineNumber() {
         return lineNumber;
     }
 }
