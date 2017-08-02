@@ -196,8 +196,41 @@ public class DataClipboardFunctions {
     
     public static void copyVol(Song song, int lineBegin, int lineEnd) {
 //        DataClipboard.setContentVol(selectionVol(song,lineBegin,lineEnd));
+        int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
+        int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
+        int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
+        int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
+
+        DataClipboard.setContentLineBegin(lineBegin);
+        DataClipboard.setContentLineEnd(lineEnd);
+        
+        for(int y = rowBegin; y <= rowEnd; y ++) {
+            for (int x = rowLineBegin; x <= rowLineEnd; x++) {
+                MeasureLine measureLineVolCopy = new MeasureLine();
+                
+                int line = y * Constants.LINES_IN_A_ROW + x;
+                MeasureLine measureLineOriginal = song.staff.get(line);
+
+                if(!measureLineOriginal.measureLine.isEmpty()) {
+                    measureLineVolCopy.setVolume(measureLineOriginal.getVolume());
+                    //check if line already exists in DataClipboard's content
+                    if(DataClipboard.getContent().get(line) != null) {
+                        DataClipboard.getContent().get(line).setVolume(measureLineOriginal.getVolume());
+                    } else {
+                        DataClipboard.getContent().set(line, measureLineVolCopy);
+                    }
+                }
+            } 
+        }
     }
     
+    /**
+     * 
+     * @param song set vols to Constants.MAX_VELOCITY
+     * @param lineBegin
+     * @param lineEnd
+     * @return a list of former vols before "deletion"/getting set to MAX_VELOCITY
+     */
     public static List<Integer> deleteVol(Song song, int lineBegin, int lineEnd) {
         int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
         int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
@@ -210,7 +243,6 @@ public class DataClipboardFunctions {
                 Integer vol = null;
                 
                 int line = y * Constants.LINES_IN_A_ROW + x;
-                MeasureLine measureLineOriginal = song.staff.get(line);
 
                 if(!song.staff.get(line).measureLine.isEmpty()) {
                     vol = song.staff.get(line).getVolume();
@@ -230,12 +262,14 @@ public class DataClipboardFunctions {
     }
     
     public static void pasteVol(Song song, int lineMoveTo) {
-//        List<Integer> contentVol = DataClipboard.getContentVol();
-//        for (int i = 0; i < contentVol.size(); i++) {    
-//            MeasureLine ml = song.staff.get(lineMoveTo + i);
-//
-//            ml.setVolume(contentVol.get(i));
-//        }
+        List<MeasureLine> contentVol = DataClipboard.getCopiedContent();
+        for (int i = 0; i < contentVol.size(); i++) {    
+            MeasureLine ml = song.staff.get(lineMoveTo + i);
+
+            if(contentVol.get(i) != null && contentVol.get(i).getVolume() >= 0) {
+                ml.setVolume(contentVol.get(i).getVolume());
+            }
+        }
     }
     
     /**

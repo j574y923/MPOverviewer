@@ -7,16 +7,20 @@
 [--/--/--]insert
 [--/--/--]move volume only
 [--/--/--]insert volume only
-[--/--/--]functions for both notes and volume
+[--/--/--]cut for both notes and volume
 [--/--/--]replace instrument
 [--/--/--]replace line
 [--/--/--]replace line selection
 [--/--/--]find
 [--/--/--]copy/cut history
 [--/--/--]octave shift up/down
+[--/--/--]key shift up/down
 [--/--/--]undo
 [--/--/--]redo
 [--/--/--]insert empty line
+[08/02/17]delete for both notes and volume
+[08/01/17]paste for both notes and volume
+[08/01/17]copy for both notes and volume
 [07/17/17]filter notes
 [07/14/17]cut
 [07/12/17]delete

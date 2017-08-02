@@ -566,15 +566,18 @@ public class RectangleRubberBand extends Rectangle {
     }
     
     public int getLineBeginVol() {
-        return getLineSimple(this.getTranslateX(), this.getTranslateY());
-    }
-    
-    public int getLineEndVol() {
-        if(zby(this.getTranslateY() + this.getHeight())) {
-            return getLineSimple(this.getTranslateX() + this.getWidth(), this.getTranslateY() + this.getHeight()) - Constants.LINES_IN_A_ROW;
+        if (zby(this.getTranslateY())) {
+            return getLineBegin();
+        } else {
+            return getLineBegin() - Constants.LINES_IN_A_ROW;
         }
-        else {
-            return getLineSimple(this.getTranslateX() + this.getWidth(), this.getTranslateY() + this.getHeight());
+    }
+
+    public int getLineEndVol() {
+        if (zby(this.getTranslateY() + this.getHeight())) {
+            return getLineEnd() - Constants.LINES_IN_A_ROW;
+        } else {
+            return getLineEnd();
         }
     }
 }

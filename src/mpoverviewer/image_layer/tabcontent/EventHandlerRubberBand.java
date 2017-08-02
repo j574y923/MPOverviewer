@@ -122,6 +122,10 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                                     rubberBand.getPositionBegin(), 
                                     rubberBand.getLineEnd(), 
                                     rubberBand.getPositionEnd());
+                            
+                            DataClipboardFunctions.copyVol(scrollPane.getSong(), 
+                                    rubberBand.getLineBeginVol(),  
+                                    rubberBand.getLineEndVol());
                             break;
                         case I:
                             System.out.println("EHRB: INSERT");
@@ -137,6 +141,14 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                                         && !DataClipboard.getCopiedContent().get(i - lineMoveTo).measureLine.isEmpty()){//optimization...
                                     scrollPane.reloadLine(i);
                                     scrollPane.redrawLine(i);
+                                }
+                            }
+                            DataClipboardFunctions.paste(scrollPane.getSong(),
+                                    lineMoveTo);
+                            for(int i = lineMoveTo; i < DataClipboard.getCopiedContent().size() + lineMoveTo; i++){
+                                if(DataClipboard.getCopiedContent().get(i - lineMoveTo) != null 
+                                        && DataClipboard.getCopiedContent().get(i - lineMoveTo).getVolume() >= 0){//optimization...
+                                    scrollPane.setVolume(i, DataClipboard.getCopiedContent().get(i - lineMoveTo).getVolume());
                                 }
                             }
 //                            scrollPane.redrawSong();
@@ -177,6 +189,17 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                                     scrollPane.removeNote(line + i, n);
                                 }
                             }
+                            
+                            int lineVol = rubberBand.getLineBeginVol();
+                            List<Integer> deletedVols = DataClipboardFunctions.deleteVol(scrollPane.getSong(), 
+                                    lineVol, 
+                                    rubberBand.getLineEndVol());
+                            
+                            for (int i = 0; i < deletedVols.size(); i++) {
+                                if(deletedVols.get(i) != null) {
+                                    scrollPane.setVolume(lineVol + i, Constants.MAX_VELOCITY);
+                                }
+                            }
                             break;
                     }
                 }
@@ -199,7 +222,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
             
             scrollPane.unhighlightAllNotes();
-//            scrollPane.unhighlightAllVols();
+            scrollPane.unhighlightAllVols();
             DataClipboard.clearContent();
             
         } else if (mouseEvent.isPrimaryButtonDown()) {
@@ -219,10 +242,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 for(Note n : ml.measureLine) {
                     scrollPane.highlightNote(n, true);
                 }
-//                if(!ml.measureLine.isEmpty()) {
-//                    scrollPane.highlightVol(lineBegin + i, true);
-//                }
             }
+            
             int lineBeginVol = rubberBand.getLineBeginVol();
             int lineEndVol = rubberBand.getLineEndVol();
             System.out.println("lineBeginVol" + lineBeginVol);

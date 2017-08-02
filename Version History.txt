@@ -1,21 +1,27 @@
-v0.5.0
+v0.5.1
+-Add copy volume
+-Add delete volume
+-Add paste volume
+-Fix volume selection bounds
+
+v0.5.0 (c2c3eaf22f8870eebd0d508315fbc03c02fdee92)
 -Change clipboard architecture
 
-v0.4.7
+v0.4.7 (fb82c7756e990c42df24ff650495b71519555b47)
 -Add initial highlight volume
 -Use image for vol bar instead of line
 
-v0.4.6
+v0.4.6 (d09274ab043673891e030575b6ffd935f23a5072)
 -Add initial selection toolbar
 -Add initial volume event handler, change volume
 
-v0.4.5
+v0.4.5 (88b70ffbc10b19646457626b676b3cde72dceac1)
 -Add basic save state logic with observable lists
 -Add filter notes
 -Add highlight note when selecting with rubber band
 -Fix rubber band issue where you select from bottom or right to top or left which would select nothing
 
-v0.4.4
+v0.4.4 (9495527bf6b8c1474a3fc88b9627305be27ccfa1)
 -Add escape to select no instrument and be able to use rubber band
 -Add volume text
 -Fix rubber band to only include notes within the region, not notes it touches position with
