@@ -37,9 +37,9 @@ public class DataClipboardFunctions {
                 measureLineDeepCopy.setVolume(-1);
                 
                 int line = y * Constants.LINES_IN_A_ROW + x;
-                MeasureLine measureLineOriginal = song.staff.get(line);
+                MeasureLine measureLineOriginal = song.get(line);
                 
-                for (Note n : measureLineOriginal.measureLine) {
+                for (Note n : measureLineOriginal) {
                     
                     //TODO: check if line already exists in dataclipboard before setting it to a the new linedeepcopy, if so add nCopy to the existing line
                     //if rowBegin, consider positionBegin
@@ -50,7 +50,7 @@ public class DataClipboardFunctions {
                         
                         if(DataClipboard.getContent().get(line) == null) {
                             Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
-                            measureLineDeepCopy.measureLine.add(nCopy);
+                            measureLineDeepCopy.add(nCopy);
                         } else {
                             Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
                             DataClipboard.getContent().get(line).addNote(nCopy);
@@ -89,20 +89,20 @@ public class DataClipboardFunctions {
                 MeasureLine measureLineShallowCopy = new MeasureLine();
 
                 int line = y * Constants.LINES_IN_A_ROW + x;
-                MeasureLine measureLineOriginal = song.staff.get(line);
+                MeasureLine measureLineOriginal = song.get(line);
 
-                for (int i = 0; i < measureLineOriginal.measureLine.size(); i++) {
+                for (int i = 0; i < measureLineOriginal.size(); i++) {
                     
                     //TODO: use instrFiltered in DataClipboard
-                    Note n = measureLineOriginal.measureLine.get(i);
+                    Note n = measureLineOriginal.get(i);
                     //if rowBegin, consider positionBegin
                     //if rowEnd, consider positionEnd
                     if (!(y == rowBegin && n.getPosition().ordinal() < positionBegin.ordinal()
                             || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal()) 
                             && instrFiltered(n.getInstrument())){
                         
-                        measureLineOriginal.measureLine.remove(n);
-                        measureLineShallowCopy.measureLine.add(n);
+                        measureLineOriginal.remove(n);
+                        measureLineShallowCopy.add(n);
                         i--;//element removed, adjust index back
                     }
                 }
@@ -142,11 +142,11 @@ public class DataClipboardFunctions {
     public static void paste(Song song, int lineMoveTo) {
         List<MeasureLine> content = DataClipboard.getCopiedContent();
         for (int i = 0; i < content.size(); i++) {    
-            MeasureLine ml = song.staff.get(lineMoveTo + i);
+            MeasureLine ml = song.get(lineMoveTo + i);
 
             if(content.get(i) != null) {
-                for(int j = 0 ;j < content.get(i).measureLine.size(); j++){
-                    Note n = content.get(i).measureLine.get(j);
+                for(int j = 0 ;j < content.get(i).size(); j++){
+                    Note n = content.get(i).get(j);
                     ml.addNote(new Note(n.getInstrument(), n.getPosition(), n.getModifier()));
                 }
             }
@@ -170,9 +170,9 @@ public class DataClipboardFunctions {
                 MeasureLine measureLineShallowCopy = new MeasureLine();
 
                 int line = y * Constants.LINES_IN_A_ROW + x;
-                MeasureLine measureLineOriginal = song.staff.get(line);
+                MeasureLine measureLineOriginal = song.get(line);
 
-                for (Note n : measureLineOriginal.measureLine) {
+                for (Note n : measureLineOriginal) {
 
                     //TODO: use instrFiltered in DataClipboard
                     //if rowBegin, consider positionBegin
@@ -181,7 +181,7 @@ public class DataClipboardFunctions {
                             || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())
                             && instrFiltered(n.getInstrument())) {
 //                        Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
-                        measureLineShallowCopy.measureLine.add(n);//nCopy);
+                        measureLineShallowCopy.add(n);//nCopy);
                     }
                 }
                 content.add(measureLineShallowCopy);
@@ -216,9 +216,9 @@ public class DataClipboardFunctions {
                 MeasureLine measureLineVolCopy = new MeasureLine();
                 
                 int line = y * Constants.LINES_IN_A_ROW + x;
-                MeasureLine measureLineOriginal = song.staff.get(line);
+                MeasureLine measureLineOriginal = song.get(line);
 
-                if(!measureLineOriginal.measureLine.isEmpty()) {
+                if(!measureLineOriginal.isEmpty()) {
                     measureLineVolCopy.setVolume(measureLineOriginal.getVolume());
                     //check if line already exists in DataClipboard's content
                     if(DataClipboard.getContent().get(line) == null) {
@@ -251,9 +251,9 @@ public class DataClipboardFunctions {
                 
                 int line = y * Constants.LINES_IN_A_ROW + x;
 
-                if(!song.staff.get(line).measureLine.isEmpty()) {
-                    vol = song.staff.get(line).getVolume();
-                    song.staff.get(line).setVolume(Constants.MAX_VELOCITY);
+                if(!song.get(line).isEmpty()) {
+                    vol = song.get(line).getVolume();
+                    song.get(line).setVolume(Constants.MAX_VELOCITY);
                 }
                 contentVol.add(vol);
             }          
@@ -271,7 +271,7 @@ public class DataClipboardFunctions {
     public static void pasteVol(Song song, int lineMoveTo) {
         List<MeasureLine> contentVol = DataClipboard.getCopiedContent();
         for (int i = 0; i < contentVol.size(); i++) {    
-            MeasureLine ml = song.staff.get(lineMoveTo + i);
+            MeasureLine ml = song.get(lineMoveTo + i);
 
             if(contentVol.get(i) != null && contentVol.get(i).getVolume() >= 0) {
                 ml.setVolume(contentVol.get(i).getVolume());
@@ -295,8 +295,8 @@ public class DataClipboardFunctions {
                 Integer vol = null;
                 
                 int line = y * Constants.LINES_IN_A_ROW + x;
-                if(!song.staff.get(line).measureLine.isEmpty()) {
-                    vol = song.staff.get(line).getVolume();
+                if(!song.get(line).isEmpty()) {
+                    vol = song.get(line).getVolume();
                 }
                 contentVol.add(vol);
             }

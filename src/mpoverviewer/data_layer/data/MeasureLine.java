@@ -1,44 +1,40 @@
 package mpoverviewer.data_layer.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 
 /**
  * Container class for all notes on a line.
  *
  * @author j574y923
  */
-public class MeasureLine {
+public class MeasureLine extends SimpleListProperty<Note> {
 
     private Song song;
     
     private int lineNumber;
     
-    public ObservableList<Note> measureLine;
-
     private int volume;
 
     public MeasureLine() {
-        measureLine = FXCollections.observableArrayList();
+        super(FXCollections.observableArrayList());
         volume = 127;
     }
 
     public boolean addNote(Note note) {
-        for(int i = 0; i < measureLine.size(); i++){
-            Note n = measureLine.get(i);
+        for(int i = 0; i < this.size(); i++){
+            Note n = this.get(i);
             if(n.getPosition() == note.getPosition()
                     && n.getModifier() == note.getModifier()
                     && n.getInstrument() == note.getInstrument()) {
                 return false;
             } else if (n.getPositionInt() > note.getPositionInt()) {
-                measureLine.add(i, note);
+                this.add(i, note);
                 return true;
             }
         }
-        measureLine.add(note);
+        this.add(note);
         return true;
     }
 
@@ -49,10 +45,10 @@ public class MeasureLine {
      * @return note that is removed or null if there is no note in that position
      */
     public Note removeNote(int position) {
-        for (int i = measureLine.size() - 1; i >= 0; i--) {
-            if (measureLine.get(i).getPositionInt() == position) {
-                Note n = measureLine.get(i);
-                measureLine.remove(i);
+        for (int i = this.size() - 1; i >= 0; i--) {
+            if (this.get(i).getPositionInt() == position) {
+                Note n = this.get(i);
+                this.remove(i);
                 return n;
             }
         }
@@ -83,10 +79,10 @@ public class MeasureLine {
      * @param note
      */
     public void bringNoteToFront(Note note) {
-        int index = measureLine.indexOf(note);
+        int index = this.indexOf(note);
         if(index < 0){
-            for(int i = 0; i < measureLine.size(); i++){
-                Note n = measureLine.get(i);
+            for(int i = 0; i < this.size(); i++){
+                Note n = this.get(i);
                 if(n.getPosition() == note.getPosition()
                         && n.getModifier() == note.getModifier()
                         && n.getInstrument() == note.getInstrument()) {
@@ -95,28 +91,28 @@ public class MeasureLine {
             }
         }
         
-        for(int i = index; i < measureLine.size(); i++){
-            Note n = measureLine.get(i);
+        for(int i = index; i < this.size(); i++){
+            Note n = this.get(i);
             if (n.getPositionInt() > note.getPositionInt()) {
-                Note noteTmp = measureLine.remove(index);
-                measureLine.add(i - 1, noteTmp);
+                Note noteTmp = this.remove(index);
+                this.add(i - 1, noteTmp);
                 return;
             }
         }
-        Note noteTmp = measureLine.remove(index);
-        measureLine.add(noteTmp);
+        Note noteTmp = this.remove(index);
+        this.add(noteTmp);
     }
     
     /**
-     * Used to refer to the song the measureLine belongs to. This way when a
-     * change occurs to the measureLine (added or removed notes), the song can
+     * Used to refer to the song the this belongs to. This way when a
+     * change occurs to the this (added or removed notes), the song can
      * be set to modified indicating a save is necessary.
      *
-     * @param song that the measureLine belongs to
+     * @param song that the this belongs to
      */
     public void setSong(Song song) {
         this.song = song;
-        measureLine.addListener(new ListChangeListener() {
+        this.addListener(new ListChangeListener() {
  
             @Override
             public void onChanged(ListChangeListener.Change change) {

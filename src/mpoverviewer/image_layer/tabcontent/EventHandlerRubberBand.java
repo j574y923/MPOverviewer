@@ -149,7 +149,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                                     lineMoveTo);
                             for(int i = lineMoveTo; i < DataClipboard.getCopiedContent().size() + lineMoveTo; i++){
                                 if(DataClipboard.getCopiedContent().get(i - lineMoveTo) != null 
-                                        && !DataClipboard.getCopiedContent().get(i - lineMoveTo).measureLine.isEmpty()){//optimization...
+                                        && !DataClipboard.getCopiedContent().get(i - lineMoveTo).isEmpty()){//optimization...
                                     scrollPane.reloadLine(i);
                                     scrollPane.redrawLine(i);
                                 }
@@ -175,7 +175,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             
                             for (int i = 0; i < deletedNotes.size(); i++) {
                                 MeasureLine ml = deletedNotes.get(i);
-                                for (Note n : ml.measureLine) {
+                                for (Note n : ml) {
                                     scrollPane.removeNote(line + i, n);
                                 }
                             }
@@ -199,7 +199,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
 
                                     for (int i = 0; i < deletedNotes.size(); i++) {
                                         MeasureLine ml = deletedNotes.get(i);
-                                        for (Note n : ml.measureLine) {
+                                        for (Note n : ml) {
                                             scrollPane.removeNote(line + i, n);
                                         }
                                     }
@@ -277,7 +277,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         rubberBand.getPositionEnd());
                 for (int i = 0; i < selection.size(); i++) {
                     MeasureLine ml = selection.get(i);
-                    for (Note n : ml.measureLine) {
+                    for (Note n : ml) {
                         scrollPane.highlightNote(n, true);
                     }
                 }

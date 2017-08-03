@@ -9,7 +9,7 @@ import mpoverviewer.global.Constants;
  *
  * @author j574y923
  */
-public class Song {
+public class Song extends ArrayList<MeasureLine> {
 
     public enum type {
         AMS,
@@ -17,8 +17,6 @@ public class Song {
         MPC,
         SMP
     }
-
-    public List<MeasureLine> staff;
 
     private int tempo;
 
@@ -29,14 +27,14 @@ public class Song {
     private boolean modified;
 
     public Song(int tempo, int time, type type) {
+        super(Constants.SONG_LENGTH);
         this.tempo = tempo;
         this.time = time;
         this.type = type;
-        staff = new ArrayList<>(Constants.SONG_LENGTH);
         //initialization of all values
         for(int i = 0 ;i < Constants.SONG_LENGTH; i++){
             MeasureLine ml = new MeasureLine();
-            staff.add(ml);
+            this.add(ml);
             ml.setSong(this);
             ml.setLineNumber(i);
         }

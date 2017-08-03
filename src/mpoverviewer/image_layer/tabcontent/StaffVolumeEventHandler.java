@@ -126,7 +126,7 @@ public class StaffVolumeEventHandler implements EventHandler<Event> {
         s.setSiehSvehMediator(2);
         
         int line = getLine(event.getX(), event.getY());
-        if(!s.getSong().staff.get(line).measureLine.isEmpty()) {
+        if(!s.getSong().get(line).isEmpty()) {
             s.setVolume(line, getVolumePosition(event.getY()));
         }
     }
@@ -153,7 +153,7 @@ public class StaffVolumeEventHandler implements EventHandler<Event> {
     private void scrollStart(ScrollEvent event) {
         if(mousePressed) {
             int line = getLine(event.getX(), event.getY());
-            if(!s.getSong().staff.get(line).measureLine.isEmpty()) {
+            if(!s.getSong().get(line).isEmpty()) {
                 s.setVolume(line, getVolumePosition(event.getY()));
             }
         }

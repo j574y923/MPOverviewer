@@ -229,8 +229,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
      */
     public void drawSong(Song song) {
 
-        for (int i = 0; i < song.staff.size(); i++) {
-            MeasureLine m = song.staff.get(i);
+        for (int i = 0; i < song.size(); i++) {
+            MeasureLine m = song.get(i);
             
             ImageView vol = Variables.imageLoader.getImageView(ImageIndex.VOL_BAR);
             vol.setX(Constants.EDGE_MARGIN + Constants.LINE_SPACING_OFFSET_X + (i % Constants.LINES_IN_A_ROW) * Constants.LINE_SPACING);
@@ -246,12 +246,12 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             
             pane.getChildren().add(vol);
             pane.getChildren().add(volText);
-            if(m.measureLine.isEmpty()){
+            if(m.isEmpty()){
                 vol.setVisible(false);
                 volText.setVisible(false);
             }
             
-            for (Note n : m.measureLine) {
+            for (Note n : m) {
 
                 ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
                 ImageView iv = Variables.imageLoader.getImageView(imageIndex);
@@ -469,14 +469,14 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     
     public void removeNote(int line, Note.Position position){
         System.out.println(position);
-        Note n = song.staff.get(line).removeNote(position.ordinal());
+        Note n = song.get(line).removeNote(position.ordinal());
         if(n != null){
             pane.getChildren().remove(composition.get(n)[0]);
             if(composition.get(n)[1] != null)
                 pane.getChildren().remove(composition.get(n)[1]);
             composition.remove(n);
         }
-        if(song.staff.get(line).measureLine.isEmpty()){
+        if(song.get(line).isEmpty()){
 //            System.out.println("SRSLY?" +compositionVol.get(line) );
             compositionVol.get(line).setVisible(false);
             compositionVolText.get(line).setVisible(false);
@@ -493,14 +493,14 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //        ivArr.add(composition.get(n)[1]);
 //}
 //pane.getChildren().removeAll(ivArr);
-        song.staff.get(line).measureLine.remove(n);
+        song.get(line).remove(n);
         if(n != null){
             pane.getChildren().remove(composition.get(n)[0]);
             if(composition.get(n)[1] != null)
                 pane.getChildren().remove(composition.get(n)[1]);
             composition.remove(n);
         }
-        if(song.staff.get(line).measureLine.isEmpty()){
+        if(song.get(line).isEmpty()){
 //            System.out.println("SRSLY?" +compositionVol.get(line) );
             compositionVol.get(line).setVisible(false);
             compositionVolText.get(line).setVisible(false);
@@ -510,7 +510,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     public void addNote(int line, Note.Instrument instrument, Note.Position position, Note.Modifier modifier){
         System.out.println(position + " " + instrument);
         Note n = new Note(instrument, position, modifier);
-        if(song.staff.get(line).addNote(n)){
+        if(song.get(line).addNote(n)){
             //TODO: add new note imageview...
             ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
             ImageView iv = Variables.imageLoader.getImageView(imageIndex);
@@ -528,7 +528,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //                pane.getChildren().add(ivArray[1]);
         }
         else {
-            song.staff.get(line).bringNoteToFront(n);
+            song.get(line).bringNoteToFront(n);
             
             redrawLine(line);
         }
@@ -544,7 +544,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
      * @param line at which new note is placed
      */
     public void redrawLine(int line){
-        for(Note n : song.staff.get(line).measureLine){
+        for(Note n : song.get(line)){
             ImageView[] ivArray = this.composition.get(n);
             
             pane.getChildren().remove(ivArray[0]);
@@ -552,7 +552,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
                 pane.getChildren().remove(ivArray[1]);
         }
         
-        for(Note n : song.staff.get(line).measureLine){
+        for(Note n : song.get(line)){
             ImageView[] ivArray = this.composition.get(n);
             
             pane.getChildren().add(ivArray[0]);
@@ -574,7 +574,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
      * @param line at which notes have changed
      */
     public void reloadLine(int line) {
-        for(Note n : song.staff.get(line).measureLine){
+        for(Note n : song.get(line)){
             if(!this.composition.containsKey(n)) {
                 ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());
                 ImageView iv = Variables.imageLoader.getImageView(imageIndex);
@@ -640,7 +640,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
     }
     
     public void setVolume(int line, int volume) {
-        song.staff.get(line).setVolume(volume);
+        song.get(line).setVolume(volume);
         compositionVol.get(line).setFitHeight(volume / 2);
         compositionVol.get(line).setTranslateY(-volume / 2);
         compositionVolText.get(line).setText("" + volume);

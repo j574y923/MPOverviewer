@@ -127,16 +127,16 @@ public class DataToMPC {
 
         String songContent = "";
 
-        List<MeasureLine> composition = data.staff;
+        List<MeasureLine> composition = data;
 
         for (int i = 0; i < Math.min(composition.size(), 384); i++) {
             MeasureLine m = composition.get(i);
-            if (m.measureLine.isEmpty() && m.getVolume() == Constants.MAX_VELOCITY) {
+            if (m.isEmpty() && m.getVolume() == Constants.MAX_VELOCITY) {
                 songContent += ":";
                 continue;
             }
 
-            List<Note> notes = m.measureLine;
+            List<Note> notes = m;
             int numPluses = 0;
             for (int j = 0; j < notes.size(); j++) {
                 songContent += convI(notes.get(j).getInstrument());
