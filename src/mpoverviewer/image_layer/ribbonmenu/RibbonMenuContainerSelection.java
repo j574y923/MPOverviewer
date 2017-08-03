@@ -13,6 +13,12 @@ import mpoverviewer.ui_layer.ribbonmenu.RibbonMenuContainer;
  */
 public class RibbonMenuContainerSelection extends RibbonMenuContainer {
 
+    public enum Selection {
+        SELECTION_NOTES,
+        SELECTION_VOL,
+        SELECTION_NOTES_AND_VOL,
+    }
+    
     private static final String DESCRIPTION_SEL = "Selected selection tool";
     
     private static final Tooltip TT_DESCRIPTION_SEL = new Tooltip(DESCRIPTION_SEL);
@@ -60,7 +66,7 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
     public RibbonMenuContainerSelection() {
         super("Selection tools");
         
-        selectionImage = ImageIndex.SELECTION_NOTES;
+        selectionImage = ImageIndex.SELECTION_NOTES_AND_VOL;
         selection = new RibbonMenuButtonMPO();
         selection.setGraphic(Variables.imageLoader.getImageView(selectionImage));
         selection.setTooltip(TT_DESCRIPTION_SEL);
@@ -168,5 +174,33 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
      */
     public boolean selectionToolToggled() {
         return selectionToggle;
+    }
+    
+    /**
+     * 
+     * @return selection type based on selection enum of notes, vol, or
+     * notes_and_vol
+     */
+    public Selection getSelectionType() {
+        return Selection.valueOf(selectionImage.toString());
+    }
+    
+    /**
+     * 
+     * @return flag indicating toggle of keep bounds option. Keep bounds means
+     * to retain the rubberband and also apply that rubberband to all tabs in 
+     * its window.
+     */
+    public boolean getKeepBoundsFlag() {
+        return keepBoundsFlag;
+    }
+    
+    /**
+     *
+     * @return flag indicating toggle of linear selection. Linear selection used
+     * to select a linear range of lines.
+     */
+    public boolean getLinearFlag() {
+        return linearFlag;
     }
 }

@@ -1,3 +1,7 @@
+v0.5.3
+-Add selection toolbar: select tool
+-Add copy, delete, paste note/vol only by checking selection toolbar
+
 v0.5.2
 -Add multi-rubber band (multi copy and delete)
 
