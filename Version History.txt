@@ -1,3 +1,6 @@
+v0.5.2
+-Add multi-rubber band (multi copy and delete)
+
 v0.5.1
 -Add copy volume
 -Add delete volume

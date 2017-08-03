@@ -48,11 +48,18 @@ public class DataClipboardFunctions {
                             || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())
                             && instrFiltered(n.getInstrument())){
                         
-                        Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
-                        measureLineDeepCopy.measureLine.add(nCopy);
+                        if(DataClipboard.getContent().get(line) == null) {
+                            Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
+                            measureLineDeepCopy.measureLine.add(nCopy);
+                        } else {
+                            Note nCopy = new Note(n.getInstrument(), n.getPosition(), n.getModifier());
+                            DataClipboard.getContent().get(line).addNote(nCopy);
+                        }
                     }
                 }
-                DataClipboard.getContent().set(measureLineOriginal.getLineNumber(), measureLineDeepCopy);
+                if (DataClipboard.getContent().get(line) == null) {
+                    DataClipboard.getContent().set(measureLineOriginal.getLineNumber(), measureLineDeepCopy);
+                }
             }
         }
     }
@@ -214,10 +221,10 @@ public class DataClipboardFunctions {
                 if(!measureLineOriginal.measureLine.isEmpty()) {
                     measureLineVolCopy.setVolume(measureLineOriginal.getVolume());
                     //check if line already exists in DataClipboard's content
-                    if(DataClipboard.getContent().get(line) != null) {
-                        DataClipboard.getContent().get(line).setVolume(measureLineOriginal.getVolume());
-                    } else {
+                    if(DataClipboard.getContent().get(line) == null) {
                         DataClipboard.getContent().set(line, measureLineVolCopy);
+                    } else {
+                        DataClipboard.getContent().get(line).setVolume(measureLineOriginal.getVolume());
                     }
                 }
             } 

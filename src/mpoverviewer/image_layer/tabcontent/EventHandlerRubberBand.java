@@ -1,5 +1,6 @@
 package mpoverviewer.image_layer.tabcontent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,7 @@ import mpoverviewer.image_layer.ribbonmenu.RibbonMenuMPO;
 public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
 
     RectangleRubberBand rubberBand;
+    List<RectangleRubberBand> rubberBands;
     CompositionPane scrollPane;
 
     /**
@@ -62,9 +64,10 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
      */
     public EventHandlerRubberBand(Pane child, CompositionPane parent) {
         DataClipboard.initialize();
+        rubberBands = new ArrayList<>();
         
-        rubberBand = new RectangleRubberBand();
-        child.getChildren().add(rubberBand);
+//        rubberBand = new RectangleRubberBand();
+//        child.getChildren().add(rubberBand);
         this.scrollPane = parent;
         /* rubber band resize if scrollbars change */
         this.scrollPane.hvalueProperty().addListener(new ChangeListener<Number>() {
@@ -117,15 +120,17 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 if(event.isControlDown()){
                     switch(event.getCode()){
                         case C:
-                            DataClipboardFunctions.copy(scrollPane.getSong(), 
-                                    rubberBand.getLineBegin(), 
-                                    rubberBand.getPositionBegin(), 
-                                    rubberBand.getLineEnd(), 
-                                    rubberBand.getPositionEnd());
-                            
-                            DataClipboardFunctions.copyVol(scrollPane.getSong(), 
-                                    rubberBand.getLineBeginVol(),  
-                                    rubberBand.getLineEndVol());
+                            for(RectangleRubberBand rb : rubberBands) {
+                                DataClipboardFunctions.copy(scrollPane.getSong(), 
+                                        rb.getLineBegin(), 
+                                        rb.getPositionBegin(), 
+                                        rb.getLineEnd(), 
+                                        rb.getPositionEnd());
+
+                                DataClipboardFunctions.copyVol(scrollPane.getSong(), 
+                                        rb.getLineBeginVol(),  
+                                        rb.getLineEndVol());
+                            }
                             break;
                         case I:
                             System.out.println("EHRB: INSERT");
@@ -176,28 +181,30 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         case BACK_SPACE:
                         case DELETE:
                             System.out.println("EHRB: DEL");
-                            int line = rubberBand.getLineBegin();
-                            List<MeasureLine> deletedNotes = DataClipboardFunctions.delete(scrollPane.getSong(), 
-                                    line,//rubberBand.getLineBegin(), 
-                                    rubberBand.getPositionBegin(), 
-                                    rubberBand.getLineEnd(), 
-                                    rubberBand.getPositionEnd());
-                            
-                            for (int i = 0; i < deletedNotes.size(); i++) {
-                                MeasureLine ml = deletedNotes.get(i);
-                                for (Note n : ml.measureLine) {
-                                    scrollPane.removeNote(line + i, n);
+                            for(RectangleRubberBand rb : rubberBands) {
+                                int line = rb.getLineBegin();
+                                List<MeasureLine> deletedNotes = DataClipboardFunctions.delete(scrollPane.getSong(), 
+                                        line,//rubberBand.getLineBegin(), 
+                                        rb.getPositionBegin(), 
+                                        rb.getLineEnd(), 
+                                        rb.getPositionEnd());
+
+                                for (int i = 0; i < deletedNotes.size(); i++) {
+                                    MeasureLine ml = deletedNotes.get(i);
+                                    for (Note n : ml.measureLine) {
+                                        scrollPane.removeNote(line + i, n);
+                                    }
                                 }
-                            }
-                            
-                            int lineVol = rubberBand.getLineBeginVol();
-                            List<Integer> deletedVols = DataClipboardFunctions.deleteVol(scrollPane.getSong(), 
-                                    lineVol, 
-                                    rubberBand.getLineEndVol());
-                            
-                            for (int i = 0; i < deletedVols.size(); i++) {
-                                if(deletedVols.get(i) != null) {
-                                    scrollPane.setVolume(lineVol + i, Constants.MAX_VELOCITY);
+
+                                int lineVol = rb.getLineBeginVol();
+                                List<Integer> deletedVols = DataClipboardFunctions.deleteVol(scrollPane.getSong(), 
+                                        lineVol, 
+                                        rb.getLineEndVol());
+
+                                for (int i = 0; i < deletedVols.size(); i++) {
+                                    if(deletedVols.get(i) != null) {
+                                        scrollPane.setVolume(lineVol + i, Constants.MAX_VELOCITY);
+                                    }
                                 }
                             }
                             break;
@@ -217,13 +224,30 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             return;
         mouseX = mouseEvent.getX();
         mouseY = mouseEvent.getY();
-        rubberBand.toFront();
+//        rubberBand.toFront();
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-            rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
             
-            scrollPane.unhighlightAllNotes();
-            scrollPane.unhighlightAllVols();
-            DataClipboard.clearContent();
+            if(!mouseEvent.isControlDown()) {
+                scrollPane.unhighlightAllNotes();
+                scrollPane.unhighlightAllVols();
+                DataClipboard.clearContent();
+                
+                scrollPane.getPane().getChildren().removeAll(rubberBands);
+                rubberBands.clear();
+                rubberBand = null;
+            } else {
+                rubberBand = new RectangleRubberBand();
+                rubberBands.add(rubberBand);
+                scrollPane.getPane().getChildren().add(rubberBand);
+            }
+            
+            if (rubberBands.isEmpty()) {
+                rubberBand = new RectangleRubberBand();
+                rubberBands.add(rubberBand);
+                scrollPane.getPane().getChildren().add(rubberBand);
+            }
+            
+            rubberBand.begin(mouseEvent.getX(), mouseEvent.getY());
             
         } else if (mouseEvent.isPrimaryButtonDown()) {
             rubberBand.resize(mouseEvent.getX(), mouseEvent.getY());
