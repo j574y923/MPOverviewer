@@ -21,7 +21,7 @@ public class DataClipboard {
     private static int contentLineBegin = -1;
     /* Line where copied content ends. Inclusive. */
     private static int contentLineEnd = -1;
-
+    
     private static boolean[] instrFiltered;
 
     /**
@@ -63,7 +63,7 @@ public class DataClipboard {
     }
     
     /**
-     * clear content, setting all lines in content to null
+     * clear copied content, setting all lines in content to null
      */
     public static void clearContent() {
         for (int i = 0; i < content.size(); i++) {
@@ -107,5 +107,13 @@ public class DataClipboard {
         if (contentLineEnd == -1 || line > contentLineEnd) {
             contentLineEnd = line;
         }
+    }
+    
+    public static int getContentLineBegin() {
+        return contentLineBegin;
+    }
+    
+    public static int getContentLineEnd() {
+        return contentLineEnd;
     }
 }

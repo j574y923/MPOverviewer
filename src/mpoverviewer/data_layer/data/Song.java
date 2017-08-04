@@ -1,7 +1,6 @@
 package mpoverviewer.data_layer.data;
 
 import java.util.ArrayList;
-import java.util.List;
 import mpoverviewer.global.Constants;
 
 /**

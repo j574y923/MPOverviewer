@@ -5,7 +5,9 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Tooltip;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ImageIndex;
+import mpoverviewer.image_layer.tabcontent.CompositionPane;
 import mpoverviewer.ui_layer.ribbonmenu.RibbonMenuContainer;
+import mpoverviewer.ui_layer.tab.content.ContentControl;
 
 /**
  *
@@ -100,6 +102,12 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
                 } else {
                     selection.setGraphic(Variables.imageLoader.getImageView(selectionImage));
                 }
+                
+                ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
+                        .getSelectedItem().getContent()).getEHRB().selectNotes();
+                
+                ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
+                        .getSelectedItem().getContent()).unhighlightAllVols();
             }
         });
         selVol.setOnAction(new EventHandler<ActionEvent>() {
@@ -110,7 +118,14 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
                     selection.setGraphic(Variables.imageLoader.getImageView(ImageIndex.valueOf(selectionImage.toString() + "_HL")));
                 } else {
                     selection.setGraphic(Variables.imageLoader.getImageView(selectionImage));
-                }            }
+                }     
+                
+                ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
+                        .getSelectedItem().getContent()).getEHRB().selectVols();
+                
+                ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
+                        .getSelectedItem().getContent()).unhighlightAllNotes();
+            }
         });
         selNotesAndVol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -120,7 +135,14 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
                     selection.setGraphic(Variables.imageLoader.getImageView(ImageIndex.valueOf(selectionImage.toString() + "_HL")));
                 } else {
                     selection.setGraphic(Variables.imageLoader.getImageView(selectionImage));
-                }            }
+                }            
+ 
+                ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
+                        .getSelectedItem().getContent()).getEHRB().selectNotes();
+                                
+                ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
+                        .getSelectedItem().getContent()).getEHRB().selectVols();
+            }
         });
         
         selKeepBounds = new RibbonMenuButtonMPO();

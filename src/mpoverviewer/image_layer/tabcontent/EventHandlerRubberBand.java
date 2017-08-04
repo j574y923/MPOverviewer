@@ -121,6 +121,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 if(event.isControlDown()){
                     switch(event.getCode()){
                         case C:
+                            DataClipboard.clearContent();
+                            
                             Selection type = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getSelectionToolbar().getSelectionType();
                             for(RectangleRubberBand rb : rubberBands) {
                                 if(type.equals(Selection.SELECTION_NOTES) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
@@ -241,7 +243,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             if(!mouseEvent.isControlDown()) {
                 scrollPane.unhighlightAllNotes();
                 scrollPane.unhighlightAllVols();
-                DataClipboard.clearContent();
+//                DataClipboard.clearContent();
                 
                 scrollPane.getPane().getChildren().removeAll(rubberBands);
                 rubberBands.clear();
@@ -450,5 +452,45 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
     /* If valid y */
     private boolean zby(double y) {
         return y % Constants.ROW_HEIGHT_TOTAL <= Constants.ROW_HEIGHT_NOTES;
+    }
+    
+    public void selectNotes() {
+        Selection type = ((RibbonMenuMPO) Variables.stageInFocus.getRibbonMenu()).getSelectionToolbar().getSelectionType();
+        if (type.equals(Selection.SELECTION_NOTES) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
+            //Note: overlapping rubberbands will highlight the same notes and this might have a big impact on performance and may need to be optimized later.
+            for (RectangleRubberBand rb : rubberBands) {
+
+                int lineBegin = rb.getLineBegin();
+                List<MeasureLine> selection = DataClipboardFunctions.selection(scrollPane.getSong(),
+                        lineBegin,
+                        rb.getPositionBegin(),
+                        rb.getLineEnd(),
+                        rb.getPositionEnd());
+                for (int i = 0; i < selection.size(); i++) {
+                    MeasureLine ml = selection.get(i);
+                    for (Note n : ml) {
+                        scrollPane.highlightNote(n, true);
+                    }
+                }
+            }
+        }
+    }
+    
+    public void selectVols() {
+        Selection type = ((RibbonMenuMPO) Variables.stageInFocus.getRibbonMenu()).getSelectionToolbar().getSelectionType();
+        if (type.equals(Selection.SELECTION_VOL) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
+            for (RectangleRubberBand rb : rubberBands) {
+                int lineBeginVol = rb.getLineBeginVol();
+                int lineEndVol = rb.getLineEndVol();
+                List<Integer> selectionVol = DataClipboardFunctions.selectionVol(scrollPane.getSong(),
+                        lineBeginVol,
+                        lineEndVol);
+                for (int i = 0; i < selectionVol.size(); i++) {
+                    if (selectionVol.get(i) != null) {
+                        scrollPane.highlightVol(lineBeginVol + i, true);
+                    }
+                }
+            }
+        }
     }
 }

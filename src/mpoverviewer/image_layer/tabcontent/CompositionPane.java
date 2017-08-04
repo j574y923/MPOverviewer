@@ -3,25 +3,19 @@ package mpoverviewer.image_layer.tabcontent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import mpoverviewer.data_layer.data.MeasureLine;
@@ -79,6 +73,11 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         return siehSvehMediator;
     }
     
+    private EventHandlerRubberBand ehrb;
+    public EventHandlerRubberBand getEHRB() {
+        return ehrb;
+    }
+    
     public CompositionPane(Song song) {
         super();
         
@@ -117,7 +116,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
 //        pane.getChildren().clear();
 //        staff.clear();
 //        compositionVol.clear();
-        pane.addEventHandler(MouseEvent.ANY, new EventHandlerRubberBand(pane, this));
+        ehrb = new EventHandlerRubberBand(pane, this);
+        pane.addEventHandler(MouseEvent.ANY, ehrb);
         pane.addEventFilter(InputEvent.ANY, new StaffInstrumentEventHandler(this, Variables.imageLoader));
         pane.addEventFilter(InputEvent.ANY, new StaffVolumeEventHandler(this));
         
