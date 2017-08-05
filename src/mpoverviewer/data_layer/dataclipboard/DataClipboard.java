@@ -22,6 +22,17 @@ public class DataClipboard {
     /* Line where copied content ends. Inclusive. */
     private static int contentLineEnd = -1;
     
+    /**
+     * A mock song structure with SONG_LENGTH number of MeasureLines that will
+     * represent the selected regions of an actual song.
+     */
+    private static List<MeasureLine> selection;
+
+    /* Line where selected content begins. Inclusive. Intended to set contentLineBegin to this */
+    private static int selectionLineBegin = -1;
+    /* Line where selected content ends. Inclusive. Intended to set contentLineEnd to this. */
+    private static int selectionLineEnd = -1;
+
     private static boolean[] instrFiltered;
 
     /**
@@ -31,11 +42,14 @@ public class DataClipboard {
     public static void initialize() {
         if(content == null) {
             content = new ArrayList<>();
+            selection = new ArrayList<>();
             for (int i = 0; i < Constants.SONG_LENGTH; i++) {
                 content.add(null);
+                selection.add(null);
             }
         }
     }
+    
     
     @Deprecated
     public static void addContent(List<MeasureLine> content, int index) {
@@ -50,7 +64,7 @@ public class DataClipboard {
      * @return a sublist of content with the beginning index set by
      * contentLineBegin and all data that follows after up to contentLineEnd
      */
-    public static List<MeasureLine> getCopiedContent() {
+    public static List<MeasureLine> getContentTrimmed() {
         return content.subList(contentLineBegin, contentLineEnd + 1);
     }
 
@@ -115,5 +129,65 @@ public class DataClipboard {
     
     public static int getContentLineEnd() {
         return contentLineEnd;
+    }
+    
+    /**
+     * clear selection, setting all lines in selection to null
+     */
+    public static void clearSelection() {
+        for (int i = 0; i < selection.size(); i++) {
+            selection.set(i, null);
+        }
+        selectionLineBegin = -1;
+        selectionLineEnd = -1;
+    }
+    
+    public static List<MeasureLine> getSelection() {
+        return selection;
+    }
+    
+    /**
+     * Checks if the line begins earlier than the current contentLineBegin. If
+     * so the new line is the contentLineBegin. If contentLineBegin has not been
+     * set yet (or has been reset after clearContent()) then new line is the
+     * contentLineBegin.
+     *
+     * @param line
+     */
+    public static void setSelectionLineBegin(int line) {
+        if (selectionLineBegin == -1 || line < selectionLineBegin) {
+            selectionLineBegin = line;
+        }
+    }
+
+    /**
+     * Checks if the line ends later than the current contentLineEnd. If
+     * so the new line is the contentLineEnd. If contentLineEnd has not been
+     * set yet (or has been reset after clearContent()) then new line is the
+     * contentLineEnd.
+     *
+     * @param line
+     */
+    public static void setSelectionLineEnd(int line) {
+        if (selectionLineEnd == -1 || line > selectionLineEnd) {
+            selectionLineEnd = line;
+        }
+    }
+    
+    public static int getSelectionLineBegin() {
+        return selectionLineBegin;
+    }
+    
+    public static int getSelectionLineEnd() {
+        return selectionLineEnd;
+    }
+    
+    /**
+     *
+     * @return a sublist of content with the beginning index set by
+     * contentLineBegin and all data that follows after up to contentLineEnd
+     */
+    public static List<MeasureLine> getSelectionTrimmed() {
+        return selection.subList(selectionLineBegin, selectionLineEnd + 1);
     }
 }

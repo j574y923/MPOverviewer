@@ -140,7 +140,7 @@ public class DataClipboardFunctions {
      * Paste data from clipboard at lineMoveTo.
      */
     public static void paste(Song song, int lineMoveTo) {
-        List<MeasureLine> content = DataClipboard.getCopiedContent();
+        List<MeasureLine> content = DataClipboard.getContentTrimmed();
         for (int i = 0; i < content.size(); i++) {    
             MeasureLine ml = song.get(lineMoveTo + i);
 
@@ -269,7 +269,7 @@ public class DataClipboardFunctions {
     }
     
     public static void pasteVol(Song song, int lineMoveTo) {
-        List<MeasureLine> contentVol = DataClipboard.getCopiedContent();
+        List<MeasureLine> contentVol = DataClipboard.getContentTrimmed();
         for (int i = 0; i < contentVol.size(); i++) {    
             MeasureLine ml = song.get(lineMoveTo + i);
 
@@ -279,8 +279,8 @@ public class DataClipboardFunctions {
         }
     }
     
-    /**
-     * 
+    /** 
+     * @see #selVol(Song song, int lineBegin, int lineEnd)
      * @return copy of volumes found in the given selection
      */
     public static List<Integer> selectionVol(Song song, int lineBegin, int lineEnd) {
@@ -309,5 +309,114 @@ public class DataClipboardFunctions {
         }
         
         return contentVol;
+    }
+    
+    //--------------------------------------------------------------------------
+    //
+    //  DataClipboard's selection variable to store the selected region
+    //
+    //--------------------------------------------------------------------------
+    /**
+     * copy over selection to content including all note and vol information if present
+     */
+    public static void copySel() {
+        DataClipboard.setContentLineBegin(DataClipboard.getSelectionLineBegin());
+        DataClipboard.setContentLineEnd(DataClipboard.getSelectionLineEnd());
+        for(MeasureLine ml : DataClipboard.getSelectionTrimmed()) {
+            if(ml != null) {
+                DataClipboard.getContent().set(ml.getLineNumber(), ml);
+            }
+        }
+    }
+    
+    public static List<MeasureLine> cutSel(Song song) {
+        copySel();
+        return deleteSel(song);
+    }
+    
+    public static List<MeasureLine> deleteSel(Song song) {
+        for(MeasureLine ml : DataClipboard.getSelectionTrimmed()) {
+            if(ml != null) {
+                for(Note n : ml) {
+                    song.get(ml.getLineNumber()).remove(n);
+                }
+                if(ml.getVolume() >= 0) {
+                    song.get(ml.getLineNumber()).setVolume(Constants.MAX_VELOCITY);
+                }
+            }
+        }
+        List<MeasureLine> selection = DataClipboard.getSelectionTrimmed();
+        DataClipboard.clearSelection();
+        return DataClipboard.getSelectionTrimmed();
+    }
+    
+    public static List<MeasureLine> sel(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
+        int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
+        int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
+        int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
+        int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
+        
+        DataClipboard.setSelectionLineBegin(lineBegin);
+        DataClipboard.setSelectionLineEnd(lineEnd);
+        
+        for(int y = rowBegin; y <= rowEnd; y ++) {
+            for (int x = rowLineBegin; x <= rowLineEnd; x++) {
+                MeasureLine measureLineShallowCopy = new MeasureLine();
+                measureLineShallowCopy.setVolume(-1);
+                
+                int line = y * Constants.LINES_IN_A_ROW + x;
+                MeasureLine measureLineOriginal = song.get(line);
+                measureLineShallowCopy.setLineNumber(line);
+                
+                for (Note n : measureLineOriginal) {
+                    
+                    //TODO: check if line already exists in dataclipboard before setting it to a the new linedeepcopy, if so add nCopy to the existing line
+                    //if rowBegin, consider positionBegin
+                    //if rowEnd, consider positionEnd
+                    if(!(y == rowBegin && n.getPosition().ordinal() < positionBegin.ordinal()
+                            || y == rowEnd && n.getPosition().ordinal() > positionEnd.ordinal())
+                            && instrFiltered(n.getInstrument())){
+                        
+                        if(DataClipboard.getSelection().get(line) == null) {
+                            measureLineShallowCopy.add(n);
+                        } else {
+                            DataClipboard.getSelection().get(line).addNote(n);
+                        }
+                    }
+                }
+                if (DataClipboard.getSelection().get(line) == null) {
+                    DataClipboard.getSelection().set(measureLineOriginal.getLineNumber(), measureLineShallowCopy);
+                }
+            }
+        }
+        return DataClipboard.getSelectionTrimmed();
+    }
+    
+    public static List<MeasureLine> selVol(Song song, int lineBegin, int lineEnd) {
+        int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
+        int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
+        int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
+        int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
+        
+        DataClipboard.setSelectionLineBegin(lineBegin);
+        DataClipboard.setSelectionLineEnd(lineEnd);
+        
+        for (int y = rowBegin; y <= rowEnd; y++) {
+            for (int x = rowLineBegin; x <= rowLineEnd; x++) {
+                int line = y * Constants.LINES_IN_A_ROW + x;
+                if (!song.get(line).isEmpty()) {
+                    if (DataClipboard.getSelection().get(line) == null) {
+                        MeasureLine measureLineCopy = new MeasureLine();
+                        measureLineCopy.setVolume(song.get(line).getVolume());
+                        measureLineCopy.setLineNumber(line);
+                        DataClipboard.getSelection().set(line, measureLineCopy);
+                    } else {
+                        DataClipboard.getSelection().get(line).setVolume(song.get(line).getVolume());
+                    }
+                }
+            }
+        }
+        
+        return DataClipboard.getSelectionTrimmed();
     }
 }

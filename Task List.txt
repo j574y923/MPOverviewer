@@ -36,6 +36,7 @@
 [07/17/17]song modified
 
 (image_layer)COMPOSITIONPANE
+[--/--/--]remove highlighted notes when add or remove note or change volume
 [--/--/--]change tempo
 [--/--/--]song type restrictions
 [--/--/--]option to apply clipboard functions to all tabs

@@ -146,22 +146,22 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         case V:
                             int lineMoveTo = getLine(mouseX, mouseY);
                             System.out.println("lineMoveTo = " + lineMoveTo);
-                            System.out.println("PASTE getContent().size() == " + DataClipboard.getCopiedContent().size());
+                            System.out.println("PASTE getContent().size() == " + DataClipboard.getContentTrimmed().size());
                             DataClipboardFunctions.paste(scrollPane.getSong(),
                                     lineMoveTo);
-                            for(int i = lineMoveTo; i < DataClipboard.getCopiedContent().size() + lineMoveTo; i++){
-                                if(DataClipboard.getCopiedContent().get(i - lineMoveTo) != null 
-                                        && !DataClipboard.getCopiedContent().get(i - lineMoveTo).isEmpty()){//optimization...
+                            for(int i = lineMoveTo; i < DataClipboard.getContentTrimmed().size() + lineMoveTo; i++){
+                                if(DataClipboard.getContentTrimmed().get(i - lineMoveTo) != null 
+                                        && !DataClipboard.getContentTrimmed().get(i - lineMoveTo).isEmpty()){//optimization...
                                     scrollPane.reloadLine(i);
                                     scrollPane.redrawLine(i);
                                 }
                             }
                             DataClipboardFunctions.paste(scrollPane.getSong(),
                                     lineMoveTo);
-                            for(int i = lineMoveTo; i < DataClipboard.getCopiedContent().size() + lineMoveTo; i++){
-                                if(DataClipboard.getCopiedContent().get(i - lineMoveTo) != null 
-                                        && DataClipboard.getCopiedContent().get(i - lineMoveTo).getVolume() >= 0){//optimization...
-                                    scrollPane.setVolume(i, DataClipboard.getCopiedContent().get(i - lineMoveTo).getVolume());
+                            for(int i = lineMoveTo; i < DataClipboard.getContentTrimmed().size() + lineMoveTo; i++){
+                                if(DataClipboard.getContentTrimmed().get(i - lineMoveTo) != null 
+                                        && DataClipboard.getContentTrimmed().get(i - lineMoveTo).getVolume() >= 0){//optimization...
+                                    scrollPane.setVolume(i, DataClipboard.getContentTrimmed().get(i - lineMoveTo).getVolume());
                                 }
                             }
 //                            scrollPane.redrawSong();
