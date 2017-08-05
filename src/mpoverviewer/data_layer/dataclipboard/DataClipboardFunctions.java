@@ -317,14 +317,17 @@ public class DataClipboardFunctions {
     //
     //--------------------------------------------------------------------------
     /**
-     * copy over selection to content including all note and vol information if present
+     * copy over selection to content including all note and vol information if
+     * present
      */
     public static void copySel() {
-        DataClipboard.setContentLineBegin(DataClipboard.getSelectionLineBegin());
-        DataClipboard.setContentLineEnd(DataClipboard.getSelectionLineEnd());
-        for(MeasureLine ml : DataClipboard.getSelectionTrimmed()) {
-            if(ml != null) {
-                DataClipboard.getContent().set(ml.getLineNumber(), ml);
+        if (DataClipboard.getSelectionLineBegin() != -1) {
+            DataClipboard.setContentLineBegin(DataClipboard.getSelectionLineBegin());
+            DataClipboard.setContentLineEnd(DataClipboard.getSelectionLineEnd());
+            for (MeasureLine ml : DataClipboard.getSelectionTrimmed()) {
+                if (ml != null) {
+                    DataClipboard.getContent().set(ml.getLineNumber(), ml);
+                }
             }
         }
     }
@@ -347,10 +350,14 @@ public class DataClipboardFunctions {
         }
         List<MeasureLine> selection = DataClipboard.getSelectionTrimmed();
         DataClipboard.clearSelection();
-        return DataClipboard.getSelectionTrimmed();
+        return selection;
     }
     
     public static List<MeasureLine> sel(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
+        //important check to prevent setting wrong lineBegin and lineEnd for selection
+        if(lineEnd < lineBegin)
+            return new ArrayList<MeasureLine>();
+        
         int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
         int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
         int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;

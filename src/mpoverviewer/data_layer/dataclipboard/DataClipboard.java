@@ -61,11 +61,11 @@ public class DataClipboard {
 
     /**
      *
-     * @return a sublist of content with the beginning index set by
+     * @return a shallow copy sublist of content with the beginning index set by
      * contentLineBegin and all data that follows after up to contentLineEnd
      */
     public static List<MeasureLine> getContentTrimmed() {
-        return content.subList(contentLineBegin, contentLineEnd + 1);
+        return new ArrayList<>(content.subList(contentLineBegin, contentLineEnd + 1));
     }
 
     /**
@@ -184,10 +184,11 @@ public class DataClipboard {
     
     /**
      *
-     * @return a sublist of content with the beginning index set by
-     * contentLineBegin and all data that follows after up to contentLineEnd
+     * @return a shallow copy sublist of selection with the beginning index set
+     * by selectionLineBegin and all data that follows after up to
+     * selectionLineEnd
      */
     public static List<MeasureLine> getSelectionTrimmed() {
-        return selection.subList(selectionLineBegin, selectionLineEnd + 1);
+        return new ArrayList<>(selection.subList(selectionLineBegin, selectionLineEnd + 1));
     }
 }

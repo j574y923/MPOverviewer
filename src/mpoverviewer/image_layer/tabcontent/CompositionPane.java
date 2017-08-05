@@ -477,22 +477,12 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             composition.remove(n);
         }
         if(song.get(line).isEmpty()){
-//            System.out.println("SRSLY?" +compositionVol.get(line) );
             compositionVol.get(line).setVisible(false);
             compositionVolText.get(line).setVisible(false);
         }
     }
     
     public void removeNote(int line, Note n){
-//        System.out.println(n.getPosition());
-//remove all... seems to have same behavior
-//List<ImageView> ivArr = new ArrayList<>();
-//for(Note n : notes){
-//    ivArr.add(composition.get(n)[0]);
-//    if(composition.get(n)[1] != null)
-//        ivArr.add(composition.get(n)[1]);
-//}
-//pane.getChildren().removeAll(ivArr);
         song.get(line).remove(n);
         if(n != null){
             pane.getChildren().remove(composition.get(n)[0]);
@@ -501,7 +491,6 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             composition.remove(n);
         }
         if(song.get(line).isEmpty()){
-//            System.out.println("SRSLY?" +compositionVol.get(line) );
             compositionVol.get(line).setVisible(false);
             compositionVolText.get(line).setVisible(false);
         }

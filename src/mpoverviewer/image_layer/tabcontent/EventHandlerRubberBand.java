@@ -123,22 +123,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         case C:
                             DataClipboard.clearContent();
                             
-                            Selection type = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getSelectionToolbar().getSelectionType();
-                            for(RectangleRubberBand rb : rubberBands) {
-                                if(type.equals(Selection.SELECTION_NOTES) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
-                                    DataClipboardFunctions.copy(scrollPane.getSong(),
-                                            rb.getLineBegin(),
-                                            rb.getPositionBegin(),
-                                            rb.getLineEnd(),
-                                            rb.getPositionEnd());
-                                }
-                                
-                                if(type.equals(Selection.SELECTION_VOL) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
-                                    DataClipboardFunctions.copyVol(scrollPane.getSong(), 
-                                            rb.getLineBeginVol(),  
-                                            rb.getLineEndVol());
-                                }
-                            }
+                            DataClipboardFunctions.copySel();
                             break;
                         case I:
                             System.out.println("EHRB: INSERT");
@@ -189,37 +174,19 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         case BACK_SPACE:
                         case DELETE:
                             System.out.println("EHRB: DEL");
-                            Selection type = ((RibbonMenuMPO)Variables.stageInFocus.getRibbonMenu()).getSelectionToolbar().getSelectionType();
-                            for(RectangleRubberBand rb : rubberBands) {
-                                if(type.equals(Selection.SELECTION_NOTES) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
-                                    int line = rb.getLineBegin();
-                                    List<MeasureLine> deletedNotes = DataClipboardFunctions.delete(scrollPane.getSong(), 
-                                            line,//rubberBand.getLineBegin(), 
-                                            rb.getPositionBegin(), 
-                                            rb.getLineEnd(), 
-                                            rb.getPositionEnd());
+                            List<MeasureLine> deletedSel = DataClipboardFunctions.deleteSel(scrollPane.getSong());
 
-                                    for (int i = 0; i < deletedNotes.size(); i++) {
-                                        MeasureLine ml = deletedNotes.get(i);
-                                        for (Note n : ml) {
-                                            scrollPane.removeNote(line + i, n);
-                                        }
+                            for (MeasureLine ml : deletedSel) {
+                                if (ml != null) {
+                                    for (Note n : ml) {
+                                        scrollPane.removeNote(ml.getLineNumber(), n);
                                     }
-                                }
-                                   
-                                if(type.equals(Selection.SELECTION_VOL) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
-                                    int lineVol = rb.getLineBeginVol();
-                                    List<Integer> deletedVols = DataClipboardFunctions.deleteVol(scrollPane.getSong(), 
-                                            lineVol, 
-                                            rb.getLineEndVol());
-
-                                    for (int i = 0; i < deletedVols.size(); i++) {
-                                        if(deletedVols.get(i) != null) {
-                                            scrollPane.setVolume(lineVol + i, Constants.MAX_VELOCITY);
-                                        }
+                                    if (ml.getVolume() >= 0) {
+                                        scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
                                     }
                                 }
                             }
+
                             break;
                     }
                 }
@@ -243,7 +210,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             if(!mouseEvent.isControlDown()) {
                 scrollPane.unhighlightAllNotes();
                 scrollPane.unhighlightAllVols();
-//                DataClipboard.clearContent();
+                DataClipboard.clearSelection();
                 
                 scrollPane.getPane().getChildren().removeAll(rubberBands);
                 rubberBands.clear();
@@ -272,15 +239,16 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             if (type.equals(Selection.SELECTION_NOTES) || type.equals(Selection.SELECTION_NOTES_AND_VOL)) {
 
                 int lineBegin = rubberBand.getLineBegin();
-                List<MeasureLine> selection = DataClipboardFunctions.selection(scrollPane.getSong(),
+                List<MeasureLine> selection = DataClipboardFunctions.sel(scrollPane.getSong(),
                         lineBegin,
                         rubberBand.getPositionBegin(),
                         rubberBand.getLineEnd(),
                         rubberBand.getPositionEnd());
-                for (int i = 0; i < selection.size(); i++) {
-                    MeasureLine ml = selection.get(i);
-                    for (Note n : ml) {
-                        scrollPane.highlightNote(n, true);
+                for (MeasureLine ml : selection) {
+                    if (ml != null) {
+                        for (Note n : ml) {
+                            scrollPane.highlightNote(n, true);
+                        }
                     }
                 }
             }
@@ -289,11 +257,11 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 int lineEndVol = rubberBand.getLineEndVol();
                 System.out.println("lineBeginVol" + lineBeginVol);
                 System.out.println("lineEndVol" + lineEndVol);
-                List<Integer> selectionVol = DataClipboardFunctions.selectionVol(scrollPane.getSong(),
+                List<MeasureLine> selectionVol = DataClipboardFunctions.selVol(scrollPane.getSong(),
                         lineBeginVol,
                         lineEndVol);
                 for (int i = 0; i < selectionVol.size(); i++) {
-                    if (selectionVol.get(i) != null) {
+                    if (selectionVol.get(i) != null && selectionVol.get(i).getVolume() >= 0) {
                         scrollPane.highlightVol(lineBeginVol + i, true);
                     }
                 }
