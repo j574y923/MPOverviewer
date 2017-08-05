@@ -27,8 +27,8 @@ public class DataClipboardFunctions {
         int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
         int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
         
-        DataClipboard.setContentLineBegin(lineBegin);
-        DataClipboard.setContentLineEnd(lineEnd);
+        DataClipboard.updateContentLineBegin(lineBegin);
+        DataClipboard.updateContentLineEnd(lineEnd);
         
         List<MeasureLine> content = new ArrayList<>();
         for(int y = rowBegin; y <= rowEnd; y ++) {
@@ -208,8 +208,8 @@ public class DataClipboardFunctions {
         int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
         int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
 
-        DataClipboard.setContentLineBegin(lineBegin);
-        DataClipboard.setContentLineEnd(lineEnd);
+        DataClipboard.updateContentLineBegin(lineBegin);
+        DataClipboard.updateContentLineEnd(lineEnd);
         
         for(int y = rowBegin; y <= rowEnd; y ++) {
             for (int x = rowLineBegin; x <= rowLineEnd; x++) {
@@ -322,8 +322,8 @@ public class DataClipboardFunctions {
      */
     public static void copySel() {
         if (DataClipboard.getSelectionLineBegin() != -1) {
-            DataClipboard.setContentLineBegin(DataClipboard.getSelectionLineBegin());
-            DataClipboard.setContentLineEnd(DataClipboard.getSelectionLineEnd());
+            DataClipboard.updateContentLineBegin(DataClipboard.getSelectionLineBegin());
+            DataClipboard.updateContentLineEnd(DataClipboard.getSelectionLineEnd());
             for (MeasureLine ml : DataClipboard.getSelectionTrimmed()) {
                 if (ml != null) {
                     DataClipboard.getContent().set(ml.getLineNumber(), ml);
@@ -363,8 +363,8 @@ public class DataClipboardFunctions {
         int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
         int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
         
-        DataClipboard.setSelectionLineBegin(lineBegin);
-        DataClipboard.setSelectionLineEnd(lineEnd);
+        DataClipboard.updateSelectionLineBegin(lineBegin);
+        DataClipboard.updateSelectionLineEnd(lineEnd);
         
         for(int y = rowBegin; y <= rowEnd; y ++) {
             for (int x = rowLineBegin; x <= rowLineEnd; x++) {
@@ -405,8 +405,8 @@ public class DataClipboardFunctions {
         int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
         int rowLineEnd = lineEnd % Constants.LINES_IN_A_ROW;
         
-        DataClipboard.setSelectionLineBegin(lineBegin);
-        DataClipboard.setSelectionLineEnd(lineEnd);
+        DataClipboard.updateSelectionLineBegin(lineBegin);
+        DataClipboard.updateSelectionLineEnd(lineEnd);
         
         for (int y = rowBegin; y <= rowEnd; y++) {
             for (int x = rowLineBegin; x <= rowLineEnd; x++) {
@@ -425,5 +425,65 @@ public class DataClipboardFunctions {
         }
         
         return DataClipboard.getSelectionTrimmed();
+    }
+    
+    public static void deselNotes() {
+        List<MeasureLine> selection = DataClipboard.getSelection();
+        for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){
+            if(selection.get(i) != null) {
+                if (selection.get(i).size() > 0) {
+                    selection.get(i).clear();
+                }
+                if(selection.get(i).getVolume() < 0) {
+                    selection.set(i, null);
+                }
+            }
+        }
+        
+        //find new line begin      
+        for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){
+            if(selection.get(i) != null) {
+                DataClipboard.setSelectionLineBegin(i);
+                break;
+            }
+        }
+        
+        //find new line end    
+        for(int i = DataClipboard.getSelectionLineEnd(); i > DataClipboard.getSelectionLineBegin() - 1; i--){
+            if(selection.get(i) != null) {
+                DataClipboard.setSelectionLineEnd(i);
+                break;
+            }
+        }
+    }
+    
+    public static void deselVols() {
+                List<MeasureLine> selection = DataClipboard.getSelection();
+        for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){
+            if(selection.get(i) != null) {
+                if (selection.get(i).getVolume() >= 0) {
+                    selection.get(i).setVolume(-1);
+                }
+                if(selection.get(i).isEmpty()) {
+                    selection.set(i, null);
+                }
+            }
+        }
+        
+        //find new line begin      
+        for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){
+            if(selection.get(i) != null) {
+                DataClipboard.setSelectionLineBegin(i);
+                break;
+            }
+        }
+        
+        //find new line end    
+        for(int i = DataClipboard.getSelectionLineEnd(); i > DataClipboard.getSelectionLineBegin() - 1; i--){
+            if(selection.get(i) != null) {
+                DataClipboard.setSelectionLineEnd(i);
+                break;
+            }
+        }
     }
 }

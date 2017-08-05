@@ -1,3 +1,7 @@
+v0.6.4
+-Fix extra highlighted volumes when multi-highlighting additional lines' volumes
+-Fix selection toolbar to use DataClipboard's selection architecture
+
 v0.6.3
 -Fix to use selection architecture
 

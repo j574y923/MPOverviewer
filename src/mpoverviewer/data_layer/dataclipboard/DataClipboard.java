@@ -103,7 +103,7 @@ public class DataClipboard {
      *
      * @param line
      */
-    public static void setContentLineBegin(int line) {
+    public static void updateContentLineBegin(int line) {
         if (contentLineBegin == -1 || line < contentLineBegin) {
             contentLineBegin = line;
         }
@@ -117,7 +117,7 @@ public class DataClipboard {
      *
      * @param line
      */
-    public static void setContentLineEnd(int line) {
+    public static void updateContentLineEnd(int line) {
         if (contentLineEnd == -1 || line > contentLineEnd) {
             contentLineEnd = line;
         }
@@ -154,7 +154,7 @@ public class DataClipboard {
      *
      * @param line
      */
-    public static void setSelectionLineBegin(int line) {
+    public static void updateSelectionLineBegin(int line) {
         if (selectionLineBegin == -1 || line < selectionLineBegin) {
             selectionLineBegin = line;
         }
@@ -168,10 +168,18 @@ public class DataClipboard {
      *
      * @param line
      */
-    public static void setSelectionLineEnd(int line) {
+    public static void updateSelectionLineEnd(int line) {
         if (selectionLineEnd == -1 || line > selectionLineEnd) {
             selectionLineEnd = line;
         }
+    }
+        
+    public static void setSelectionLineBegin(int line) {
+        selectionLineBegin = line;
+    }
+    
+    public static void setSelectionLineEnd(int line) {
+        selectionLineEnd = line;
     }
     
     public static int getSelectionLineBegin() {

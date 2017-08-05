@@ -262,7 +262,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                         lineEndVol);
                 for (int i = 0; i < selectionVol.size(); i++) {
                     if (selectionVol.get(i) != null && selectionVol.get(i).getVolume() >= 0) {
-                        scrollPane.highlightVol(lineBeginVol + i, true);
+                        scrollPane.highlightVol(selectionVol.get(i).getLineNumber(), true);
                     }
                 }
             }
@@ -429,15 +429,16 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             for (RectangleRubberBand rb : rubberBands) {
 
                 int lineBegin = rb.getLineBegin();
-                List<MeasureLine> selection = DataClipboardFunctions.selection(scrollPane.getSong(),
+                List<MeasureLine> selection = DataClipboardFunctions.sel(scrollPane.getSong(),
                         lineBegin,
                         rb.getPositionBegin(),
                         rb.getLineEnd(),
                         rb.getPositionEnd());
-                for (int i = 0; i < selection.size(); i++) {
-                    MeasureLine ml = selection.get(i);
-                    for (Note n : ml) {
-                        scrollPane.highlightNote(n, true);
+                for (MeasureLine ml : selection) {
+                    if(ml != null) {
+                        for (Note n : ml) {
+                            scrollPane.highlightNote(n, true);
+                        }
                     }
                 }
             }
@@ -450,12 +451,12 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             for (RectangleRubberBand rb : rubberBands) {
                 int lineBeginVol = rb.getLineBeginVol();
                 int lineEndVol = rb.getLineEndVol();
-                List<Integer> selectionVol = DataClipboardFunctions.selectionVol(scrollPane.getSong(),
+                List<MeasureLine> selectionVol = DataClipboardFunctions.selVol(scrollPane.getSong(),
                         lineBeginVol,
                         lineEndVol);
                 for (int i = 0; i < selectionVol.size(); i++) {
                     if (selectionVol.get(i) != null) {
-                        scrollPane.highlightVol(lineBeginVol + i, true);
+                        scrollPane.highlightVol(selectionVol.get(i).getLineNumber(), true);
                     }
                 }
             }

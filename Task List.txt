@@ -78,5 +78,8 @@ GLOBAL
 [--/--/--]save program state before exiting (# of windows, # of tabs and their files, window sizes, etc...)
 [--/--/--]uncaught exception handler that will save file that caused the exception and log the exception
 
+MISC
+[--/--/--]use string data structure to store song and use regex for clipboard functions
+
 
 [--/--/--] is completion date

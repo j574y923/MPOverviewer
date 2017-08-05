@@ -3,6 +3,7 @@ package mpoverviewer.image_layer.ribbonmenu;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tooltip;
+import mpoverviewer.data_layer.dataclipboard.DataClipboardFunctions;
 import mpoverviewer.global.Variables;
 import mpoverviewer.image_layer.ImageIndex;
 import mpoverviewer.image_layer.tabcontent.CompositionPane;
@@ -108,6 +109,7 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
                 
                 ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
                         .getSelectedItem().getContent()).unhighlightAllVols();
+                DataClipboardFunctions.deselVols();
             }
         });
         selVol.setOnAction(new EventHandler<ActionEvent>() {
@@ -125,6 +127,7 @@ public class RibbonMenuContainerSelection extends RibbonMenuContainer {
                 
                 ((CompositionPane) Variables.stageInFocus.getTabPane().getSelectionModel()
                         .getSelectedItem().getContent()).unhighlightAllNotes();
+                DataClipboardFunctions.deselNotes();
             }
         });
         selNotesAndVol.setOnAction(new EventHandler<ActionEvent>() {
