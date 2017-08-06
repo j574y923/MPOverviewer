@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -56,7 +57,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
     /* Get line with these */
     private static double mouseX;
     private static double mouseY;
-
+    
+    private static boolean selVolAtNoteFlag;
     /**
      *
      * @param child contained in parent, this will be where rubber band is added
@@ -121,7 +123,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                 if(event.isControlDown()){
                     switch(event.getCode()){
                         case C:
-                            DataClipboard.clearContent();
+//                            DataClipboard.clearContent();
                             
                             DataClipboardFunctions.copySel();
                             break;
@@ -153,17 +155,26 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             break;
                         case X:
                             //reset rubberband after cutting because ctrl+x click is inaccurate and prone to triggering cut twice: thus cut content first time, cut nothing the second time
-                            int line = rubberBand.getLineBegin();
-                            List<MeasureLine> deletedNotes = DataClipboardFunctions.cut(scrollPane.getSong(), 
-                                    line,//rubberBand.getLineBegin(), 
-                                    rubberBand.getPositionBegin(), 
-                                    rubberBand.getLineEnd(), 
-                                    rubberBand.getPositionEnd());
-                            
-                            for (int i = 0; i < deletedNotes.size(); i++) {
-                                MeasureLine ml = deletedNotes.get(i);
-                                for (Note n : ml) {
-                                    scrollPane.removeNote(line + i, n);
+                            List<MeasureLine> deletedSel = DataClipboardFunctions.cutSel(scrollPane.getSong());
+
+                            for (MeasureLine ml : deletedSel) {
+                                if (ml != null) {
+                                    for (Note n : ml) {
+                                        scrollPane.removeNote(ml.getLineNumber(), n);
+                                    }
+                                    if (ml.getVolume() >= 0) {
+                                        scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
+                                    }
+                                }
+                            }
+                            break;
+                        case LESS:
+                        case COMMA:
+                            System.out.println("SELVOLATNOTES"); 
+                            List<MeasureLine> selectionVol = DataClipboardFunctions.selVolAtNotes(scrollPane.getSong());
+                            for (int i = 0; i < selectionVol.size(); i++) {
+                                if (selectionVol.get(i) != null && selectionVol.get(i).getVolume() >= 0) {
+                                    scrollPane.highlightVol(selectionVol.get(i).getLineNumber(), true);
                                 }
                             }
                             break;
@@ -451,6 +462,8 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
             for (RectangleRubberBand rb : rubberBands) {
                 int lineBeginVol = rb.getLineBeginVol();
                 int lineEndVol = rb.getLineEndVol();
+                System.out.println("SV_lBV:" + lineBeginVol);
+                System.out.println("SV_lEV:" + lineEndVol);
                 List<MeasureLine> selectionVol = DataClipboardFunctions.selVol(scrollPane.getSong(),
                         lineBeginVol,
                         lineEndVol);

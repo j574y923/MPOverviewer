@@ -321,6 +321,7 @@ public class DataClipboardFunctions {
      * present
      */
     public static void copySel() {
+        DataClipboard.clearContent();
         if (DataClipboard.getSelectionLineBegin() != -1) {
             DataClipboard.updateContentLineBegin(DataClipboard.getSelectionLineBegin());
             DataClipboard.updateContentLineEnd(DataClipboard.getSelectionLineEnd());
@@ -400,6 +401,10 @@ public class DataClipboardFunctions {
     }
     
     public static List<MeasureLine> selVol(Song song, int lineBegin, int lineEnd) {
+        //important check to prevent selecting vols when not within bounds
+        if(lineEnd < lineBegin)
+            return new ArrayList<MeasureLine>();
+        
         int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
         int rowEnd = lineEnd / Constants.LINES_IN_A_ROW;
         int rowLineBegin = lineBegin % Constants.LINES_IN_A_ROW;
@@ -426,7 +431,23 @@ public class DataClipboardFunctions {
         
         return DataClipboard.getSelectionTrimmed();
     }
-    
+        
+    /**
+     * select only volumes at lines that have notes highlighted
+     * @param song
+     * @return 
+     */
+    public static List<MeasureLine> selVolAtNotes(Song song) {
+        
+        for(MeasureLine ml : DataClipboard.getSelectionTrimmed()) {
+            if(ml != null && ml.size() > 0) {
+                ml.setVolume(song.get(ml.getLineNumber()).getVolume());
+            }
+        }
+        
+        return DataClipboard.getSelectionTrimmed();
+    }
+        
     public static void deselNotes() {
         List<MeasureLine> selection = DataClipboard.getSelection();
         for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){

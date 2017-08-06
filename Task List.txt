@@ -1,20 +1,20 @@
 (data_layer)CLIPBOARD
-[--/--/--]cut volume only†
 [--/--/--]move
-[--/--/--]insert
+[--/--/--]insert†
 [--/--/--]move volume only
-[--/--/--]insert volume only
-[--/--/--]cut for both notes and volume†
+[--/--/--]insert volume only†
 [--/--/--]replace instrument
 [--/--/--]replace line
-[--/--/--]replace line selection
+[--/--/--]replace multiple line selection
 [--/--/--]find
 [--/--/--]copy/cut history
 [--/--/--]octave shift up/down
 [--/--/--]key shift up/down
 [--/--/--]undo
 [--/--/--]redo
-[--/--/--]insert empty line
+[--/--/--]insert empty line†
+[08/05/17]cut volume only
+[08/05/17]cut for both notes and volume
 [08/02/17]copy volume only
 [08/02/17]paste volume only
 [08/02/17]delete volume only
@@ -41,8 +41,7 @@
 [--/--/--]song type restrictions
 [--/--/--]option to apply clipboard functions to all tabs
 [--/--/--]change time
-[--/--/--]create a hotkey that will toggle select all volumes for the lines that have notes selected†
-[--/--/--]create a hotkey that will toggle select all notes for the lines that have notes selected†
+[08/05/17]create a hotkey that will select all volumes for the lines that have notes selected
 [08/01/17]rubber band selection highlights all volumes it selects
 [07/29/17]change volume
 [07/16/17]rubber band selection highlights all notes it selects
@@ -52,11 +51,11 @@
 
 (image_layer)RUBBERBANDSELECTION
 [--/--/--]show which position hovering over
-[--/--/--]select all
-[--/--/--]rubber band option to copy with volume
-[--/--/--]rubber band option to copy only volume
+[--/--/--]select all†
 [--/--/--]rubber band option that stays visible in the same place for all tabs
 [--/--/--]linear selection option (Selecting lines over a linear range)
+[08/05/17]rubber band option to copy with volume
+[08/05/17]rubber band option to copy only volume
 [08/02/17]multi-rubber band
 [07/14/17]rubber band to only include notes within the region, not notes it touches position with
 
