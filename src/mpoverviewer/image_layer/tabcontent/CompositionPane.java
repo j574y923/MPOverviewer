@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
@@ -593,6 +594,10 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
         if(highlight) {
             highlightedNotes.add(n);
+            ivArray[0].setCursor(Cursor.MOVE);
+        } else {
+//            highlightedVols.remove(line);
+            ivArray[0].setCursor(Cursor.DEFAULT);
         }
     }
     
@@ -602,6 +607,10 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         Variables.imageLoader.setImageHighlight(iv, highlight);
         if(highlight) {
             highlightedVols.add(line);
+            iv.setCursor(Cursor.MOVE);
+        } else {
+//            highlightedVols.remove(line);
+            iv.setCursor(Cursor.DEFAULT);
         }
     }
     
@@ -614,6 +623,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
                 if(ivArray[1] != null) {
                     Variables.imageLoader.setImageHighlight(ivArray[1], false);
                 }
+                
+                ivArray[0].setCursor(Cursor.DEFAULT);
             }
         }
         highlightedNotes.clear();
@@ -624,6 +635,8 @@ public class CompositionPane extends ScrollPane implements ContentControl {
             ImageView iv = this.compositionVol.get(line);
             
             Variables.imageLoader.setImageHighlight(iv, false);
+            
+            iv.setCursor(Cursor.DEFAULT);
         }
         highlightedVols.clear();
     }

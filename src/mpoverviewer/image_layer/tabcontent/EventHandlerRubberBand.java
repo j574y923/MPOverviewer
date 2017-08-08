@@ -129,26 +129,100 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             break;
                         case I:
                             System.out.println("EHRB: INSERT");
+//                            int lineInsertTo = getLine(mouseX, mouseY);
+//
+//                            int insertedContentSize = DataClipboard.getContentTrimmed().size();
+//
+//                            List<MeasureLine> linesOOB0 = DataClipboardFunctions.insert(scrollPane.getSong(), lineInsertTo);
+//
+//                            for (int i = lineInsertTo + insertedContentSize; i < Constants.SONG_LENGTH; i++) {
+//                                MeasureLine ml = scrollPane.getSong().get(i);
+//                                if (ml != null) {
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber() - insertedContentSize, n);
+//                                    }
+//                                    if (ml.getVolume() >= 0) {
+//                                        scrollPane.setVolume(ml.getLineNumber() - insertedContentSize, Constants.MAX_VELOCITY);
+//                                    }
+//                                }
+//                            }
+//                            
+//                            for(MeasureLine ml : linesOOB0) {
+//                                if (ml != null) {
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+//                                    if (ml.getVolume() >= 0) {
+//                                        scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
+//                                    }
+//                                }
+//                            }
+//                            
+//                            for(int i = lineInsertTo; i < Constants.SONG_LENGTH; i++){
+//                                if(scrollPane.getSong().get(i) != null 
+//                                        && !scrollPane.getSong().get(i).isEmpty()){//optimization...
+//                                    scrollPane.reloadLine(i);
+//                                    scrollPane.redrawLine(i);
+//                                }
+//                            }
+//                            for(int i = lineInsertTo; i < Constants.SONG_LENGTH; i++){
+//                                if(scrollPane.getSong().get(i) != null 
+//                                        && scrollPane.getSong().get(i).getVolume() >= 0){//optimization...
+//                                    scrollPane.setVolume(i, scrollPane.getSong().get(i).getVolume());
+//                                }
+//                            }
+                            
                             break;
-                        case V:
+                        case M:
                             int lineMoveTo = getLine(mouseX, mouseY);
-                            System.out.println("lineMoveTo = " + lineMoveTo);
-                            System.out.println("PASTE getContent().size() == " + DataClipboard.getContentTrimmed().size());
-                            DataClipboardFunctions.paste(scrollPane.getSong(),
-                                    lineMoveTo);
-                            for(int i = lineMoveTo; i < DataClipboard.getContentTrimmed().size() + lineMoveTo; i++){
-                                if(DataClipboard.getContentTrimmed().get(i - lineMoveTo) != null 
-                                        && !DataClipboard.getContentTrimmed().get(i - lineMoveTo).isEmpty()){//optimization...
+                            List<MeasureLine> movedSel = DataClipboard.getSelectionTrimmed();
+
+                            List<MeasureLine> linesOOB = DataClipboardFunctions.moveSel(scrollPane.getSong(), lineMoveTo);
+                            
+                            for (MeasureLine ml : movedSel) {
+                                if (ml != null) {
+                                    for (Note n : ml) {
+                                        scrollPane.removeNote(ml.getLineNumber(), n);
+                                    }
+                                    if (ml.getVolume() >= 0) {
+                                        scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
+                                    }
+                                }
+                            }
+                            
+                            for(int i = lineMoveTo; i < Math.min(Constants.SONG_LENGTH, movedSel.size() + lineMoveTo); i++){
+                                if(movedSel.get(i - lineMoveTo) != null 
+                                        && !movedSel.get(i - lineMoveTo).isEmpty()){//optimization...
                                     scrollPane.reloadLine(i);
                                     scrollPane.redrawLine(i);
                                 }
                             }
+                            for(int i = lineMoveTo; i < Math.min(Constants.SONG_LENGTH, movedSel.size() + lineMoveTo); i++){
+                                if(movedSel.get(i - lineMoveTo) != null 
+                                        && movedSel.get(i - lineMoveTo).getVolume() >= 0){//optimization...
+                                    scrollPane.setVolume(i, movedSel.get(i - lineMoveTo).getVolume());
+                                }
+                            }
+                            break;
+                        case V:
+                            int linePasteTo = getLine(mouseX, mouseY);
+                            System.out.println("linePasteTo = " + linePasteTo);
+                            System.out.println("PASTE getContent().size() == " + DataClipboard.getContentTrimmed().size());
                             DataClipboardFunctions.paste(scrollPane.getSong(),
-                                    lineMoveTo);
-                            for(int i = lineMoveTo; i < DataClipboard.getContentTrimmed().size() + lineMoveTo; i++){
-                                if(DataClipboard.getContentTrimmed().get(i - lineMoveTo) != null 
-                                        && DataClipboard.getContentTrimmed().get(i - lineMoveTo).getVolume() >= 0){//optimization...
-                                    scrollPane.setVolume(i, DataClipboard.getContentTrimmed().get(i - lineMoveTo).getVolume());
+                                    linePasteTo);
+                            for(int i = linePasteTo; i < DataClipboard.getContentTrimmed().size() + linePasteTo; i++){
+                                if(DataClipboard.getContentTrimmed().get(i - linePasteTo) != null 
+                                        && !DataClipboard.getContentTrimmed().get(i - linePasteTo).isEmpty()){//optimization...
+                                    scrollPane.reloadLine(i);
+                                    scrollPane.redrawLine(i);
+                                }
+                            }
+                            DataClipboardFunctions.pasteVol(scrollPane.getSong(),
+                                    linePasteTo);
+                            for(int i = linePasteTo; i < DataClipboard.getContentTrimmed().size() + linePasteTo; i++){
+                                if(DataClipboard.getContentTrimmed().get(i - linePasteTo) != null 
+                                        && DataClipboard.getContentTrimmed().get(i - linePasteTo).getVolume() >= 0){//optimization...
+                                    scrollPane.setVolume(i, DataClipboard.getContentTrimmed().get(i - linePasteTo).getVolume());
                                 }
                             }
 //                            scrollPane.redrawSong();

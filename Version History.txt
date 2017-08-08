@@ -1,3 +1,7 @@
+v0.6.6
+-Add move
+-Add cursor.move to highlighted notes to indicate movable
+
 v0.6.5
 -Add create a hotkey that will select all volumes for the lines that have notes selected
 -Add cut for both notes and volume using DataClipboard's selection architecture

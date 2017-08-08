@@ -20,6 +20,7 @@ public class DataClipboardFunctions {
      * clipboard. This copy will be a deep copy so a reference of those notes
      * cannot be used.
      */
+    @Deprecated
     public static void copy(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
         //TODO: use instrFiltered in DataClipboard
         int rowBegin = lineBegin / Constants.LINES_IN_A_ROW;
@@ -67,6 +68,7 @@ public class DataClipboardFunctions {
     /**
      * Copy and delete.
      */
+    @Deprecated
     public static List<MeasureLine> cut(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
         copy(song, lineBegin, positionBegin, lineEnd, positionEnd);
         return delete(song, lineBegin, positionBegin, lineEnd, positionEnd);
@@ -75,6 +77,7 @@ public class DataClipboardFunctions {
     /**
      * Use the bounds for notes to delete in the song. 
      */
+    @Deprecated
     public static List<MeasureLine> delete(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
         //TODO: use instrFiltered in DataClipboard
         //TODO: ... return deleted notes
@@ -120,19 +123,58 @@ public class DataClipboardFunctions {
     }
 
     /**
-     * Move selection at song's line to accommodate clipboard content size
-     * effectively creating space to insert data into. Then paste.
+     * Shift all content at and after lineMoveTo a number of content.size()
+     * lines over. Paste copied content at lineMoveTo.
+     *
+     * If no copied content then insert one empty line effectively shifting over
+     * all lines at and after lineMoveTo.
+     *
+     * @param lineMoveTo, where this line and all lines after are shifted,
+     * copied content will begin here
+     * @return the lines that have been moved past the song's length defined by
+     * Constants.SONG_LENGTH, null if no lines with notes have moved past
      */
-    public static void insert(Song song, int lineMoveTo) {
-
+    public static List<MeasureLine> insert(Song song, int lineMoveTo) {
+        
+        //Move all content at and after lineMoveTo a number of content.size() lines over
+        List<MeasureLine> linesOOB = new ArrayList<MeasureLine>();
+        for(int i = 0; i < DataClipboard.getContentTrimmed().size(); i++) {
+            song.add(lineMoveTo, new MeasureLine());
+            
+            linesOOB.add(0, song.get(song.size() - 1));
+            song.remove(song.size() - 1);
+        }
+        //Paste copied content at lineMoveTo.
+        paste(song, lineMoveTo);
+        pasteVol(song, lineMoveTo);
+        
+        //refresh lineNumber
+        for(int i = lineMoveTo; i < Constants.SONG_LENGTH; i++) {
+            song.get(i).setLineNumber(i);
+        }
+        
+        //null if no lines with notes have moved past
+        boolean setNull = true;
+        for(MeasureLine ml : linesOOB) {
+            if(!ml.isEmpty()) {
+                setNull = false;
+                break;
+            }
+        }
+        if (setNull) {
+            linesOOB = null;
+        }
+        
+        return linesOOB;
     }
     
     /**
      * Move a selection to a new location and delete where it was before.
      */
+    @Deprecated
     public static void move(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd,
             int lineMoveTo) {
-//        cut(song, lineBegin, positionBegin, lineEnd, positionEnd);
+//        move
 //        paste(song, lineMoveTo);
     }
 
@@ -354,6 +396,37 @@ public class DataClipboardFunctions {
         return selection;
     }
     
+    /**
+     * Move all content at and after lineMoveTo a number of content.size() lines
+     * over. Done by deleting selection and "pasting" the selection to
+     * lineMoveTo.
+     *
+     * @param lineMoveTo, where the selection will be moved to
+     * @return the lines that have been moved past the song's length defined by
+     * Constants.SONG_LENGTH, null if none
+     */
+    public static List<MeasureLine> moveSel(Song song, int lineMoveTo) {
+        List<MeasureLine> deletedSel = deleteSel(song);
+        for(int i = lineMoveTo; i < Math.min(Constants.SONG_LENGTH, lineMoveTo + deletedSel.size()); i++) {
+            MeasureLine ml = deletedSel.get(i - lineMoveTo);
+            if(ml != null) {
+                for(Note n : ml) {
+                    song.get(i).add(n);
+                }
+                if(ml.getVolume() >= 0) {
+                    song.get(i).setVolume(ml.getVolume());
+                }
+            }
+        }
+        //lines moved past the song's length defined by Constants.SONG_LENGTH, null if none
+        List<MeasureLine> linesOOB = null;
+        if(lineMoveTo + deletedSel.size() > Constants.SONG_LENGTH) {
+            int numOOB = lineMoveTo + deletedSel.size() - Constants.SONG_LENGTH;
+            linesOOB = new ArrayList<>(deletedSel.subList(deletedSel.size() - numOOB, deletedSel.size()));
+        }
+        return linesOOB;
+    }
+    
     public static List<MeasureLine> sel(Song song, int lineBegin, Note.Position positionBegin, int lineEnd, Note.Position positionEnd) {
         //important check to prevent setting wrong lineBegin and lineEnd for selection
         if(lineEnd < lineBegin)
@@ -448,6 +521,10 @@ public class DataClipboardFunctions {
         return DataClipboard.getSelectionTrimmed();
     }
         
+    /**
+     * remove notes from every measureLine in the selection. if measureLine's
+     * volume < 0 then replace it with null
+     */
     public static void deselNotes() {
         List<MeasureLine> selection = DataClipboard.getSelection();
         for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){
@@ -477,9 +554,13 @@ public class DataClipboardFunctions {
             }
         }
     }
-    
+
+    /**
+     * sets all measureLines' volumes to -1. if measureLine is also empty then
+     * replace it with null
+     */
     public static void deselVols() {
-                List<MeasureLine> selection = DataClipboard.getSelection();
+        List<MeasureLine> selection = DataClipboard.getSelection();
         for(int i = DataClipboard.getSelectionLineBegin(); i < DataClipboard.getSelectionLineEnd() + 1; i++){
             if(selection.get(i) != null) {
                 if (selection.get(i).getVolume() >= 0) {
