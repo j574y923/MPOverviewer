@@ -54,9 +54,9 @@
 
 (image_layer)RUBBERBANDSELECTION
 [--/--/--]show which position hovering over
-[--/--/--]select all†
 [--/--/--]rubber band option that stays visible in the same place for all tabs
 [--/--/--]linear selection option (Selecting lines over a linear range)
+[08/09/17]select all
 [08/05/17]rubber band option to copy with volume
 [08/05/17]rubber band option to copy only volume
 [08/02/17]multi-rubber band

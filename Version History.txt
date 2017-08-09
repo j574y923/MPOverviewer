@@ -1,3 +1,6 @@
+v0.6.8
+-Add select all
+
 v0.6.7
 -Add insert
 -Add removedNotesStash for measureLine
