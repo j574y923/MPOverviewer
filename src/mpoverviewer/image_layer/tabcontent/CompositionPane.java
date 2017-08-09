@@ -550,8 +550,10 @@ public class CompositionPane extends ScrollPane implements ContentControl {
                 pane.getChildren().add(ivArray[1]);
         }
         
-        compositionVol.get(line).setVisible(true);
-        compositionVolText.get(line).setVisible(true);
+        if(!song.get(line).isEmpty()) {
+            compositionVol.get(line).setVisible(true);
+            compositionVolText.get(line).setVisible(true);
+        }
     }
     
     /**
@@ -575,6 +577,12 @@ public class CompositionPane extends ScrollPane implements ContentControl {
                 this.composition.put(n, ivArray);
 
                 zMod(iv, n);
+            }
+        }
+        
+        for(Note n : song.get(line).popRemovedNotes()) {
+            if(this.composition.containsKey(n)) {
+                removeNote(line, n);
             }
         }
     }
@@ -608,7 +616,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         if(highlight) {
             highlightedVols.add(line);
             iv.setCursor(Cursor.MOVE);
-        } else {
+        } else { 
 //            highlightedVols.remove(line);
             iv.setCursor(Cursor.DEFAULT);
         }

@@ -1,5 +1,7 @@
 package mpoverviewer.data_layer.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -16,10 +18,13 @@ public class MeasureLine extends SimpleListProperty<Note> {
     private int lineNumber;
     
     private int volume;
+    
+    private List<Note> removedNotesStash;
 
     public MeasureLine() {
         super(FXCollections.observableArrayList());
         volume = 127;
+        removedNotesStash = new ArrayList<>();
     }
 
     public boolean addNote(Note note) {
@@ -116,6 +121,13 @@ public class MeasureLine extends SimpleListProperty<Note> {
  
             @Override
             public void onChanged(ListChangeListener.Change change) {
+                while (change.next()) {
+                    if (change.wasRemoved()) {
+                        removedNotesStash.add((Note)change.getRemoved().get(0));
+                    } else {
+                        break;
+                    }
+                }
                 song.setModified(true);
             }
         });
@@ -127,5 +139,23 @@ public class MeasureLine extends SimpleListProperty<Note> {
     
     public int getLineNumber() {
         return lineNumber;
+    }
+    
+    /**
+     * 
+     * @return reference to removedNotesStash
+     */
+    public List<Note> getRemovedNotes() {
+        return removedNotesStash;
+    }
+    
+    /**
+     * pop all notes from removedNotesStash, return those notes
+     * @return popped notes from removedNotesStash
+     */
+    public List<Note> popRemovedNotes() {
+        List<Note> popped = new ArrayList<>(removedNotesStash);
+        removedNotesStash.clear();
+        return popped;
     }
 }

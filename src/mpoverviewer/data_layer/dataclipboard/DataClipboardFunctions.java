@@ -137,21 +137,29 @@ public class DataClipboardFunctions {
     public static List<MeasureLine> insert(Song song, int lineMoveTo) {
         
         //Move all content at and after lineMoveTo a number of content.size() lines over
-        List<MeasureLine> linesOOB = new ArrayList<MeasureLine>();
-        for(int i = 0; i < DataClipboard.getContentTrimmed().size(); i++) {
-            song.add(lineMoveTo, new MeasureLine());
-            
-            linesOOB.add(0, song.get(song.size() - 1));
-            song.remove(song.size() - 1);
+        List<MeasureLine> linesOOB = new ArrayList<>(song.subList(Constants.SONG_LENGTH - DataClipboard.getContentTrimmed().size(), Constants.SONG_LENGTH));
+        for(int i = Constants.SONG_LENGTH - 1; i >= lineMoveTo + DataClipboard.getContentTrimmed().size(); i--) {
+            int mlSize = song.get(i).size();
+            for(int j = 0 ; j < mlSize; j++) {
+                song.get(i).remove(0);//individual remove instead of removeall or clear because those do not trigger the changelistener
+            }
+            song.get(i).addAll(song.get(i - DataClipboard.getContentTrimmed().size()));
+            song.get(i).setVolume(song.get(i - DataClipboard.getContentTrimmed().size()).getVolume());
+        }
+        for (int i = lineMoveTo; i < lineMoveTo + DataClipboard.getContentTrimmed().size(); i++) {
+            int mlSize = song.get(i).size();
+            for (int j = 0; j < mlSize; j++) {
+                song.get(i).remove(0);
+            }
         }
         //Paste copied content at lineMoveTo.
         paste(song, lineMoveTo);
         pasteVol(song, lineMoveTo);
         
         //refresh lineNumber
-        for(int i = lineMoveTo; i < Constants.SONG_LENGTH; i++) {
-            song.get(i).setLineNumber(i);
-        }
+//        for(int i = lineMoveTo; i < Constants.SONG_LENGTH; i++) {
+//            song.get(i).setLineNumber(i);
+//        }
         
         //null if no lines with notes have moved past
         boolean setNull = true;

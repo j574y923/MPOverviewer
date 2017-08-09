@@ -1,6 +1,5 @@
 (data_layer)CLIPBOARD
-[--/--/--]insert†
-[--/--/--]insert volume only†
+[--/--/--]shift back all lines at line position†
 [--/--/--]replace instrument
 [--/--/--]replace line
 [--/--/--]replace multiple line selection
@@ -11,6 +10,8 @@
 [--/--/--]undo
 [--/--/--]redo
 [--/--/--]insert empty line†
+[08/09/17]insert
+[08/09/17]insert volume only
 [08/05/17]move
 [08/05/17]move volume only
 [08/05/17]cut volume only

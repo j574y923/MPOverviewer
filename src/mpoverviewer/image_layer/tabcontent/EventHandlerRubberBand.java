@@ -117,11 +117,13 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
         //
         //KEY EVENT HANDLER
         //
-        scrollPane.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>(){
+        scrollPane.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>(){
             @Override
             public void handle(KeyEvent event) {
                 if(event.isControlDown()){
                     switch(event.getCode()){
+                        case A:
+                            break;
                         case C:
 //                            DataClipboard.clearContent();
                             
@@ -129,11 +131,28 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             break;
                         case I:
                             System.out.println("EHRB: INSERT");
-//                            int lineInsertTo = getLine(mouseX, mouseY);
-//
-//                            int insertedContentSize = DataClipboard.getContentTrimmed().size();
-//
-//                            List<MeasureLine> linesOOB0 = DataClipboardFunctions.insert(scrollPane.getSong(), lineInsertTo);
+                            int lineInsertTo = getLine(mouseX, mouseY);
+                            
+                            long initial = System.currentTimeMillis();
+                            List<MeasureLine> linesOOB0 = DataClipboardFunctions.insert(scrollPane.getSong(), lineInsertTo);
+                            System.out.println("INSERT" + (System.currentTimeMillis() - initial) + "ms");
+                            
+                            initial = System.currentTimeMillis();
+                            for(int i = lineInsertTo; i < Constants.SONG_LENGTH; i++) {
+                                MeasureLine ml = scrollPane.getSong().get(i);
+                                if (ml != null) {
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+                                    scrollPane.reloadLine(i);
+                                    scrollPane.redrawLine(i);
+
+                                    if (ml.getVolume() >= 0) {
+                                        scrollPane.setVolume(i, scrollPane.getSong().get(i).getVolume());
+                                    }
+                                }
+                            }
+                            System.out.println("RELOAD" + (System.currentTimeMillis() - initial) + "ms");
 //
 //                            for (int i = lineInsertTo + insertedContentSize; i < Constants.SONG_LENGTH; i++) {
 //                                MeasureLine ml = scrollPane.getSong().get(i);
@@ -181,9 +200,11 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             
                             for (MeasureLine ml : movedSel) {
                                 if (ml != null) {
-                                    for (Note n : ml) {
-                                        scrollPane.removeNote(ml.getLineNumber(), n);
-                                    }
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+                                    scrollPane.reloadLine(ml.getLineNumber());
+
                                     if (ml.getVolume() >= 0) {
                                         scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
                                     }
@@ -233,9 +254,11 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
 
                             for (MeasureLine ml : deletedSel) {
                                 if (ml != null) {
-                                    for (Note n : ml) {
-                                        scrollPane.removeNote(ml.getLineNumber(), n);
-                                    }
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+                                    scrollPane.reloadLine(ml.getLineNumber());
+
                                     if (ml.getVolume() >= 0) {
                                         scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
                                     }
@@ -263,9 +286,11 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
 
                             for (MeasureLine ml : deletedSel) {
                                 if (ml != null) {
-                                    for (Note n : ml) {
-                                        scrollPane.removeNote(ml.getLineNumber(), n);
-                                    }
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+                                    scrollPane.reloadLine(ml.getLineNumber());
+
                                     if (ml.getVolume() >= 0) {
                                         scrollPane.setVolume(ml.getLineNumber(), Constants.MAX_VELOCITY);
                                     }
