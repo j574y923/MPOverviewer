@@ -543,6 +543,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
         
         for(Note n : song.get(line)){
+            System.out.println("WTF?" + line + " " + n.getInstrument());
             ImageView[] ivArray = this.composition.get(n);
             
             pane.getChildren().add(ivArray[0]);
@@ -566,6 +567,7 @@ public class CompositionPane extends ScrollPane implements ContentControl {
      * @param line at which notes have changed
      */
     public void reloadLine(int line) {
+        
         for(Note n : song.get(line)){
             if(!this.composition.containsKey(n)) {
                 ImageIndex imageIndex = ImageIndex.valueOf(n.getInstrument().toString());

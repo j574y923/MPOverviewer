@@ -203,7 +203,7 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                                     scrollPane.redrawLine(i);
 
                                     if (ml.getVolume() >= 0) {
-                                        scrollPane.setVolume(i, scrollPane.getSong().get(i).getVolume());
+                                        scrollPane.setVolume(i, ml.getVolume());
                                     }
                                 }
                             }
@@ -322,6 +322,46 @@ public class EventHandlerRubberBand implements EventHandler<MouseEvent> {
                             break;
                         case LESS:
                         case COMMA:
+                            System.out.println("SHIFT FW 1");
+                            int lineSF = getLine(mouseX, mouseY);
+                            List<MeasureLine> deletedLine = DataClipboardFunctions.shiftForward(scrollPane.getSong(), lineSF, 1);
+                            //updating must occur backward to remove and re-add notes in order
+                            for (int i = Constants.SONG_LENGTH - 1; i >= lineSF - 1; i--) {
+                                MeasureLine ml = scrollPane.getSong().get(i);
+                                if (ml != null) {
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+                                    scrollPane.reloadLine(i);
+                                    scrollPane.redrawLine(i);
+                                    System.out.println(i + " " + ml.size());
+
+                                    if (ml.getVolume() >= 0) {
+                                        scrollPane.setVolume(i, ml.getVolume());
+                                    }
+                                }
+                            }
+                            break;
+                        case GREATER:
+                        case PERIOD:
+                            System.out.println("SHIFT BACK 1");
+                            int lineSB = getLine(mouseX, mouseY);
+                            List<MeasureLine> linesOOB2 = DataClipboardFunctions.shiftBack(scrollPane.getSong(), lineSB, 1);
+                            for (int i = lineSB; i < Constants.SONG_LENGTH; i++) {
+                                MeasureLine ml = scrollPane.getSong().get(i);
+                                if (ml != null) {
+//                                    for (Note n : ml) {
+//                                        scrollPane.removeNote(ml.getLineNumber(), n);
+//                                    }
+                                    scrollPane.reloadLine(i);
+                                    scrollPane.redrawLine(i);
+                                    if (ml.getVolume() >= 0) {
+                                        scrollPane.setVolume(i, ml.getVolume());
+                                    }
+                                }
+                            }
+                            break;
+                        case SLASH:
                             System.out.println("SELVOLATNOTES"); 
                             List<MeasureLine> selectionVol = DataClipboardFunctions.selVolAtNotes(scrollPane.getSong());
                             for (int i = 0; i < selectionVol.size(); i++) {

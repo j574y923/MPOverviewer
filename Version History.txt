@@ -1,3 +1,6 @@
+v0.6.9
+-Add shift forward/backward 1 line
+
 v0.6.8
 -Add select all
 

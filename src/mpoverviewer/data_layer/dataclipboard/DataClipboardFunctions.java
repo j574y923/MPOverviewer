@@ -137,41 +137,10 @@ public class DataClipboardFunctions {
     public static List<MeasureLine> insert(Song song, int lineMoveTo) {
         
         //Move all content at and after lineMoveTo a number of content.size() lines over
-        List<MeasureLine> linesOOB = new ArrayList<>(song.subList(Constants.SONG_LENGTH - DataClipboard.getContentTrimmed().size(), Constants.SONG_LENGTH));
-        for(int i = Constants.SONG_LENGTH - 1; i >= lineMoveTo + DataClipboard.getContentTrimmed().size(); i--) {
-            int mlSize = song.get(i).size();
-            for(int j = 0 ; j < mlSize; j++) {
-                song.get(i).remove(0);//individual remove instead of removeall or clear because those do not trigger the changelistener
-            }
-            song.get(i).addAll(song.get(i - DataClipboard.getContentTrimmed().size()));
-            song.get(i).setVolume(song.get(i - DataClipboard.getContentTrimmed().size()).getVolume());
-        }
-        for (int i = lineMoveTo; i < lineMoveTo + DataClipboard.getContentTrimmed().size(); i++) {
-            int mlSize = song.get(i).size();
-            for (int j = 0; j < mlSize; j++) {
-                song.get(i).remove(0);
-            }
-        }
+        List<MeasureLine> linesOOB = shiftBack(song, lineMoveTo, DataClipboard.getContentTrimmed().size());
         //Paste copied content at lineMoveTo.
         paste(song, lineMoveTo);
         pasteVol(song, lineMoveTo);
-        
-        //refresh lineNumber
-//        for(int i = lineMoveTo; i < Constants.SONG_LENGTH; i++) {
-//            song.get(i).setLineNumber(i);
-//        }
-        
-        //null if no lines with notes have moved past
-        boolean setNull = true;
-        for(MeasureLine ml : linesOOB) {
-            if(!ml.isEmpty()) {
-                setNull = false;
-                break;
-            }
-        }
-        if (setNull) {
-            linesOOB = null;
-        }
         
         return linesOOB;
     }
@@ -595,5 +564,82 @@ public class DataClipboardFunctions {
                 break;
             }
         }
+    }
+    
+    /**
+     *
+     * @param lineShift the line at which shifting will start
+     * @param numLines the number of lines that will be shifted toward the end. 
+     * @return the lines that have been moved past the song's length defined by
+     * Constants.SONG_LENGTH, null if no lines with notes have moved past
+     */
+    public static List<MeasureLine> shiftBack(Song song, int lineShift, int numLines) {
+        List<MeasureLine> linesOOB = new ArrayList<>(song.subList(Constants.SONG_LENGTH - numLines, Constants.SONG_LENGTH));
+        for(int i = Constants.SONG_LENGTH - 1; i >= lineShift + numLines; i--) {
+            int mlSize = song.get(i).size();
+            for(int j = 0 ; j < mlSize; j++) {
+                song.get(i).remove(0);//individual remove instead of removeall or clear because those do not trigger the changelistener
+            }
+            song.get(i).addAll(song.get(i - numLines));
+            song.get(i).setVolume(song.get(i - numLines).getVolume());
+        }
+        for (int i = lineShift; i < lineShift + numLines; i++) {
+            int mlSize = song.get(i).size();
+            for (int j = 0; j < mlSize; j++) {
+                song.get(i).remove(0);
+            }
+        }
+        
+        //null if no lines with notes have moved past
+        boolean setNull = true;
+        for (MeasureLine ml : linesOOB) {
+            if (!ml.isEmpty()) {
+                setNull = false;
+                break;
+            }
+        }
+        if (setNull) {
+            linesOOB = null;
+        }
+        return linesOOB;
+    }
+
+    /**
+     *
+     * @param lineShift the line at which shifting will start
+     * @param numLines the number of lines that will be shifted toward the
+     * beginning
+     * @return the lines that have been deleted, null if all those lines are
+     * empty
+     */
+    public static List<MeasureLine> shiftForward(Song song, int lineShift, int numLines) {
+        List<MeasureLine> linesDeleted = new ArrayList<>(song.subList(lineShift - numLines, lineShift));
+        for(int i = lineShift - numLines; i < Constants.SONG_LENGTH - numLines; i++) {
+            int mlSize = song.get(i).size();
+            for(int j = 0 ; j < mlSize; j++) {
+                song.get(i).remove(0);//individual remove instead of removeall or clear because those do not trigger the changelistener
+            }
+            song.get(i).addAll(song.get(i + numLines));
+            song.get(i).setVolume(song.get(i + numLines).getVolume());
+        }
+        for (int i = Constants.SONG_LENGTH - numLines; i < Constants.SONG_LENGTH; i++) {
+            int mlSize = song.get(i).size();
+            for (int j = 0; j < mlSize; j++) {
+                song.get(i).remove(0);
+            }
+        }
+        
+        //null if no lines with notes have moved past
+        boolean setNull = true;
+        for (MeasureLine ml : linesDeleted) {
+            if (!ml.isEmpty()) {
+                setNull = false;
+                break;
+            }
+        }
+        if (setNull) {
+            linesDeleted = null;
+        }
+        return linesDeleted;
     }
 }
