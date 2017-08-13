@@ -1,46 +1,46 @@
-v0.6.9
+v0.6.9 (ada1c1e2222081c6cff98fff408ca53eb2035d6f)
 -Add shift forward/backward 1 line
 
-v0.6.8
+v0.6.8 (e024b856941a41af595497142dfabb66eea81c7e)
 -Add select all
 
-v0.6.7
+v0.6.7 (642e9cb424ce501d09976192e1c61f2eafa08578)
 -Add insert
 -Add removedNotesStash for measureLine
 
-v0.6.6
+v0.6.6 (eb7aed60d24d5b7f4bced05f9dccbae166311ab6)
 -Add move
 -Add cursor.move to highlighted notes to indicate movable
 
-v0.6.5
+v0.6.5 (30af50ea494beb8f6aa2eecdca81e50b11212871)
 -Add create a hotkey that will select all volumes for the lines that have notes selected
 -Add cut for both notes and volume using DataClipboard's selection architecture
 
-v0.6.4
+v0.6.4 (4147dff5e4e94b4e3b6002934f4163db822e26a1)
 -Fix extra highlighted volumes when multi-highlighting additional lines' volumes
 -Fix selection toolbar to use DataClipboard's selection architecture
 
-v0.6.3
+v0.6.3 (18c4d6b412f46f03e5ada7d8bedfc8db51e544a0)
 -Fix to use selection architecture
 
-v0.6.2
+v0.6.2 (ea87559c76d0b747fe2d41bf1e978e9bf112be35)
 -Add selection architecture to DataClipboard
 
-v0.6.1
+v0.6.1 (6b772107d1748699aef0f41295a09eab35ea1e2e)
 -Add toggle note selection and vol selection through selection toolbar
 -Fix to prevent clearing copied content anytime a new selection is made with rubber band
 
-v0.6.0
+v0.6.0 (45cc2e5cb3892a57395f314abe07ded0161aab36)
 -Change song data structure
 
-v0.5.3
+v0.5.3 (ea4578187d3bbcfd888cea8009266e86f332d0c7)
 -Add selection toolbar: select tool
 -Add copy, delete, paste note/vol only by checking selection toolbar
 
-v0.5.2
+v0.5.2 (f22f1eaa7dea0ab406a99e5bc7ba8b0dce0c72fd)
 -Add multi-rubber band (multi copy and delete)
 
-v0.5.1
+v0.5.1 (82a3af0e1f9ab41a574c874adc66033960eb962b)
 -Add copy volume
 -Add delete volume
 -Add paste volume

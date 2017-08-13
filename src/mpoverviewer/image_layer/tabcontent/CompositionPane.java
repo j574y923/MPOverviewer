@@ -543,7 +543,6 @@ public class CompositionPane extends ScrollPane implements ContentControl {
         }
         
         for(Note n : song.get(line)){
-            System.out.println("WTF?" + line + " " + n.getInstrument());
             ImageView[] ivArray = this.composition.get(n);
             
             pane.getChildren().add(ivArray[0]);
